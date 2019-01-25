@@ -5,7 +5,7 @@
 # Edited by: dytrych AT fit vutbr cz
 #===========================================
 # asi budete chtit prejmenovat / you will probably rename:
-CO=projekt
+CO=xkolar71-koordinace-iot
 
 all: $(CO).pdf
 
