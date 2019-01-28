@@ -182,7 +182,9 @@ faculty.en={Faculty of Information Technology}, % Fakulta v angličtině - pro v
     % ----------------------------------------------
     \setlength{\parskip}{0pt}
 
-    {\hypersetup{hidelinks}\tableofcontents}
+    {\setcounter{tocdepth}{1}\hypersetup{hidelinks}\tableofcontents}
+
+    \listoftodos[Tohle všechno bys měl dodělat]
 
     % Seznam obrazku a tabulek (pokud prace obsahuje velke mnozstvi obrazku, tak se to hodi)
     % List of figures and list of tables (if the thesis contains a lot of pictures, it is good)
@@ -217,6 +219,14 @@ faculty.en={Faculty of Information Technology}, % Fakulta v angličtině - pro v
     % Text prace / Thesis text
     % ----------------------------------------------
     \subfile{chapters/01-introduction.tex}
+    \subfile{chapters/02-iot-principles.tex}
+    \subfile{chapters/03-node-red.tex}
+    \subfile{chapters/04-protocol.tex}
+    \subfile{chapters/05-extensions.tex}
+    \subfile{chapters/06-firmware.tex}
+    \subfile{chapters/07-usage.tex}
+    \subfile{chapters/08-conclusion.tex}
+
 
     % Kompilace po částech (viz výše, nutno odkomentovat)
     % Compilation piecewise (see above, it is necessary to uncomment it)
