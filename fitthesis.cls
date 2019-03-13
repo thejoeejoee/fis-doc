@@ -1084,7 +1084,9 @@ morekeywords={UINT8, UINT16, UINT32, INT8, INT16, INT32, Post, Properties, Proto
 \usepackage[colorinlistoftodos,prependcaption,textsize=medium]{todonotes}
 
 \newcommand{\phony}[1]{\textcolor{gray}{#1}}
-\newcommand{\blind}[1]{\textcolor{gray}{\Blindtext[#1]}}
+\newcommand{\blind}[1]{
+%\textcolor{gray}{\Blindtext[#1]}
+}
 
 
 % Sloupec zarovnaný vlevo s pevnou šířkou
