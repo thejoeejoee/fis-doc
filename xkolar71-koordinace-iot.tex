@@ -47,6 +47,17 @@
 % Compilation piecewise (faster, but not all parts in preview will be up-to-date)
 \usepackage{subfiles}
 
+
+% CUSTOM JOE
+\newcolumntype{b}{X}
+\newcolumntype{s}{>{\hsize=.5\hsize}X}
+\newcolumntype{r}{>{\hsize=.5\hsize}X}
+
+\usepackage{pifont}% http://ctan.org/pkg/pifont
+\newcommand{\truemark}{\ding{51}}%
+\newcommand{\falsemark}{\ding{55}}%
+% END CUSTOM JOE
+
 % Nastavení cesty k obrázkům
 % Setting of a path to the pictures
 \graphicspath{{figs/}{../figs/}}

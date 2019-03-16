@@ -39,4 +39,35 @@
 
 \section{Message Queuing Telemetry Transport}
 Message Queuing Telemetry Transport (MQTT) je protokol definovaný ISO standardem určený pro kanálovou komunikaci zařízení
-mezi sebou. 
+mezi sebou. Jedná se o typ komunikace klient-server nad protokolem TCP/IP, server je dle svých vlastností nazýván specificky
+jako \uv{broker}. Klient má možnost si po připojení zaregistrovat odběry jednotlivých kanálů -- ty mají tvar alfanumerických
+řetězců oddělených pomocí znaku \uv{/}. Benefitem přístupu s jasně definovaným oddělovačem je možnost použití zástupných znaků pro
+zaregistrování odběru více kanálů zároveň. Této vlastnosti bude využito v pozdější části práce pro komunikaci s uzly.
+
+\begin{table}
+    \centering
+    \begin{tabularx}{\textwidth}{ssr}
+        \textbf{kanál zaregistrovaný k odběru} & \textbf{kanál zprávy} & \textbf{bude zpráva zahrnuta?} \\
+        \hline
+
+            \emph{node/1}
+            &
+            \emph{node/1} \newline
+            \emph{node} \newline
+            \emph{node/1/status} \newline
+            \emph{node/2}
+            &
+            \truemark \newline
+            \falsemark \newline
+            \falsemark \newline
+            \falsemark
+        \\
+        \hline
+
+        \emph{node/1} &
+        \emph{node/1} \newline \emph{node/2} &
+        ANO \newline NE \\
+
+    \end{tabularx}
+    \caption{Srovnání možných odběrů kanálů v protokolu MQTT}
+\end{table}
