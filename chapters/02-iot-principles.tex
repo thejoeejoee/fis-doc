@@ -40,16 +40,17 @@
 \section{Message Queuing Telemetry Transport}
 Message Queuing Telemetry Transport (MQTT) je protokol definovaný ISO standardem určený pro kanálovou komunikaci zařízení
 mezi sebou. Jedná se o typ komunikace klient-server nad protokolem TCP/IP, server je dle svých vlastností nazýván specificky
-jako \uv{broker}. Klient má možnost si po připojení zaregistrovat odběry jednotlivých kanálů -- ty mají tvar alfanumerických
-řetězců oddělených pomocí znaku \uv{/}. Benefitem přístupu s jasně definovaným oddělovačem je možnost použití zástupných znaků pro
-zaregistrování odběru více kanálů zároveň. Této vlastnosti bude využito v pozdější části práce pro komunikaci s uzly.
+jako \uv{broker}. Klient má možnost si po připojení zaregistrovat odběry jednotlivých kanálů -- jejich identifikace má tvar
+alfanumerických řetězců oddělených pomocí znaku \uv{/}. Benefitem přístupu s jasně definovaným oddělovačem je možnost použití zástupných znaků pro
+zaregistrování odběru více kanálů zároveň. Této vlastnosti bude využito v pozdější části práce pro komunikaci s uzly. Znak \uv{+}
+je použit pro zastoupení jedné úrovně kanálu, znak \uv{\#} pro víceúrovňové zahrnutí -- demonstrace funkce je shrnuta v
+tabulce \ref{table:02:mqtt-subscribes}.
 
 \begin{table}
     \centering
     \begin{tabularx}{\textwidth}{ssr}
         \textbf{kanál zaregistrovaný k odběru} & \textbf{kanál zprávy} & \textbf{bude zpráva zahrnuta?} \\
         \hline
-
             \emph{node/1}
             &
             \emph{node/1} \newline
@@ -62,12 +63,60 @@ zaregistrování odběru více kanálů zároveň. Této vlastnosti bude využit
             \falsemark \newline
             \falsemark
         \\
-        \hline
 
-        \emph{node/1} &
-        \emph{node/1} \newline \emph{node/2} &
-        ANO \newline NE \\
+        \hline
+            \emph{node/+/status}
+            &
+            \emph{node/1/status} \newline
+            \emph{node/2/status} \newline
+            \emph{node/foo/status} \newline
+            \emph{node/1/data} \newline
+            \emph{node} \newline
+            \emph{node/2}
+            &
+            \truemark \newline
+            \truemark \newline
+            \truemark \newline
+            \falsemark \newline
+            \falsemark \newline
+            \falsemark
+        \\
+
+        \hline
+            \emph{node/\#}
+            &
+            \emph{node/1} \newline
+            \emph{node/2/status} \newline
+            \emph{node/2/status/data} \newline
+            \emph{node/} \newline
+            \emph{block/}
+            &
+            \truemark \newline
+            \truemark \newline
+            \truemark \newline
+            \falsemark \newline
+            \falsemark
+        \\
+
+        \hline
+            \emph{node/+/data/\#}
+            &
+            \emph{node/1/data/value} \newline
+            \emph{node/2/data/value/degrees} \newline
+            \emph{node/1/data/value} \newline
+            \emph{node/1/status/value} \newline
+            \emph{node/} \newline
+            \emph{block/}
+            &
+            \truemark \newline
+            \truemark \newline
+            \truemark \newline
+            \falsemark \newline
+            \falsemark \newline
+            \falsemark
+        \\
 
     \end{tabularx}
-    \caption{Srovnání možných odběrů kanálů v protokolu MQTT}
+    \caption{Možnosti odběru zpráv v protokolu MQTT}
+    \label{table:02:mqtt-subscribes}
 \end{table}

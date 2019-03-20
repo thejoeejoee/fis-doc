@@ -52,6 +52,10 @@
 \newcolumntype{b}{X}
 \newcolumntype{s}{>{\hsize=.5\hsize}X}
 \newcolumntype{r}{>{\hsize=.5\hsize}X}
+\usepackage{nameref}
+
+\newcommand*{\fullref}[1]{\hyperref[{#1}]{\autoref*{#1} \nameref*{#1}}} % One single link
+
 
 \usepackage{pifont}% http://ctan.org/pkg/pifont
 \newcommand{\truemark}{\ding{51}}%
