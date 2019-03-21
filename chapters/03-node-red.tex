@@ -61,7 +61,14 @@ Node-RED bez dalších rozšíření nabízí základní sadu uzlů, mezi ty nej
     pouze zpožďuje o~konstantní hodnotu, nebo i omezuje průtok (šířku pásma) za časovou jednotku.
 \end{itemize}
 
-\subsection{Konfigurace systému}
+\subsection{Konfigurační bloky}
+Pro bloky využívající externí služby nabízí Node-RED institut konfiguračních bloků. S pomocí nich je možné sdílet a
+znovupoužívat statickou konfiguraci v dalších blocích -- tedy např. údaje pro připojení k MQTT brokeru není nutné zadávat
+do každého bloku zvlášť, ale jsou sdílené pro jeden konfigurační blok, který je následně přiřazen ke každému bloku vyžadující
+MQTT broker.
+
+Díky tomuto principu
+
 \todo{Rozsiritelnost, config nodes}
 \blind{2}
 

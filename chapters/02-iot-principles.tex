@@ -35,7 +35,12 @@
 
 \section{MicroPython}
 \todo{uPython}
-\blind{1}
+MicroPython je derivátem vysokoúrovňového skriptovacího programovacího jazyka Python určený pro běh na embed zařízeních a dalších
+aplikacích s nízkým výpočetním výkonem. Z hlediska vestavěné knihovny nabízí naprostou většinu základní knihovny z původní
+distribuce a navíc knihovny zodpovědné za manipulaci s rozhraním mikropočítače, na kterém běží. Kromě oficiálního sestavení
+pro pyboard\footnote{Oficiální (výukový) vývojový kit pro běh Micropythonu s cenou okolo \pounds30 z oficiálního e-shopu.}
+nabízí komunita i sestavení pro ESP2866, ESP32, WiPy nebo Espruino Pico.
+
 
 \section{Message Queuing Telemetry Transport}
 Message Queuing Telemetry Transport (MQTT) je protokol definovaný ISO standardem určený pro kanálovou komunikaci zařízení
@@ -43,8 +48,8 @@ mezi sebou. Jedná se o typ komunikace klient-server nad protokolem TCP/IP, serv
 jako \uv{broker}. Klient má možnost si po připojení zaregistrovat odběry jednotlivých kanálů -- jejich identifikace má tvar
 alfanumerických řetězců oddělených pomocí znaku \uv{/}. Benefitem přístupu s jasně definovaným oddělovačem je možnost použití zástupných znaků pro
 zaregistrování odběru více kanálů zároveň. Této vlastnosti bude využito v pozdější části práce pro komunikaci s uzly. Znak \uv{+}
-je použit pro zastoupení jedné úrovně kanálu, znak \uv{\#} pro víceúrovňové zahrnutí -- demonstrace funkce je shrnuta v
-tabulce \ref{table:02:mqtt-subscribes}.
+je použit pro zastoupení jedné úrovně kanálu, znak \uv{\#} pro víceúrovňové zahrnutí -- demonstrace těchto principů je shrnuta v
+tabulce~\ref{table:02:mqtt-subscribes}.
 
 \begin{table}
     \centering
