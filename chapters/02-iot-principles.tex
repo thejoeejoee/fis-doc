@@ -25,6 +25,21 @@
 \blind{1}
 
 \section{ESP32}
+\textit{ESP32} je řada nízkonákladových SoC\footnote{\textit{System on Chip} je integrovaný obvod obsahující veškeré periferie (digitální, analogové a často i rádiová rozhraní) zabudované přímo v čipu. Tento princip bývá použit e vestavěných systémech díky jeho nízdé spotřebě.} mikrokontrolérů představená čínskou firmou Espressif Systems. Jakožto nástupce řady \textit{ESP8266} nabízí na jediném čipu následující:
+
+\begin{itemize}
+    \item 32 bitový mikroprocesor Xtensa LX6, taktovaný na 160 či 240 MHz
+    \item 520 KiB statické operační paměti
+    \item Wi-Fi ve stadardu 802.11 b/g/n
+    \item Bluetooth v4.2 včetně nízkoodběrového režimu BLE
+    \item 12 bitový ADC až s 18 kanály
+    \item dva 2 bitové DAC
+    \item čtyři rozhraní SPI
+    \item tři rozhraní UART
+    \item deset GPIO pinů pro kapacitní použití
+    \item rozhraní I\textsuperscript{2}C, I\textsuperscript{2}S, Hallovu sondu, sběrnici CAN, generátory PWM a další
+\end{itemize}
+
 \todo{ESP32}
 \blind{3}
 \missingfigure{ESP32}
@@ -35,21 +50,53 @@
 
 \section{MicroPython}
 \todo{uPython}
-MicroPython je derivátem vysokoúrovňového skriptovacího programovacího jazyka Python určený pro běh na embed zařízeních a dalších
+MicroPython je derivátem vysokoúrovňového skriptovacího programovacího jazyka Python určený pro běh na vestavěných systémech a dalších
 aplikacích s nízkým výpočetním výkonem. Z hlediska vestavěné knihovny nabízí naprostou většinu základní knihovny z původní
 distribuce a navíc knihovny zodpovědné za manipulaci s rozhraním mikropočítače, na kterém běží. Kromě oficiálního sestavení
 pro pyboard\footnote{Oficiální (výukový) vývojový kit pro běh Micropythonu s cenou okolo \pounds30 z oficiálního e-shopu.}
 nabízí komunita i sestavení pro ESP2866, ESP32, WiPy nebo Espruino Pico.
 
+Sestavení pro kity od společnosti ESP jsou založena na vývojovém frameworku ESP-IDF.
+Ten je zástupcem operačních systémů reálného času (RTOS), tedy systémů pro které je typické časové plánování jednotlivých úloh
+a kritické jejich časově přesné spuštění -- to vše nzaložené na plánovači, který bývá napostradatelnou součástí. ESP-IDF
+je konkrétně postaven nad FreeRTOS, který je de facto standardem a největším hráčem na poli RTOS s otevřeným zdrojovým kódem. \todo{citace z https://www.simform.com/iot-rtos-selection/}
+Jedním z benefitů tohoto typu systému je možnost použití programového řízení komunikačních rozhraní
+(jako je SPI, I\textsuperscript{2}C nebo USART) -- tato rozhraní lze poté naimplementovat, není nutný konkrétní hardwarový prvek.
 
-\section{Message Queuing Telemetry Transport}
+I přes omezenou vestavěnou knihovnu a vysokoúrovňovost tohoto jazyka jej lze použít ve světě internetu věcí --
+a to především díky jeho paměťové optimalizaci. Nespornou výhodou pro použití v internetu věcí je i dostupnost základních knihoven
+pro komunikaci s okolním světem. MicroPython v základu nabízí knihovnu \ic|machine| s třídami \ic|Pin|, \ic|PWM| či \ic|ADC| --
+každá z těchto tříd reprezentuje způsob, jak komunikovat s okolním světem pomocí vestavěných periférií. I vestavěná knihovna
+je ovšem svým obsahem závislá na konkrétní distribuci pro konkrétní vývojový kit
+
+\begin{code}
+    import machine
+    pin = machine.Pin(14, mode=machine.Pin.OUT)
+    pin.value(1)
+\end{code}
+
+
+\section{Message Queuing Telemetry Transport}\label{sec:message-queuing-telemetry-transport}
 Message Queuing Telemetry Transport (MQTT) je protokol definovaný ISO standardem určený pro kanálovou komunikaci zařízení
 mezi sebou. Jedná se o typ komunikace klient-server nad protokolem TCP/IP, server je dle svých vlastností nazýván specificky
 jako \uv{broker}. Klient má možnost si po připojení zaregistrovat odběry jednotlivých kanálů -- jejich identifikace má tvar
-alfanumerických řetězců oddělených pomocí znaku \uv{/}. Benefitem přístupu s jasně definovaným oddělovačem je možnost použití zástupných znaků pro
-zaregistrování odběru více kanálů zároveň. Této vlastnosti bude využito v pozdější části práce pro komunikaci s uzly. Znak \uv{+}
-je použit pro zastoupení jedné úrovně kanálu, znak \uv{\#} pro víceúrovňové zahrnutí -- demonstrace těchto principů je shrnuta v
+alfanumerických řetězců oddělených pomocí znaku \ic|/|. Benefitem přístupu s jasně definovaným oddělovačem je možnost použití zástupných znaků pro
+zaregistrování odběru více kanálů zároveň. Této vlastnosti bude využito v pozdější části práce pro komunikaci s uzly. Znak \ic|+|
+je použit pro zastoupení jedné úrovně kanálu, znak \ic|#| pro víceúrovňové zahrnutí -- demonstrace těchto principů je shrnuta v
 tabulce~\ref{table:02:mqtt-subscribes}.
+
+Kromě základního nabízí protokol MQTT ještě několik dalších možností:
+
+\begin{itemize}
+    \item \textbf{Příznak zprávy \uv{retain}} \\
+        Pomocí příznaku \uv{retain} může klient pro zprávu v konkrétním kanálu nastavit její ponechání v kanálu pro budoucí klienty
+        -- tedy, zaregistruje-li si klient kanál k odběru, broker klientovi automaticky po zaregistrování odešle zprávy,
+        spadající tohoto kanálu (či kanálů v případě zástupných znaků), které mají nastavený tento příznak. Tohoto chování lze
+        velmi dobře využít pro kanály obsahující stav kterékoliv části ze systému -- nově připojený klient pak ihned dostane zprávu
+        o stavu a nedochází k časovému intervalu, kdy je sice klient zaregistrovaný, ale teprve čeká na novou aktualizaci stavu.
+
+    \item
+\end{itemize}
 
 \begin{table}
     \centering

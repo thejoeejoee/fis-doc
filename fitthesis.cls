@@ -1004,6 +1004,46 @@ faculty.en=,faculty=FIT
 \definecolor{darkblue}{rgb}{0.0,0.0,0.6}
 \definecolor{cyan}{rgb}{0.0,0.6,0.6}
 
+\definecolor{codeprimary}{HTML}{3300CC}
+\colorlet{keywordstyle}{codeprimary!50!black}
+
+% custom joe
+\usepackage{newverbs}
+\lstset{
+language=Python,
+frameround=fftf,
+breaklines=true,
+keywordstyle=\color{keywordstyle}\ttfamily,
+basicstyle=\color{codeprimary},
+numberstyle=\color{black},
+backgroundcolor=\color{white},
+frame=single,
+tabsize=4,
+breaklines=true,
+captionpos=t,
+xleftmargin=\dimexpr\fboxsep+1pt\relax,
+xrightmargin=\fboxsep,
+numbers=none,
+showstringspaces=false,
+escapeinside={\#!}{\^^M},
+belowcaptionskip=0pt,
+belowskip=0pt,
+aboveskip=0pt,
+}
+
+\makeatletter
+\newcommand\ic[1][green]{%
+\@testopt{\@ic{#1}}{-#1}% Handle second optional argument
+}
+\def\@ic#1[#2]{%
+\Collectverb{\@@ic{#1}{#2}}%
+}
+\def\@@ic#1#2#3{%
+{\lstinline[basicstyle=\ttfamily\color{codeprimary},breaklines=true]|#3|}%
+}
+\newcommand{\icmacro}[1]{{\lstinline[basicstyle=\ttfamily\color{codeprimary},breaklines=true]|#1|}}
+\makeatother
+
 \lstset{
 basicstyle=\ttfamily,
 columns=fullflexible,
@@ -1011,6 +1051,10 @@ showstringspaces=false,
 commentstyle=\color{gray}\upshape,
 captionpos=b
 }
+
+\lstnewenvironment{code}[1][]%
+{\noindent\lstset{frameround=fttf,#1}}%
+{}%
 
 \lstdefinestyle{csh}{language=[Sharp]C,
 showspaces=false,
