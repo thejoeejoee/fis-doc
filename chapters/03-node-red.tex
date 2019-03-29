@@ -22,14 +22,14 @@ význam funkčních bloků propojených pomocí propojů, které zajištují vz�
 programming}
 \blind{2}
 
-\section{Základní principy Node-RED}
+\section{Základní principy Node-RED}\label{sec:zakladni-principy-node-red}
 
 \todo{Pouziti, opensource}
-Vnitřní architektura nástroje Node-RED je rozdělena na dva samostatné funkční části. V~pohledu samotného běhu je
-důležitější částí jádro provádějící veškeré datové operace nad samotným nadefinovaným modelem, zodpovědné za spouštění
-jednotlivých uživatelských uzly, jejich synchronizaci a vzájemnou distribuci dat. Druhou částí je samotný vizuální
-editor, který je ve výchozím nastavení dostupný pomocí protokolu HTTP. Pomocí něj je možné uživatelsky nastavovat
-jednotlivé uzly a vytvářet mezi nimi datové spoje.
+Vnitřní architektura nástroje Node-RED je rozdělena na dva samostatné funkční části.
+V~pohledu samotného běhu je důležitější částí jádro provádějící veškeré datové operace nad samotným nadefinovaným
+modelem, zodpovědné za spouštění jednotlivých uživatelských uzly, jejich synchronizaci a vzájemnou distribuci dat.
+Druhou částí je samotný vizuální editor, který je ve výchozím nastavení dostupný pomocí protokolu HTTP. Pomocí něj je
+možné uživatelsky nastavovat jednotlivé uzly a vytvářet mezi nimi datové spoje.
 
 Toto rozdělení nabízí možnost běhu sítě mimo samotný editor, a to především kvůli bezpečnostním a
 výkonnostním důvodům -- každé \uv{flow} (množina entit funkčních uzlů a jejich propojení, dále jen
@@ -89,7 +89,9 @@ MQTT broker.
 \end{figure}
 
 
-\subsection{Rozšíření pomocí vlastních modulů}
+\section{Rozšíření pomocí vlastních modulů}\label{sec:rozšíření-pomocí-vlastních-modulů}
+
+Díky povaze nástroje Node-RED
 
 
 \todo{Rozšíření pomocí vlastních modulů}

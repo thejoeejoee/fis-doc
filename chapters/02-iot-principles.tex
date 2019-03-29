@@ -112,7 +112,7 @@ Této vlastnosti bude využito v pozdější části práce pro komunikaci s uzl
 je použit pro zastoupení jedné úrovně kanálu, znak \ic|#| pro víceúrovňové zahrnutí -- demonstrace těchto principů je shrnuta v
 tabulce~\ref{table:02:mqtt-subscribes}.
 
-Kromě základního nabízí protokol MQTT ještě několik dalších možností:
+Kromě základního nabízí protokol MQTT ještě několik zmíněníhodných vlastností:
 
 \begin{itemize}
     \item \textbf{Příznak zprávy \uv{retain}} \\
@@ -127,8 +127,9 @@ Kromě základního nabízí protokol MQTT ještě několik dalších možností
     Quality of Service (QoS) je pro MQTT vlastnost stanovující, k jak důslednému potvrzování zpráv by mělo mezi
     brokerem a klientem docházet.
     Ve své podstatě stanovuje, ke kolika potvrzení odeslané zprávy musí dojít, aby byla
-    zpráva prohlášena za úspěšně odeslanou. Na obrázku~\ref{fig:mqtt-qos} jsou znázorněny směry zpráv mezi
-    odesílatelem a příjemcem pro jednotlivé hodnoty možné pro QoS:
+    zpráva prohlášena za úspěšně odeslanou.
+    Na obrázku~\ref{fig:mqtt-qos} jsou znázorněny směry zpráv protokolu mezi odesílatelem a příjemcem pro jednotlivé
+    hodnoty dostupné pro QoS:
 
     \begin{enumerate}
         \item[\textbf{0}] U zprávy nedochází k potvrzování, je odeslána a je na ni zapomenuto.
@@ -145,6 +146,29 @@ Kromě základního nabízí protokol MQTT ještě několik dalších možností
         %\todo{obrazek z ROOT.cz https://i.iinfo.cz/images/116/bigclown-2-3-prev.png }
     \end{figure}
 
+    \item \textbf{Parametr spojení \uv{Keep Alive}} \\
+    Parametr \uv{Keep Alive} určuje časový interval, během kterého musí klient odpovědět na zprávu \ic|PINGREQ| zprávou
+    \ic|PINGRESP| -- jestliže se tak nestane, spojení je ukončeno.
+    Tento parametr je nutný kvůli nežádoucí vlastnosti protokolu TCP --
+    v tomto protokolu, nad kterým je MQTT založen, může dojít k situaci tzv. polootevřeného spojení.
+    Je to standardně nežádoucí stav, při kterém je jedna ze stran spojení informována o ukončení spojení (jakoukoliv
+    vinou), druhá však ne.
+    To vede k čekání na potvrzení odeslaných zpráv na druhé straně, která ovšem nepřichází -- MQTT spojení se poté
+    tváří jako otevřené, ale není tomu tak.
+
+    \item \textbf{\uv{Last Will} zpráva} \\
+    Zpráva s tímto příznakem je klientem nastavena při připojení k brokeru a brokerem je použita ve chvíli, kdy dojde
+    k neočekávanému odpojení klienta.
+    Tato zpráva \uv{poslední vůle} kromě samotného obsahu u sebe nese i cílový kanál, QoS či \uv{retain}
+    příznak.
+    MQTT tímto nabízí možnost klientům informovat o svém stavu odpojení autonomně bez dalšího zásahu --
+    \uv{Last Will} zpráva je odeslána do daného kanálu v následujících případech:
+    \begin{itemize}
+        \item Klient neodpoví ve smluveném intervalu Keep Alive.
+        \item Klient před ukončením spojení neodešle zprávu protokolu \ic|DISCONNECT|.
+        \item Broker ukončí spojení vinou chyby samotného protokolu.
+        \item Broker detekuje IO chybu nebo chybu sítě.
+    \end{itemize}
 \end{itemize}
 
 \begin{table}
@@ -218,6 +242,7 @@ Kromě základního nabízí protokol MQTT ještě několik dalších možností
         \\
 
     \end{tabularx}
-    \caption{Možnosti odběru zpráv v protokolu MQTT}
+    \caption{Možnosti odběru zpráv v protokolu MQTT -- používají se dva typy zástupných znaků pro zaregistrování
+    odběru více kanálů naráz.}
     \label{table:02:mqtt-subscribes}
 \end{table}
