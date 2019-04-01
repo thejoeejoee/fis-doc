@@ -1,10 +1,11 @@
 \chapter{Principy dnešního internetu věcí}
 \label{ch:principy-iot}
-Internet věcí je novodobé označení pro síť fyzických zařízení komunikujících mezi sebou.
-Z podstaty své vlastní funkce obsahuje každé zařízení senzory, části interagující s okolním světem nebo
-
-
-\blind{1}
+Internet věcí lze z odborného hlediska klasifikovat jako síť fyzických zařízení komunikujících mezi sebou.
+Primárním obsahem zpráv jsou hodnoty získané v koncových zařízeních a příkazy pro jejich interkaci se světem.
+Data pro síť získává zařízení z okolního prostředí pomocí senzorů (nejčastěji neelektrických) veličin, přímé
+uživatelské vstupy pomocí mechanických ovládacích prvků (tlačítka, přepínače, spínače), výstupy systému mohou být
+realizovány pomocí zobrazovacích jednotek, signalizačních světel či reproduktorů, stejně tak jako pomocí motorů,
+elektrických relé či krokových motorů.
 
 \todo{Co je to IoT a proc jej potrebujeme?}
 \blind{1}
@@ -18,7 +19,32 @@ Z podstaty své vlastní funkce obsahuje každé zařízení senzory, části in
 \todo{Rozdelit na SW a HW casti}
 \blind{1}
 
-\section{Existující řešení}
+\section{Existující řešení}\label{sec:existujici-reseni}
+
+Na realizaci systémů IoT se v dnešní době zaměřuje mnoho firem, stejně tak existuje několik variant s otevřeným kódem.
+Často se jedná o kombinaci obou potřebných stránek pro provoz -- tedy, k hardwarovému řešení je poskytnuto i řešení
+softwarové, ale existují i pouze jednostranné nástroje.
+Dále budou představeni největší hráči na poli jak komerční sféry, tak sféry otevřeného zdrojového kódu.
+\todo{citace https://chytrydumsvepomoci.cz/blog/vyber-systemu-pro-inteligentni-dum}
+
+\begin{itemize}
+    \item \textbf{OpenHAB} -- open Home Automation Bus \\
+    OpenHAB je zástupcem softwarového řešení s otevřeným zdrojovým kódem v programovacím jazyce Java.
+    Díky tomu jej lze spustit prakticky na všech dostupných hardwarových řešeních\footnote{Jazyk Java pro svůj běh
+    používá JVM, což je prostředí obdobné k již zmíněnému Node.js, a které je schopno běhu na zařízeních založených nad
+    architekturami \textit{x86}, \textit{x86\_64}, \textit{ARM} a dalšími -- podpora architektury \textit{ARM} je
+    významná vzhledem k populárnímu mikropočítači Raspberry Pi, který je na ní založen.}.
+    Toto řešení nabízí možnost kompletní konfigurace serveru pro řízení IoT, jednotlivé uzly sítě mohou být k serveru
+    připojeny jak po síti Internet, tak lokálně např. pomocí rozhraní USB -- k rozšíření je dostupná obsáhlá
+    knihovna přídavných modulů.
+    OpenHAB je primárně založen na sestavení uživatelského rozhraní pro ovládání systému, ve kterém uživatel ovládá
+    připojená zařízení na základě pravidel, které mohou být nakonfigurována staticky či dynamicky pomocí dostupného
+    skriptování.
+
+    \item \textbf{Loxone} -- Loxone Smart Home \\
+    Loxone
+\end{itemize}
+
 \subsection{Hardware}
 \todo{Pro SW poresit Loxone/SmartHome}
 \blind{1}
@@ -88,10 +114,11 @@ Jedním z benefitů tohoto typu systému je možnost použití programového ř�
 (jako je SPI, I\textsuperscript{2}C nebo USART) -- tato rozhraní lze poté naimplementovat, není nutný konkrétní hardwarový prvek.
 
 I přes omezenou vestavěnou knihovnu a vysokoúrovňovost tohoto jazyka jej lze použít ve světě internetu věcí --
-a to především díky jeho paměťové optimalizaci. Nespornou výhodou pro použití v internetu věcí je i dostupnost základních knihoven
-pro komunikaci s okolním světem. MicroPython v základu nabízí knihovnu \ic|machine| s třídami \ic|Pin|, \ic|PWM| či \ic|ADC| --
-každá z těchto tříd reprezentuje způsob, jak komunikovat s okolním světem pomocí vestavěných periférií. I vestavěná knihovna
-je ovšem svým obsahem závislá na konkrétní distribuci pro konkrétní vývojový kit
+a to především díky jeho paměťové optimalizaci.
+Nespornou výhodou pro použití v internetu věcí je i dostupnost základních knihoven pro komunikaci s okolním světem.
+MicroPython v základu nabízí knihovnu \ic|machine| s třídami \ic|Pin|, \ic|PWM| či \ic|ADC| --
+každá z těchto tříd reprezentuje způsob, jak komunikovat s okolním světem pomocí vestavěných periférií.
+I vestavěná knihovna je ovšem svým obsahem závislá na konkrétní distribuci pro konkrétní vývojový kit
 
 \begin{code}
     import machine
@@ -108,9 +135,9 @@ Klient má možnost si po připojení zaregistrovat odběry jednotlivých kanál
 alfanumerických řetězců oddělených pomocí znaku \ic|/|.
 Benefitem přístupu s jasně definovaným oddělovačem je možnost použití zástupných znaků pro
 zaregistrování odběru více kanálů zároveň.
-Této vlastnosti bude využito v pozdější části práce pro komunikaci s uzly. Znak \ic|+|
-je použit pro zastoupení jedné úrovně kanálu, znak \ic|#| pro víceúrovňové zahrnutí -- demonstrace těchto principů je shrnuta v
-tabulce~\ref{table:02:mqtt-subscribes}.
+Této vlastnosti bude využito v pozdější části práce pro komunikaci s uzly.
+Znak \ic|+| je použit pro zastoupení jedné úrovně kanálu, znak \ic|#| pro víceúrovňové zahrnutí -- demonstrace těchto
+principů je shrnuta v tabulce~\ref{table:02:mqtt-subscribes}.
 
 Kromě základního nabízí protokol MQTT ještě několik zmíněníhodných vlastností:
 

@@ -37,8 +37,7 @@ výkonnostním důvodům -- každé \uv{flow} (množina entit funkčních uzlů 
 příp. přímo \uv{datový tok}, což ale příliš nekoresponduje s~praktickou stránkou věci -- \uv{síť} je reprezentativnější
 pojmenování pro strukturu vytvářenou editorem, i například vzhledem k~pojmenování Petriho sítí.}) je schopen
 Node-RED serializovat do formátu JSON, tedy i ukládat či načítat do, resp. ze souborů, díky čemuž lze jednotlivé
-sítě
-i snadno sdílet.
+sítě i snadno sdílet.
 
 Mechanika samotných zpráv a jejich doručování je založena na několika základních premisách:
 \begin{enumerate}
@@ -67,10 +66,10 @@ Node-RED bez dalších rozšíření nabízí základní sadu uzlů, mezi ty nej
     pouze zpožďuje o~konstantní hodnotu, nebo i omezuje průtok (šířku pásma) za časovou jednotku.
 \end{itemize}
 
-Pro bloky využívající externí služby nabízí Node-RED institut konfiguračních bloků. S pomocí nich je možné sdílet a
-znovupoužívat statickou konfiguraci v dalších blocích -- tedy např. údaje pro připojení k MQTT brokeru není nutné zadávat
-do každého bloku zvlášť, ale jsou sdílené pro jeden konfigurační blok, který je následně přiřazen ke každému bloku vyžadující
-MQTT broker.
+Pro bloky využívající externí služby nabízí Node-RED institut konfiguračních bloků.
+S pomocí nich je možné sdílet a znovupoužívat statickou konfiguraci v dalších blocích -- tedy např. údaje pro
+připojení k MQTT brokeru není nutné zadávat do každého bloku zvlášť, ale jsou sdílené pro jeden konfigurační blok,
+který je následně přiřazen ke každému bloku vyžadující MQTT broker.
 
 \begin{figure}%
     \centering
