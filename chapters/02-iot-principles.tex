@@ -27,23 +27,28 @@ softwarové, ale existují i pouze jednostranné nástroje.
 Dále budou představeni největší hráči na poli jak komerční sféry, tak sféry otevřeného zdrojového kódu.
 \todo{citace https://chytrydumsvepomoci.cz/blog/vyber-systemu-pro-inteligentni-dum}
 
-\begin{itemize}
-    \item \textbf{OpenHAB} -- open Home Automation Bus \\
-    OpenHAB je zástupcem softwarového řešení s otevřeným zdrojovým kódem v programovacím jazyce Java.
-    Díky tomu jej lze spustit prakticky na všech dostupných hardwarových řešeních\footnote{Jazyk Java pro svůj běh
-    používá JVM, což je prostředí obdobné k již zmíněnému Node.js, a které je schopno běhu na zařízeních založených nad
-    architekturami \textit{x86}, \textit{x86\_64}, \textit{ARM} a dalšími -- podpora architektury \textit{ARM} je
-    významná vzhledem k populárnímu mikropočítači Raspberry Pi, který je na ní založen.}.
-    Toto řešení nabízí možnost kompletní konfigurace serveru pro řízení IoT, jednotlivé uzly sítě mohou být k serveru
-    připojeny jak po síti Internet, tak lokálně např. pomocí rozhraní USB -- k rozšíření je dostupná obsáhlá
-    knihovna přídavných modulů.
-    OpenHAB je primárně založen na sestavení uživatelského rozhraní pro ovládání systému, ve kterém uživatel ovládá
-    připojená zařízení na základě pravidel, které mohou být nakonfigurována staticky či dynamicky pomocí dostupného
-    skriptování.
+\subsection{OpenHAB -- open Home Automation Bus}\label{subsec:openhab}
+OpenHAB je zástupcem softwarového řešení s otevřeným zdrojovým kódem v programovacím jazyce Java.
+Díky tomu jej lze spustit prakticky na všech dostupných hardwarových řešeních\footnote{Jazyk Java pro svůj běh
+používá JVM, což je prostředí obdobné k již zmíněnému Node.js, a které je schopno běhu na zařízeních založených nad
+architekturami \textit{x86}, \textit{x86\_64}, \textit{ARM} a dalšími -- podpora architektury \textit{ARM} je
+významná vzhledem k populárnímu mikropočítači Raspberry Pi, který je na ní založen.}.
+Toto řešení nabízí možnost kompletní konfigurace serveru pro řízení IoT, jednotlivé uzly sítě mohou být k serveru
+připojeny jak po síti Internet, tak lokálně např. pomocí rozhraní USB -- k rozšíření je dostupná obsáhlá
+knihovna přídavných modulů.
+OpenHAB je primárně založen na sestavení uživatelského rozhraní pro ovládání systému, ve kterém uživatel ovládá
+připojená zařízení na základě pravidel, které mohou být nakonfigurována staticky či dynamicky pomocí dostupného
+skriptování.
 
-    \item \textbf{Loxone} -- Loxone Smart Home \\
-    Loxone
-\end{itemize}
+\subsection{Loxone -- Loxone Smart Home}\label{subsec:loxone}
+Loxone je otevřený, avšak komerční systém nabízející jak hardwarové řešení, tak odpovídající softwarové řešení --
+jádrem systému je miniserver s proprietárním programovou výbavou, která zajišťuje obsluhu pro karty tzv. \uv{Loxone
+extension}, která jsou poté rozhraním pro komunikaci s okolním světem.
+Toto řešení také nabízí experimentální funkci automatického naučení pravidel pro funkci celého systému, kdy
+systém detekuje své vstupy a výstupy a na základě již existujících řešení vygeneruje pravidla.
+Samotná manuální konfigurace je poté možná skrz nástroj Loxone Config, který zajišťuje zaslání požadované
+konfigurace do miniserveru a nabízí i její lokální simulaci.
+
 
 \subsection{Hardware}
 \todo{Pro SW poresit Loxone/SmartHome}
@@ -139,63 +144,66 @@ Této vlastnosti bude využito v pozdější části práce pro komunikaci s uzl
 Znak \ic|+| je použit pro zastoupení jedné úrovně kanálu, znak \ic|#| pro víceúrovňové zahrnutí -- demonstrace těchto
 principů je shrnuta v tabulce~\ref{table:02:mqtt-subscribes}.
 
-Kromě základního nabízí protokol MQTT ještě několik zmíněníhodných vlastností:
+V následujících podkapitolách budou popsány specifické vlastnosti protokolu MQTT důležité pro další postup v této
+práci.
 
+\subsection{Příznak zprávy \uv{retain}}\label{subsec:priznak-zpravy-retain}
+Pomocí příznaku \uv{retain} může klient pro zprávu v konkrétním kanálu nastavit její ponechání v kanálu pro budoucí klienty
+-- tedy, zaregistruje-li si klient kanál k odběru, broker klientovi automaticky po zaregistrování odešle zprávy,
+spadající tohoto kanálu (či kanálů v případě zástupných znaků), které mají nastavený tento příznak.
+Tohoto chování lze velmi dobře využít pro kanály obsahující stav kterékoliv části ze systému --
+nově připojený klient pak ihned dostane zprávu o stavu a nedochází k časovému intervalu, kdy je sice klient
+zaregistrovaný, ale teprve čeká na novou aktualizaci stavu.
+
+\subsection{Quality of Service}\label{subsec:quality-of-service}
+Quality of Service (QoS) je pro MQTT vlastnost stanovující, k jak důslednému potvrzování zpráv by mělo mezi
+brokerem a klientem docházet.
+Ve své podstatě stanovuje, ke kolika potvrzení odeslané zprávy musí dojít, aby byla
+zpráva prohlášena za úspěšně odeslanou.
+Na obrázku~\ref{fig:mqtt-qos} jsou znázorněny směry zpráv protokolu mezi odesílatelem a příjemcem pro jednotlivé
+hodnoty dostupné pro QoS:
+
+\begin{enumerate}
+    \item[\textbf{0}] U zprávy nedochází k potvrzování, je odeslána a je na ni zapomenuto.
+    \item[\textbf{1}] Pro zprávu je zasláno od příjemce jedno potvrzení, je tedy zajištěno alespoň jedno doručení.
+    \item[\textbf{2}] Kromě zpětného potvrzení je potvrzeno i samotné první zpětné potvrzení, příjemce tedy
+    odesílateli potvrdí příjetí a smazání ze svého úložiště -- zpráva poté není distribuována vícenásobně.
+\end{enumerate}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=.5\textwidth]{figures/mqtt-qos.png}
+    \caption{Tři typy QoS pro MQTT - $0$ pro zprávy bez potvrzování (doručení nejvýše jednou), $1$ pro jednosměrné potvrzení (doručení alespoň jednou) a $2$ pro obousměrné potvrzení (doručení právě jednou).}
+    \label{fig:mqtt-qos}
+    %\todo{obrazek z ROOT.cz https://i.iinfo.cz/images/116/bigclown-2-3-prev.png }
+\end{figure}
+
+\subsection{Identifikace klienta \uv{Client ID}}\label{subsec:identifikace-klienta-client-id}
+\todo{Client ID}
+
+
+\subsection{Parametr spojení \uv{Keep Alive}}\label{subsec:parametr-spojeni-keep-alive}
+Parametr \uv{Keep Alive} určuje časový interval, během kterého musí klient odpovědět na zprávu \ic|PINGREQ| zprávou
+\ic|PINGRESP| -- jestliže se tak nestane, spojení je ukončeno.
+Tento parametr je nutný kvůli nežádoucí vlastnosti protokolu TCP --
+v tomto protokolu, nad kterým je MQTT založen, může dojít k situaci tzv. polootevřeného spojení.
+Je to standardně nežádoucí stav, při kterém je jedna ze stran spojení informována o ukončení spojení (jakoukoliv
+vinou), druhá však ne.
+To vede k čekání na potvrzení odeslaných zpráv na druhé straně, která ovšem nepřichází -- MQTT spojení se poté
+tváří jako otevřené, ale není tomu tak.
+
+\subsection{\uv{Last Will} zpráva}\label{subsec:last-will-zprava}
+Zpráva s tímto příznakem je klientem nastavena při připojení k brokeru a brokerem je použita ve chvíli, kdy dojde
+k neočekávanému odpojení klienta.
+Tato zpráva \uv{poslední vůle} kromě samotného obsahu u sebe nese i cílový kanál, QoS či \uv{retain}
+příznak.
+MQTT tímto nabízí možnost klientům informovat o svém stavu odpojení autonomně bez dalšího zásahu --
+\uv{Last Will} zpráva je odeslána do daného kanálu v následujících případech:
 \begin{itemize}
-    \item \textbf{Příznak zprávy \uv{retain}} \\
-    Pomocí příznaku \uv{retain} může klient pro zprávu v konkrétním kanálu nastavit její ponechání v kanálu pro budoucí klienty
-    -- tedy, zaregistruje-li si klient kanál k odběru, broker klientovi automaticky po zaregistrování odešle zprávy,
-    spadající tohoto kanálu (či kanálů v případě zástupných znaků), které mají nastavený tento příznak.
-    Tohoto chování lze velmi dobře využít pro kanály obsahující stav kterékoliv části ze systému --
-    nově připojený klient pak ihned dostane zprávu o stavu a nedochází k časovému intervalu, kdy je sice klient
-    zaregistrovaný, ale teprve čeká na novou aktualizaci stavu.
-
-    \item \textbf{Quality of Service} \\
-    Quality of Service (QoS) je pro MQTT vlastnost stanovující, k jak důslednému potvrzování zpráv by mělo mezi
-    brokerem a klientem docházet.
-    Ve své podstatě stanovuje, ke kolika potvrzení odeslané zprávy musí dojít, aby byla
-    zpráva prohlášena za úspěšně odeslanou.
-    Na obrázku~\ref{fig:mqtt-qos} jsou znázorněny směry zpráv protokolu mezi odesílatelem a příjemcem pro jednotlivé
-    hodnoty dostupné pro QoS:
-
-    \begin{enumerate}
-        \item[\textbf{0}] U zprávy nedochází k potvrzování, je odeslána a je na ni zapomenuto.
-        \item[\textbf{1}] Pro zprávu je zasláno od příjemce jedno potvrzení, je tedy zajištěno alespoň jedno doručení.
-        \item[\textbf{2}] Kromě zpětného potvrzení je potvrzeno i samotné první zpětné potvrzení, příjemce tedy
-        odesílateli potvrdí příjetí a smazání ze svého úložiště -- zpráva poté není distribuována vícenásobně.
-    \end{enumerate}
-
-    \begin{figure}
-        \centering
-        \includegraphics[width=.5\textwidth]{figures/mqtt-qos.png}
-        \caption{Tři typy QoS pro MQTT - $0$ pro zprávy bez potvrzování (doručení nejvýše jednou), $1$ pro jednosměrné potvrzení (doručení alespoň jednou) a $2$ pro obousměrné potvrzení (doručení právě jednou).}
-        \label{fig:mqtt-qos}
-        %\todo{obrazek z ROOT.cz https://i.iinfo.cz/images/116/bigclown-2-3-prev.png }
-    \end{figure}
-
-    \item \textbf{Parametr spojení \uv{Keep Alive}} \\
-    Parametr \uv{Keep Alive} určuje časový interval, během kterého musí klient odpovědět na zprávu \ic|PINGREQ| zprávou
-    \ic|PINGRESP| -- jestliže se tak nestane, spojení je ukončeno.
-    Tento parametr je nutný kvůli nežádoucí vlastnosti protokolu TCP --
-    v tomto protokolu, nad kterým je MQTT založen, může dojít k situaci tzv. polootevřeného spojení.
-    Je to standardně nežádoucí stav, při kterém je jedna ze stran spojení informována o ukončení spojení (jakoukoliv
-    vinou), druhá však ne.
-    To vede k čekání na potvrzení odeslaných zpráv na druhé straně, která ovšem nepřichází -- MQTT spojení se poté
-    tváří jako otevřené, ale není tomu tak.
-
-    \item \textbf{\uv{Last Will} zpráva} \\
-    Zpráva s tímto příznakem je klientem nastavena při připojení k brokeru a brokerem je použita ve chvíli, kdy dojde
-    k neočekávanému odpojení klienta.
-    Tato zpráva \uv{poslední vůle} kromě samotného obsahu u sebe nese i cílový kanál, QoS či \uv{retain}
-    příznak.
-    MQTT tímto nabízí možnost klientům informovat o svém stavu odpojení autonomně bez dalšího zásahu --
-    \uv{Last Will} zpráva je odeslána do daného kanálu v následujících případech:
-    \begin{itemize}
-        \item Klient neodpoví ve smluveném intervalu Keep Alive.
-        \item Klient před ukončením spojení neodešle zprávu protokolu \ic|DISCONNECT|.
-        \item Broker ukončí spojení vinou chyby samotného protokolu.
-        \item Broker detekuje IO chybu nebo chybu sítě.
-    \end{itemize}
+    \item Klient neodpoví ve smluveném intervalu \uv{Keep Alive}.
+    \item Klient před ukončením spojení neodešle zprávu protokolu \ic|DISCONNECT|.
+    \item Broker ukončí spojení vinou chyby samotného protokolu.
+    \item Broker detekuje IO chybu nebo chybu sítě.
 \end{itemize}
 
 \begin{table}
