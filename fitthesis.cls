@@ -1032,16 +1032,16 @@ aboveskip=0pt,
 }
 
 \makeatletter
-\newcommand\ic[1][green]{%
-\@testopt{\@ic{#1}}{-#1}% Handle second optional argument
-}
-\def\@ic#1[#2]{%
-\Collectverb{\@@ic{#1}{#2}}%
-}
-\def\@@ic#1#2#3{%
-{\lstinline[basicstyle=\ttfamily\color{codeprimary},breaklines=true]|#3|}%
-}
-\newcommand{\icmacro}[1]{{\lstinline[basicstyle=\ttfamily\color{codeprimary},breaklines=true]|#1|}}
+%\newcommand\ic[1][green]{%
+%\@testopt{\@ic{#1}}{-#1}% Handle second optional argument
+%}
+%\def\@ic#1[#2]{%
+%\Collectverb{\@@ic{#1}{#2}}%
+%}
+%\def\@@ic#1#2#3{%
+%{\lstinline[basicstyle=\ttfamily\color{codeprimary},breaklines=true]|#3|}%
+%}
+\newcommand{\ic}[1]{{\lstinline[basicstyle=\ttfamily\color{codeprimary},breaklines=true]|#1|}}
 \makeatother
 
 \lstset{

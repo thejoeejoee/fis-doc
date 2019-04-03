@@ -1,19 +1,37 @@
 \chapter{Návrh komunikačního protokolu}
 \label{ch:protokol}
 
-Pro komunikaci
+Základním spojovacím prvkem pro rozšíření nástroje Node-RED a vlastních uzlů je rozhraní, pomocí kterého budou
+komunikovat.
+S využitím protokolu MQTT a jeho vlastností popíšu v této kapitole základní požadavky na komunikační protokol a
+následně jej navrhnu -- ze základních požadavků poté budou plynout i požadavky na obě strany komunikace (uzly i
+Node-RED).
+
+\section{Požadavky na protokol}\label{sec:pozadavky-na-protokol}
+Na základě povahy obou komunikujících stran jsem navrhnul tyto základní požadavky:
+\begin{enumerate}
+    \item \textbf{Pro formát zpráv je použit JSON} \\
+    Důvodem je jeho jednoduchost, kvalitní podpora a textová podstata (tedy i snažší ladění).
+    Ze strany Node-RED je tento formát implicitní -- jedná se o \uv{Javascript Object Notation} -- serializace a
+    deserializace probíhají zcela přirozeně.
+    Na straně uzlů pak poskytuje MicroPython kompletní podporu pro tento formát -- deserializace probíhá do
+    vestavěných typů.
+
+    \item \textbf{Samostatné kanály pro směry \uv{do uzlu} a \uv{z uzlu}} \\
+    Pro snížení datového toku a cílení zpráv pro konkrétní uzly je nutné oddělit komunikační kanály pro každý
+    samostatný uzel -- rozšíření na straně Node-RED zajistí směřování do konkrétních kanálů dle konfigurace a uzly
+    naopak odběr kanálů pouze příslušících danému uzlu.
+
+    \item \textbf{Samostatné kanály pro jednotlivé aplikace na uzlu} \todo{popsat aplikace na uzlech někdy dřív} \\
+    Jednotlivé aplikace běžící na uzlech je nutné v protokolu od sebe oddělovat -- tzn. kromě rozlišení na úrovni
+    všech uzlů musí dojít k rozlišení běžících aplikací na úrovni jednoho uzlu.
+\end{enumerate}
+
 
 \section{MQTT kanály}
 \todo{Využití MQTT kanálů \& retain}
 \blind{1}
 
-\section{Požadavky pro směr do uzlu}
-\todo{Požadavky pro smer -> uzel}
-\blind{3}
-
-\section{Požadavky pro směr z~uzlu}
-\todo{Požadavky pro smer -> nodered}
-\blind{3}
 
 \section{Navržený protokol}
 \todo{Vysledek}

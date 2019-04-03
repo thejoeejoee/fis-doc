@@ -7,12 +7,39 @@ uživatelské vstupy pomocí mechanických ovládacích prvků (tlačítka, pře
 realizovány pomocí zobrazovacích jednotek, signalizačních světel či reproduktorů, stejně tak jako pomocí motorů,
 elektrických relé či krokových motorů.
 
+Systémy pro Internet věcí lze v zásadě rozdělit dle vnitřní struktury na centralizované a decentralizované --
+sítě těch prvně jmenovaných obsahují centrální prvek řídící okolní zařízení a nejčastěji i distribuující data mezi nimi.
+Decentralizované sítě jsou poté složeny pouze z množiny zařízení, u kterých dochází výhradně ke komunikaci mezi
+samotnými uzly bez dodatečného prostředníka.
+Porovnání základních vlastností těchto dvou konceptů lze nalézt v tabulce~\ref{table:iot-types}.
+
+\begin{table}
+    \centering
+    \begin{tabularx}{\textwidth}{r|r|r}
+        \, & \textbf{centralizovaný} & \textbf{decentralizovaný} \\
+        \hline
+        vliv selhání uzlu na síť & v případě centrálního uzlu fatální & absence pouze konkrétního uzlu \\
+        \hline
+        bezpečnost dat sítě & závislá na bezpečnosti centrálního uzlu & v případě použití blockchainu
+        velmi vysoká~\cite{IoTeX} \\
+        \hline
+        zdroj pravdy v síti & centrální uzel & bez jednotného zdroje \\
+        \hline
+        konfigurace uzlů & z centrálního uzlu principem \uv{master-slave} & specifická pouze pro dotčené uzly \\
+        \hline
+        odolnost proti ztrátě dat & nižší vinou jednotného úložiště & vyšší v případě dat uložených v uzlech
+
+    \end{tabularx}
+    \caption{Srovnání vlastností základních koncepcí systému Internetu věcí.}
+    \label{table:iot-types}
+\end{table}
+
 \todo{Co je to IoT a proc jej potrebujeme?}
 \blind{1}
 
 \missingfigure{Schema centralizovaneho iot systemu}
 
-\subsection{Bezpečnost systémů}
+\subsection*{Bezpečnost systémů}
 \todo{Duraz na bezpecnost a uzivatelskou privetivost}
 \blind{2}
 
@@ -44,11 +71,23 @@ skriptování.
 Loxone je otevřený, avšak komerční systém nabízející jak hardwarové řešení, tak odpovídající softwarové řešení --
 jádrem systému je miniserver s proprietárním programovou výbavou, která zajišťuje obsluhu pro karty tzv. \uv{Loxone
 extension}, která jsou poté rozhraním pro komunikaci s okolním světem.
+
 Toto řešení také nabízí experimentální funkci automatického naučení pravidel pro funkci celého systému, kdy
 systém detekuje své vstupy a výstupy a na základě již existujících řešení vygeneruje pravidla.
 Samotná manuální konfigurace je poté možná skrz nástroj Loxone Config, který zajišťuje zaslání požadované
-konfigurace do miniserveru a nabízí i její lokální simulaci.
+konfigurace do miniserveru a nabízí i její lokální simulaci -- dvě takováto pravidla lze vidět na
+obrázku~\ref{fig:iot-loxone-config}.
 
+\begin{figure}%
+    \centering
+    % TODO: loxone from https://www.loxone.com/cscz/loxone-config-8
+    \includegraphics[width=\textwidth]{figures/iot-loxone-config.png}
+    \caption{Detail z nástroje Loxone Config -- v levé části se nachází zařízení připojené do Loxone miniserveru
+    figurující jako vstupy pro samotné pravidlo chování figurující uprostřed. %
+    Vpravo jsou poté výstupy, pomocí kterých je rozhodnutí z pravidla aplikováno zpět do reálného světa.}
+    \label{fig:iot-loxone-config}
+    %
+\end{figure}
 
 \subsection{Hardware}
 \todo{Pro SW poresit Loxone/SmartHome}
@@ -121,7 +160,7 @@ Jedním z benefitů tohoto typu systému je možnost použití programového ř�
 I přes omezenou vestavěnou knihovnu a vysokoúrovňovost tohoto jazyka jej lze použít ve světě internetu věcí --
 a to především díky jeho paměťové optimalizaci.
 Nespornou výhodou pro použití v internetu věcí je i dostupnost základních knihoven pro komunikaci s okolním světem.
-MicroPython v základu nabízí knihovnu \ic|machine| s třídami \ic|Pin|, \ic|PWM| či \ic|ADC| --
+MicroPython v základu nabízí knihovnu \ic{machine} s třídami \ic{Pin}, \ic{PWM} či \ic{ADC} --
 každá z těchto tříd reprezentuje způsob, jak komunikovat s okolním světem pomocí vestavěných periférií.
 I vestavěná knihovna je ovšem svým obsahem závislá na konkrétní distribuci pro konkrétní vývojový kit
 
@@ -137,20 +176,21 @@ Message Queuing Telemetry Transport (MQTT) je protokol definovaný ISO standarde
 mezi sebou.
 Jedná se o typ komunikace klient-server nad protokolem TCP/IP, server je dle svých vlastností nazýván specificky jako \uv{broker}.
 Klient má možnost si po připojení zaregistrovat odběry jednotlivých kanálů -- jejich identifikace má tvar
-alfanumerických řetězců oddělených pomocí znaku \ic|/|.
+alfanumerických řetězců oddělených pomocí znaku \ic{/}.
 Benefitem přístupu s jasně definovaným oddělovačem je možnost použití zástupných znaků pro
 zaregistrování odběru více kanálů zároveň.
 Této vlastnosti bude využito v pozdější části práce pro komunikaci s uzly.
-Znak \ic|+| je použit pro zastoupení jedné úrovně kanálu, znak \ic|#| pro víceúrovňové zahrnutí -- demonstrace těchto
-principů je shrnuta v tabulce~\ref{table:02:mqtt-subscribes}.
+Znak \ic{+} je použit pro zastoupení jedné úrovně kanálu, znak \ic{#} pro víceúrovňové zahrnutí -- demonstrace těchto
+principů je shrnuta v tabulce~\ref{table:mqtt-subscribes}.
 
 V následujících podkapitolách budou popsány specifické vlastnosti protokolu MQTT důležité pro další postup v této
 práci.
 
 \subsection{Příznak zprávy \uv{retain}}\label{subsec:priznak-zpravy-retain}
-Pomocí příznaku \uv{retain} může klient pro zprávu v konkrétním kanálu nastavit její ponechání v kanálu pro budoucí klienty
--- tedy, zaregistruje-li si klient kanál k odběru, broker klientovi automaticky po zaregistrování odešle zprávy,
+Pomocí příznaku \uv{retain} může klient pro zprávu v konkrétním kanálu zažádat o její ponechání v kanálu pro budoucí
+klienty -- tedy, zaregistruje-li si klient kanál k odběru, broker klientovi automaticky po zaregistrování odešle zprávy,
 spadající tohoto kanálu (či kanálů v případě zástupných znaků), které mají nastavený tento příznak.
+
 Tohoto chování lze velmi dobře využít pro kanály obsahující stav kterékoliv části ze systému --
 nově připojený klient pak ihned dostane zprávu o stavu a nedochází k časovému intervalu, kdy je sice klient
 zaregistrovaný, ale teprve čeká na novou aktualizaci stavu.
@@ -173,20 +213,30 @@ hodnoty dostupné pro QoS:
 \begin{figure}
     \centering
     \includegraphics[width=.5\textwidth]{figures/mqtt-qos.png}
-    \caption{Tři typy QoS pro MQTT - $0$ pro zprávy bez potvrzování (doručení nejvýše jednou), $1$ pro jednosměrné potvrzení (doručení alespoň jednou) a $2$ pro obousměrné potvrzení (doručení právě jednou).}
+    \caption{Tři typy QoS pro MQTT - $0$ pro zprávy bez potvrzování (doručení nejvýše jednou), $1$ pro jednosměrné
+    potvrzení (doručení alespoň jednou) a $2$ pro obousměrné potvrzení (doručení právě jednou).}
     \label{fig:mqtt-qos}
     %\todo{obrazek z ROOT.cz https://i.iinfo.cz/images/116/bigclown-2-3-prev.png }
 \end{figure}
 
 \subsection{Identifikace klienta \uv{Client ID}}\label{subsec:identifikace-klienta-client-id}
 \todo{Client ID}
+Možností klienta je zapsat si při připojení k brokeru své \uv{Client ID}.
+Jedná se o řetězec jednoznačně identifikující konkrétního klienta -- hlavním benefitem je (v případě podpory
+persistentních sezení) je možnost zachování zaregistrovaných kanálů k odběru v případě odpojení a
+opětovného připojení klienta a také uschování prozatím nedoručených zpráv s QoS nastaveným na hodnotu 1 či 2.
 
+Klient tedy zahájí komunikaci zprávou \ic{CONNECT}, která kromě dalšího obsahuje parametry \uv{Client ID} a \uv{Clean
+session} -- druhý zmíněný vynucuje vyčištění sezení (smazání odběru a čekajících zpráv).
+Broker poté odpovídá pomocí zprávy \ic{CONNACK}, která obsahuje informaci o úspěšnosti připojení a stavu sezení (zda
+bylo vyčištěno či se podařilo připojit do existujícího).
 
 \subsection{Parametr spojení \uv{Keep Alive}}\label{subsec:parametr-spojeni-keep-alive}
-Parametr \uv{Keep Alive} určuje časový interval, během kterého musí klient odpovědět na zprávu \ic|PINGREQ| zprávou
-\ic|PINGRESP| -- jestliže se tak nestane, spojení je ukončeno.
+Parametr \uv{Keep Alive} určuje časový interval, během kterého musí klient odpovědět na zprávu \ic{PINGREQ} zprávou
+\ic{PINGRESP} -- jestliže se tak nestane, spojení je ukončeno.
 Tento parametr je nutný kvůli nežádoucí vlastnosti protokolu TCP --
 v tomto protokolu, nad kterým je MQTT založen, může dojít k situaci tzv. polootevřeného spojení.
+
 Je to standardně nežádoucí stav, při kterém je jedna ze stran spojení informována o ukončení spojení (jakoukoliv
 vinou), druhá však ne.
 To vede k čekání na potvrzení odeslaných zpráv na druhé straně, která ovšem nepřichází -- MQTT spojení se poté
@@ -201,7 +251,7 @@ MQTT tímto nabízí možnost klientům informovat o svém stavu odpojení auton
 \uv{Last Will} zpráva je odeslána do daného kanálu v následujících případech:
 \begin{itemize}
     \item Klient neodpoví ve smluveném intervalu \uv{Keep Alive}.
-    \item Klient před ukončením spojení neodešle zprávu protokolu \ic|DISCONNECT|.
+    \item Klient před ukončením spojení neodešle zprávu protokolu \ic{DISCONNECT}.
     \item Broker ukončí spojení vinou chyby samotného protokolu.
     \item Broker detekuje IO chybu nebo chybu sítě.
 \end{itemize}
@@ -211,12 +261,12 @@ MQTT tímto nabízí možnost klientům informovat o svém stavu odpojení auton
     \begin{tabularx}{\textwidth}{ssr}
         \textbf{kanál zaregistrovaný k odběru} & \textbf{kanál zprávy} & \textbf{bude zpráva zahrnuta?} \\
         \hline
-        \emph{node/1}
+        \ic{node/1}
         &
-        \emph{node/1} \newline
-        \emph{node} \newline
-        \emph{node/1/status} \newline
-        \emph{node/2}
+        \texttt{node/1} \newline
+        \texttt{node} \newline
+        \texttt{node/1/status} \newline
+        \texttt{node/2}
         &
         \truemark \newline
         \falsemark \newline
@@ -225,48 +275,48 @@ MQTT tímto nabízí možnost klientům informovat o svém stavu odpojení auton
         \\
 
         \hline
-        \emph{node/+/status}
+        \ic{node/+/status}
         &
-        \emph{node/1/status} \newline
-        \emph{node/2/status} \newline
-        \emph{node/foo/status} \newline
-        \emph{node/1/data} \newline
-        \emph{node} \newline
-        \emph{node/2}
+        \texttt{node/1/status} \newline
+        \texttt{node/2/status} \newline
+        \texttt{node/foo/status} \newline
+        \texttt{node/1/data} \newline
+        \texttt{node} \newline
+        \texttt{node/2}
         &
         \truemark \newline
         \truemark \newline
         \truemark \newline
         \falsemark \newline
-        \falsemark \newline
-        \falsemark
-        \\
-
-        \hline
-        \emph{node/\#}
-        &
-        \emph{node/1} \newline
-        \emph{node/2/status} \newline
-        \emph{node/2/status/data} \newline
-        \emph{node/} \newline
-        \emph{block/}
-        &
-        \truemark \newline
-        \truemark \newline
-        \truemark \newline
         \falsemark \newline
         \falsemark
         \\
 
         \hline
-        \emph{node/+/data/\#}
+        \ic{node/\#}
         &
-        \emph{node/1/data/value} \newline
-        \emph{node/2/data/value/degrees} \newline
-        \emph{node/1/data/value} \newline
-        \emph{node/1/status/value} \newline
-        \emph{node/} \newline
-        \emph{block/}
+        \texttt{node/1} \newline
+        \texttt{node/2/status} \newline
+        \texttt{node/2/status/data} \newline
+        \texttt{node/} \newline
+        \texttt{block/}
+        &
+        \truemark \newline
+        \truemark \newline
+        \truemark \newline
+        \falsemark \newline
+        \falsemark
+        \\
+
+        \hline
+        \ic{node/+/data/\#}
+        &
+        \texttt{node/1/data/value} \newline
+        \texttt{node/2/data/value/degrees} \newline
+        \texttt{node/1/data/value} \newline
+        \texttt{node/1/status/value} \newline
+        \texttt{node/} \newline
+        \texttt{block/}
         &
         \truemark \newline
         \truemark \newline
@@ -279,5 +329,5 @@ MQTT tímto nabízí možnost klientům informovat o svém stavu odpojení auton
     \end{tabularx}
     \caption{Možnosti odběru zpráv v protokolu MQTT -- používají se dva typy zástupných znaků pro zaregistrování
     odběru více kanálů naráz.}
-    \label{table:02:mqtt-subscribes}
+    \label{table:mqtt-subscribes}
 \end{table}
