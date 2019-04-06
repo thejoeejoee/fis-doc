@@ -5,12 +5,13 @@ Základním spojovacím prvkem pro rozšíření nástroje Node-RED a vlastních
 komunikovat.
 S využitím protokolu MQTT a jeho vlastností popíšu v této kapitole základní požadavky na komunikační protokol a
 následně jej navrhnu -- ze základních požadavků poté budou plynout i požadavky na obě strany komunikace (uzly i
-Node-RED).
+Node-RED -- centrální uzel).
+\todo{Vzhledem k možnostem jsem se rozhodl koncové uzly používat víceúčelově -- tedy aplikace atd.}
 
 \section{Požadavky na protokol}\label{sec:pozadavky-na-protokol}
-Na základě povahy obou komunikujících stran jsem navrhnul tyto základní požadavky:
+Na základě povahy a potřeb obou komunikujících stran jsem navrhnul tyto základní požadavky:
 \begin{enumerate}
-    \item \textbf{Pro formát zpráv je použit JSON} \\
+    \item \textbf{Pro zprávy je použit formát JSON} \\
     Důvodem je jeho jednoduchost, kvalitní podpora a textová podstata (tedy i snažší ladění).
     Ze strany Node-RED je tento formát implicitní -- jedná se o \uv{Javascript Object Notation} -- serializace a
     deserializace probíhají zcela přirozeně.
@@ -25,10 +26,72 @@ Na základě povahy obou komunikujících stran jsem navrhnul tyto základní po
     \item \textbf{Samostatné kanály pro jednotlivé aplikace na uzlu} \todo{popsat aplikace na uzlech někdy dřív} \\
     Jednotlivé aplikace běžící na uzlech je nutné v protokolu od sebe oddělovat -- tzn. kromě rozlišení na úrovni
     všech uzlů musí dojít k rozlišení běžících aplikací na úrovni jednoho uzlu.
+
+    \item \textbf{Kanály pro status a konfiguraci uzlu} \\
+    Pro režijní komunikaci s uzlem je nutný samostatný konfigurační kanál, pomocí kterého bude uzel příjmat příkazy k
+    zavedení aplikace, její překonfigurování či ukončení -- dále pomocí něj mohou být přenášeny informace o vytížení
+    uzlu, chybách aplikací či nastavení připojení k Internetu.
+    Druhým nutným kanálem je zpětný kanál statusu, kterým bude uzel oznamovat do sítě svůj stav (připojen či
+    nepřipojen), případně další informace (využití úložiště, čekající data).
 \end{enumerate}
 
+\section{MQTT kanály}\label{sec:mqtt-kanaly}
+V popisu kanálů budou použity následující symboly:
+\begin{itemize}
+    \item \ic{NODE_ID} je jednoznačná identifikace uzlu v síti \todo{referenci na mac adresu esp}
+    \item \ic{APP_ID} je jednoznačná identifikace instance aplikace v rámci uzlu
+    \item \ic{\#} je zástupný znak popsaný v kapitole~\ref{sec:message-queuing-telemetry-transport}
+\end{itemize}
 
-\section{MQTT kanály}
+Na základě požadavků stanovených v kapitole~\ref{sec:pozadavky-na-protokol} jsem navrhnul použití následujících kanálů
+MQTT (funkce budou popsány z pohledu centrálního uzlu):
+
+\begin{itemize}
+    \item \ic{fis/to/NODE_ID/app/APP_ID} \\
+    Kanál je určen pro zasílání zpráv do konkrétní aplikace na uzlu -- a navíc,
+    všechny jeho podkanály (\ic{fis/to/NODE_ID/app/APP_ID/\#}) také míří do dané aplikace.
+
+    \item \ic{fis/from/NODE_ID/app/APP_ID} \\
+    Tento kanál je určen pro odběr zpráv z konkrétní aplikace na uzlu --
+    všechny jeho podkanály (\ic{fis/from/NODE_ID/app/APP_ID/\#}) také míří z dané aplikace.
+
+    \item \ic{fis/from/NODE_ID/status} \\
+    Slouží pro signalizaci stavu uzlu pro Node-RED -- s pomocí parametru zpráv \uv{retain} (popsaného v
+    kapitole~\ref{subsec:priznak-zpravy-retain}), zde dochází k zachování posledního známého stavu uzlu.
+\end{itemize}
+
+
+
+\todo{zapnout JSON pro IC}
+\begin{table}
+    \centering
+
+    \caption{Příklady využití navrhnutého prokolu pro komunikaci -- řádek vždy představuje jednu konkrétní zprávu v
+    protokolu MQTT}
+    \begin{tabularx}{\textwidth}{s|l|s}
+        \textbf{kanál} & \textbf{zpráva} & \textbf{význam} \\
+        \hline
+        \ic{fis/from/25a8ced/status} & \ic{\{"online": true\}} & uzel \uv{25a8ced} oznamuje změnu svého stavu -- své
+        připojení \\
+
+        \ic{fis/from/25a8ced/app/74cae6f} & \ic{\{"value": 0.3745\}} & aplikace publikuje obecná data bez rozlišení
+        subkanálu\\
+
+        \ic{fis/from/25a8ced/app/74cae6f/temperature} & \ic{\{"value": 18.9\}} & aplikace publikuje data do svého
+        subkanálu \uv{temperature} \\
+
+        \ic{fis/to/25a8ced/app/config} & \ic{\{"action": "reload"\}} & centrální uzel zasílá zprávu pro aplikaci
+        \uv{config} \\
+
+        \ic{fis/to/25a8ced/app/3b1cef/bottom} & \ic{\{"color": "orange"\}} & centrální uzel zasílá aplikaci
+        \uv{3b1cef} zprávu do jejího subkanálu \uv{bottom} \\
+
+
+    \end{tabularx}
+    \label{table:mqtt-subscribes}
+\end{table}
+
+
 \todo{Využití MQTT kanálů \& retain}
 \blind{1}
 

@@ -13,8 +13,11 @@ Decentralizované sítě jsou poté složeny pouze z množiny zařízení, u kte
 samotnými uzly bez dodatečného prostředníka.
 Porovnání základních vlastností těchto dvou konceptů lze nalézt v tabulce~\ref{table:iot-types}.
 
+
+https://dzone.com/articles/the-internet-of-things-why-decentralization-must-b
 \begin{table}
     \centering
+    \caption{Srovnání vlastností základních koncepcí systému Internetu věcí.}
     \begin{tabularx}{\textwidth}{r|r|r}
         \, & \textbf{centralizovaný} & \textbf{decentralizovaný} \\
         \hline
@@ -28,9 +31,7 @@ Porovnání základních vlastností těchto dvou konceptů lze nalézt v tabulc
         konfigurace uzlů & z centrálního uzlu principem \uv{master-slave} & specifická pouze pro dotčené uzly \\
         \hline
         odolnost proti ztrátě dat & nižší vinou jednotného úložiště & vyšší v případě dat uložených v uzlech
-
     \end{tabularx}
-    \caption{Srovnání vlastností základních koncepcí systému Internetu věcí.}
     \label{table:iot-types}
 \end{table}
 
@@ -88,6 +89,11 @@ obrázku~\ref{fig:iot-loxone-config}.
     \label{fig:iot-loxone-config}
     %
 \end{figure}
+
+\subsection{Domoticz}\label{subsec:domoticz}
+http://www.domoticz.com/
+https://doc.turris.cz/gadgets/domoticz
+http://www.stehlikovi.eu/zapisky/raspberry-pi-z-wave-a-domoticz/
 
 \subsection{Hardware}
 \todo{Pro SW poresit Loxone/SmartHome}
@@ -258,6 +264,8 @@ MQTT tímto nabízí možnost klientům informovat o svém stavu odpojení auton
 
 \begin{table}
     \centering
+    \caption{Možnosti odběru zpráv v protokolu MQTT -- používají se dva typy zástupných znaků pro zaregistrování
+    odběru více kanálů naráz.}
     \begin{tabularx}{\textwidth}{ssr}
         \textbf{kanál zaregistrovaný k odběru} & \textbf{kanál zprávy} & \textbf{bude zpráva zahrnuta?} \\
         \hline
@@ -327,7 +335,5 @@ MQTT tímto nabízí možnost klientům informovat o svém stavu odpojení auton
         \\
 
     \end{tabularx}
-    \caption{Možnosti odběru zpráv v protokolu MQTT -- používají se dva typy zástupných znaků pro zaregistrování
-    odběru více kanálů naráz.}
     \label{table:mqtt-subscribes}
 \end{table}
