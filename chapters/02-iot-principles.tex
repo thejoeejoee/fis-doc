@@ -14,7 +14,6 @@ Decentralizované sítě jsou poté složeny pouze z množiny zařízení, u kte
 samotnými uzly bez dodatečného prostředníka.
 Porovnání základních vlastností těchto dvou konceptů lze nalézt v tabulce~\ref{table:iot-types}.
 
-
 https://dzone.com/articles/the-internet-of-things-why-decentralization-must-b
 \begin{table}
     \centering
@@ -109,26 +108,10 @@ http://www.stehlikovi.eu/zapisky/raspberry-pi-z-wave-a-domoticz/
 periferie (digitální, analogové a často i rádiová rozhraní) zabudované přímo v čipu.
 Tento princip bývá použit ve vestavěných systémech díky jeho nízké spotřebě.} mikrokontrolérů představená čínskou
 firmou Espressif Systems.
-Jakožto nástupce řady \textit{ESP8266} nabízí na jediném čipu následující:
-
-\begin{figure}
-    \centering
-
-    \subfloat[čip ESP32 integrovaný na vývojovém kitu ESP32 Devkit C]%
-    {{\includegraphics[valign=t,width=.35\textwidth]{figures/esp-devkitc.jpg}}}%
-    \subfloat[samotný čip ESP32]%
-    {{\includegraphics[valign=t,width=.6\textwidth]{figures/esp-chip.jpg}}}%
-
-    \caption{Mikrokontrolér ESP32 je pro vývojové a výukové účely nejčastěji distribuován jako kompletní kit s USB
-    konektorem pro napájení a vyvedenými piny z čipu. %
-    Pro přímé aplikace je ovšem čip dostupný i ve své surové formě.}
-    %\todo{z https://www.digikey.com/product-detail/en/espressif-systems/ESP32-WROOM-32U/1904-1026-1-ND/9381735}
-
-    %\todo{z https://www.soselectronic.cz/products/espressif/esp32-devkitc-236729}
-\end{figure}
+Jakožto nástupce řady \textit{ESP8266} nabízí na jediném čipu ve standardní distribuci následující:
 
 \begin{itemize}
-    \item 32 bitový mikroprocesor Xtensa LX6, taktovaný na 160 či 240 MHz
+    \item dvoujádrový 32 bitový mikroprocesor Xtensa LX6, taktovaný na 160 či 240 MHz
     \item 520 KiB statické operační paměti
     \item Wi-Fi ve stadardu 802.11 b/g/n
     \item Bluetooth v4.2 včetně nízkoodběrového režimu BLE
@@ -140,15 +123,54 @@ Jakožto nástupce řady \textit{ESP8266} nabízí na jediném čipu následují
     \item rozhraní I\textsuperscript{2}C, I\textsuperscript{2}S, Hallovu sondu, sběrnici CAN, generátory PWM a další
 \end{itemize}
 
-\todo{ESP32}
-\blind{3}
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{figures/esp-diagram.png}
+
+    \caption{Diagram jednotlivých dostupných modulů na SoC ESP32 -- od jádra s procesorem a pamětmi obsahuje čip
+    moduly pro bezdrátovou komunikaci, hardwarovou podporu kryptografie, podporu pro nízkoodběrový běh i periferie
+    pro externí sběrnice.}
+
+    \label{fig:esp-diagram}
+    %\todo{obrazek z https://commons.wikimedia.org/wiki/File:Espressif_ESP32_Chip_Function_Block_Diagram.svg }
+\end{figure}
+
+Důležitou periférií je modul pro WiFi a Bluetooth komunikaci, který je obsluhován druhým jádrem procesoru.
+Toto chování vyžaduje podporu od běžícího operačního systému, vzhledem k tomu, že je nutné přepínat kontext procesoru
+právě pro správu připojení -- z tohoto principu kooperace jader bohužel plyne řada bugů v čipu, které vývojáři čipu
+popsali v dokumentu \uv{ECO and Workarounds for Bugs}~\cite{ESP32KnownBugs}.
+Pro část chyb existuje alternativní způsob, jak potlačit jejich dopad na standardní běh procesoru, stejně tak část
+chyb byla vyřešena vydáním dalších revizí čipu ESP32.
+
+Komunikace na WiFi protokolech využívá standardní model ISO/OSI, kdy na druhé, linkové vrstvě modul používá MAC
+adresu, která je zabudována přímo v čipu při jeho výrobě\footnote{MAC adresa složená ze 48 bitů je na čipu
+zaznamenána pomocí technologie eFuse.}.\todo{efuse}
+Tato adresa je pro všechny vyrobené čipy ESP32 jedinečná a díky tomu, že je přístupná i pro uživatelskou programovou
+výbavu, je možné i používat jako unikátní identifikátor jednotlivých čipů -- této vlastnosti bude využito při návrhu
+protokolu dále v práci.
+
+\begin{figure}
+    \centering
+
+    \subfloat[čip ESP32 integrovaný na vývojovém kitu ESP32 Devkit C]%
+    {{\includegraphics[valign=t,width=.35\textwidth]{figures/esp-devkitc.jpg}}}%
+    \quad%
+    \subfloat[samotný čip ESP32]%
+    {{\includegraphics[valign=t,width=.6\textwidth]{figures/esp-chip.jpg}}}%
+
+    \caption{Mikrokontrolér ESP32 je pro vývojové a výukové účely nejčastěji distribuován jako kompletní kit s USB
+    konektorem pro napájení a vyvedenými piny z čipu. %
+    Pro přímé aplikace je ovšem čip dostupný i ve své surové formě.}
+    %\todo{z https://www.digikey.com/product-detail/en/espressif-systems/ESP32-WROOM-32U/1904-1026-1-ND/9381735}
+
+    %\todo{z https://www.soselectronic.cz/products/espressif/esp32-devkitc-236729}
+\end{figure}
 
 \subsection{Měření neelektrických veličin}
 \todo{Co vsechno se meri - kratky uvod do HW principu mereni?}
 \blind{1}
 
 \section{MicroPython}\label{sec:micropython}
-\todo{uPython}
 MicroPython je derivátem vysokoúrovňového skriptovacího programovacího jazyka Python určený pro běh na vestavěných systémech a dalších
 aplikacích s nízkým výpočetním výkonem.
 Z hlediska vestavěné knihovny nabízí naprostou většinu základní knihovny z původní distribuce a navíc knihovny
@@ -165,15 +187,17 @@ Jedním z benefitů tohoto typu systému je možnost použití programového ř�
 (jako je SPI, I\textsuperscript{2}C nebo USART) -- tato rozhraní lze poté naimplementovat, není nutný konkrétní hardwarový prvek.
 
 I přes omezenou vestavěnou knihovnu a vysokoúrovňovost tohoto jazyka jej lze použít ve světě internetu věcí --
-a to především díky jeho paměťové optimalizaci.\todo{weird}
+a to i díky jeho paměťové optimalizaci.
 Nespornou výhodou pro použití v internetu věcí je i dostupnost základních knihoven pro komunikaci s okolním světem.
 MicroPython v základu nabízí knihovnu \ic{machine} s třídami \ic{Pin}, \ic{PWM} či \ic{ADC} --
 každá z těchto tříd reprezentuje způsob, jak komunikovat s okolním světem pomocí vestavěných periférií
 -- i vestavěná knihovna je ovšem svým obsahem závislá na konkrétní distribuci pro konkrétní vývojový kit.
 
+Ústřední knihovnou pro pro komunikaci s okolím na vyšších vrstách poskytuje balíček \ic{network}, který zpřístupňuje
+třídu \ic{WLAN}, která je zodpovědná za práci s modulem pro WiFi připojení a to jak v klientském módu, tak v módu
+přístupového bodu.
 
-
-\begin{code}[language=Python]
+\begin{code}[language=Python,caption={Ukázka práce }]
     import machine
     pin = machine.Pin(14, mode=machine.Pin.OUT)
     pin.value(1)
