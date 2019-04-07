@@ -1,4 +1,4 @@
-\chapter{Principy dnešního internetu věcí}
+\chapter{Internet věcí dnes}
 \label{ch:principy-iot}
 Internet věcí lze z odborného hlediska klasifikovat jako síť fyzických zařízení komunikujících mezi sebou.
 Primárním obsahem zpráv jsou hodnoty získané v koncových zařízeních a příkazy pro jejich interkaci se světem.
@@ -7,6 +7,12 @@ uživatelské vstupy pomocí mechanických ovládacích prvků (tlačítka, pře
 realizovány pomocí zobrazovacích jednotek, signalizačních světel či reproduktorů, stejně tak jako pomocí motorů,
 elektrických relé či krokových motorů.
 
+Existuje několik hlavních motivací pro zavedení Internetu věcí.
+Tou první je možnost globální automatizace procesů okolo nás -- chytré domácnosti či chytré podniky.
+Díky snadno získatelným datům pro metriky je možné je vyhodnocovat v reálném čase a rozhodovat na základě nich bez
+přítomnosti nutné interakce od člověka.
+
+\subsubsection{Základní rozdělení Internetu věcí}
 Systémy pro Internet věcí lze v zásadě rozdělit dle vnitřní struktury na centralizované a decentralizované --
 sítě centralizovaných systémů obsahují centrální prvek řídící okolní zařízení a nejčastěji i distribuující data mezi
 nimi.
@@ -34,9 +40,6 @@ https://dzone.com/articles/the-internet-of-things-why-decentralization-must-b
     \end{tabularx}
     \label{table:iot-types}
 \end{table}
-
-\todo{Co je to IoT a proc jej potrebujeme?}
-\blind{1}
 
 \missingfigure{Schema centralizovaneho iot systemu}
 
@@ -96,11 +99,11 @@ https://doc.turris.cz/gadgets/domoticz
 http://www.stehlikovi.eu/zapisky/raspberry-pi-z-wave-a-domoticz/
 
 \subsection{Hardware}
-\todo{Pro SW poresit Loxone/SmartHome}
+\todo{Resit jeste nejak hardware?}
 \blind{1}
 
 \subsection{Software}
-\todo{Pro HW poresit komercni site/pyboardy a podobne}
+\todo{Resit jeste nejak software?}
 \blind{1}
 
 \section{ESP32}\label{sec:esp32}
@@ -197,6 +200,7 @@ každá z těchto tříd reprezentuje způsob, jak komunikovat s okolním světe
 třídu \ic{WLAN}, která je zodpovědná za práci s modulem pro WiFi připojení a to jak v klientském módu, tak v módu
 přístupového bodu.
 
+\todo{nechat tady tu ukazku?}
 \begin{code}[language=Python,caption={Ukázka práce }]
     import machine
     pin = machine.Pin(14, mode=machine.Pin.OUT)

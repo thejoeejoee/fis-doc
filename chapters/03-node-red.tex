@@ -66,7 +66,8 @@ Node-RED bez dalších rozšíření nabízí základní sadu uzlů, mezi ty nej
 \end{itemize}
 
 Pro bloky využívající externí služby nabízí Node-RED institut konfiguračních bloků.
-S pomocí nich je možné sdílet a znovupoužívat statickou konfiguraci v dalších blocích -- tedy např. údaje pro
+Tyto bloky jsou pouze virtuální, v síti nástroje Node-RED se viditelně nevyskytují, ale je
+s jejich pomocí možné sdílet a znovupoužívat statickou konfiguraci v dalších blocích -- tedy např. údaje pro
 připojení k MQTT brokeru není nutné zadávat do každého bloku zvlášť, ale jsou sdílené pro jeden konfigurační blok,
 který je následně přiřazen ke každému bloku vyžadující MQTT broker.
 
@@ -88,7 +89,7 @@ který je následně přiřazen ke každému bloku vyžadující MQTT broker.
 \end{figure}
 
 
-\section{Rozšíření pomocí vlastních modulů}\label{sec:rozšíření-pomocí-vlastních-bloků}
+\section{Rozšíření pomocí vlastních modulů}\label{sec:node-red-rozsireni}
 
 Nástroj Node-RED mj. díky své otevřenosti nabízí rozšiřování pomocí vlastních bloků s vlastním
 chování.
