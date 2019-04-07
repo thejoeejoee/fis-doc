@@ -14,7 +14,7 @@ rozšiřování.
     \caption{Ukázka z~Node-RED -- vstupy a výstupy jednotlivých uzlů spojené pro vzájemnou komunikaci.}
 \end{figure}
 
-\subsection{Programování datového toku}
+\subsubsection{Programování datového toku}
 Programovací paradigma založené na editaci datového toku bylo popsáno v~již v dubnu roku 1974 vědcem Dennisem. Jeho
 principem je programování pomocí vytváření datových spojů mezi funkčními bloky.
 Ve své knize \uv{First Version of a Data Flow Procedure Language}~\cite{FirstVersionOfDataflow} popisuje sémantický
@@ -24,7 +24,6 @@ programming}
 
 \section{Základní principy Node-RED}\label{sec:zakladni-principy-node-red}
 
-\todo{Pouziti, opensource}
 Vnitřní architektura nástroje Node-RED je rozdělena na dva samostatné funkční části.
 V~pohledu samotného běhu je důležitější částí jádro provádějící veškeré datové operace nad samotným nadefinovaným
 modelem, zodpovědné za spouštění jednotlivých uživatelských uzly, jejich synchronizaci a vzájemnou distribuci dat.
@@ -89,12 +88,52 @@ který je následně přiřazen ke každému bloku vyžadující MQTT broker.
 \end{figure}
 
 
-\section{Rozšíření pomocí vlastních modulů}\label{sec:rozšíření-pomocí-vlastních-modulů}
+\section{Rozšíření pomocí vlastních modulů}\label{sec:rozšíření-pomocí-vlastních-bloků}
 
-Díky povaze nástroje Node-RED
+Nástroj Node-RED mj. díky své otevřenosti nabízí rozšiřování pomocí vlastních bloků s vlastním
+chování.
+Ve chvíli svého startu tento nástroj proskenuje jmenný prostor nainstalovaných knihoven a do užšího výběru bere
+knihovny s názvem začínajícím na \ic{node-red-contrib-} -- tento prefix značí, že knihovna může obsahovat rozšiřující
+bloky.
+Standardem v ekosystému jazyka Javascript je soubor \texttt{package.json} obsahující metainformace o konkrétním
+balíčku (knihovně) -- v tomto souboru vyhledává Node-RED klíč \texttt{node-red} a následně \texttt{nodes}.
 
+Balíček takto exportuje uzly, které jsou zařazeny do galerie všech dostupných uzlů -- reprezentaci v galerii zajišťuje
+soubor se zdrojovým kódem v jazyce HTML.
+V tomto souboru je pro uzel definován název, nápověda či ikona, ale především počet vstupů a výstupů a vlastní
+konfigurační parametry, které se následně zobrazují jako nastavitelné přímo v editoru -- kromě standardních vstupů
+pro řetězce se může jednat o výběr z výčtu, výběr barvy či výběr konfiguračního bloku popsaného výše.
 
-\todo{Rozšíření pomocí vlastních modulů}
+Druhým souborem je soubor v jazyce Javascript popisující chování samotného uzlu -- zde jsou definovány reakce na
+přicházející zprávy (implementace zpracovávající příchozí zprávy), ale také připojení na služby dalších stran.
+Standardním obsahem tohoto souboru je funkce, která ve svém těle registruje konkrétní blok do centrálního registru
+bloků a následně i implemnetace tohoto bloku.
+Z editoru jsou zde dostupné nakonfigurované parametry (v parametru funkce), které mohou být následně použity pro
+úpravu chování bloku.
+Ve zdrojovém kódu~\ref{code:node-red-custom-block} se nachází ukázka implementace jednoduchého rozšiřujícího bloku --
+v bloku hlavní funkce je navázána funkce obsluhující událost \ic{input}.
+Na základě této události je zpracována příchozivší zpráva a výsledek je opět dál odeslán jako zpráva datového typu
+\ic{Object}.
+
+% @formatter:off
+\begin{code}[%
+    caption={Ukázka implementace vlastního rozšiřujícího bloku do nástroje Node-RED.},
+    label=code:node-red-custom-block,
+    language=Javascript
+]
+module.exports = function(RED) {
+    function StringLengthNode(config) {
+        RED.nodes.createNode(this, config);
+        var node = this;
+        node.on('input', function(msg) {
+            msg.payload = msg.payload.length;
+            node.send(msg);
+        });
+    }
+    RED.nodes.registerType("string-length", StringLengthNode);
+}
+\end{code}
+% @formatter:on
 
 
 \missingfigure{Node-RED spojeni}

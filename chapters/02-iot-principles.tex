@@ -8,7 +8,8 @@ realizovány pomocí zobrazovacích jednotek, signalizačních světel či repro
 elektrických relé či krokových motorů.
 
 Systémy pro Internet věcí lze v zásadě rozdělit dle vnitřní struktury na centralizované a decentralizované --
-sítě těch prvně jmenovaných obsahují centrální prvek řídící okolní zařízení a nejčastěji i distribuující data mezi nimi.
+sítě centralizovaných systémů obsahují centrální prvek řídící okolní zařízení a nejčastěji i distribuující data mezi
+nimi.
 Decentralizované sítě jsou poté složeny pouze z množiny zařízení, u kterých dochází výhradně ke komunikaci mezi
 samotnými uzly bez dodatečného prostředníka.
 Porovnání základních vlastností těchto dvou konceptů lze nalézt v tabulce~\ref{table:iot-types}.
@@ -164,20 +165,22 @@ Jedním z benefitů tohoto typu systému je možnost použití programového ř�
 (jako je SPI, I\textsuperscript{2}C nebo USART) -- tato rozhraní lze poté naimplementovat, není nutný konkrétní hardwarový prvek.
 
 I přes omezenou vestavěnou knihovnu a vysokoúrovňovost tohoto jazyka jej lze použít ve světě internetu věcí --
-a to především díky jeho paměťové optimalizaci.
+a to především díky jeho paměťové optimalizaci.\todo{weird}
 Nespornou výhodou pro použití v internetu věcí je i dostupnost základních knihoven pro komunikaci s okolním světem.
 MicroPython v základu nabízí knihovnu \ic{machine} s třídami \ic{Pin}, \ic{PWM} či \ic{ADC} --
-každá z těchto tříd reprezentuje způsob, jak komunikovat s okolním světem pomocí vestavěných periférií.
-I vestavěná knihovna je ovšem svým obsahem závislá na konkrétní distribuci pro konkrétní vývojový kit
+každá z těchto tříd reprezentuje způsob, jak komunikovat s okolním světem pomocí vestavěných periférií
+-- i vestavěná knihovna je ovšem svým obsahem závislá na konkrétní distribuci pro konkrétní vývojový kit.
 
-\begin{code}
+
+
+\begin{code}[language=Python]
     import machine
     pin = machine.Pin(14, mode=machine.Pin.OUT)
     pin.value(1)
 \end{code}
 
 
-\section{Message Queuing Telemetry Transport}\label{sec:message-queuing-telemetry-transport}
+\section{Message Queuing Telemetry Transport}\label{sec:mqtt}
 Message Queuing Telemetry Transport (MQTT) je protokol definovaný ISO standardem určený pro kanálovou komunikaci zařízení
 mezi sebou.
 Jedná se o typ komunikace klient-server nad protokolem TCP/IP, server je dle svých vlastností nazýván specificky jako \uv{broker}.
@@ -194,7 +197,8 @@ práci.
 
 \subsection{Příznak zprávy \uv{retain}}\label{subsec:priznak-zpravy-retain}
 Pomocí příznaku \uv{retain} může klient pro zprávu v konkrétním kanálu zažádat o její ponechání v kanálu pro budoucí
-klienty -- tedy, zaregistruje-li si klient kanál k odběru, broker klientovi automaticky po zaregistrování odešle zprávy,
+klienty -- tedy, zaregistruje-li si klient kanál k odběru, broker klientovi automaticky po zaregistrovásíní odešle
+zprávy,
 spadající tohoto kanálu (či kanálů v případě zástupných znaků), které mají nastavený tento příznak.
 
 Tohoto chování lze velmi dobře využít pro kanály obsahující stav kterékoliv části ze systému --
@@ -226,7 +230,6 @@ hodnoty dostupné pro QoS:
 \end{figure}
 
 \subsection{Identifikace klienta \uv{Client ID}}\label{subsec:identifikace-klienta-client-id}
-\todo{Client ID}
 Možností klienta je zapsat si při připojení k brokeru své \uv{Client ID}.
 Jedná se o řetězec jednoznačně identifikující konkrétního klienta -- hlavním benefitem je (v případě podpory
 persistentních sezení) je možnost zachování zaregistrovaných kanálů k odběru v případě odpojení a

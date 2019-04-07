@@ -1006,21 +1006,28 @@ faculty.en=,faculty=FIT
 
 \definecolor{codeprimary}{HTML}{3300CC}
 \colorlet{keywordstyle}{codeprimary!50!black}
+\colorlet{stringstyle}{codeprimary!25!red}
+
 
 % custom joe
+\renewcommand\lstlistlistingname{Seznam zdrojových kódů}
+\renewcommand\lstlistingname{Zdrojový kód}
+
 \usepackage{newverbs}
 \lstset{
 % language=Python,
-frameround=fftf,
+frameround=ftff,
 breaklines=true,
-keywordstyle=\color{keywordstyle}\ttfamily,
+keywordstyle=\color{codeprimary}\ttfamily,
 basicstyle=\color{codeprimary},
-numberstyle=\color{black},
-backgroundcolor=\color{white},
+commentstyle=\color{purple}\ttfamily,
+stringstyle=\color{stringstyle},
+%numberstyle=\color{black},
+%backgroundcolor=\color{white},
 frame=single,
 tabsize=4,
 breaklines=true,
-captionpos=t,
+captionpos=b,
 xleftmargin=\dimexpr\fboxsep+1pt\relax,
 xrightmargin=\fboxsep,
 numbers=none,
@@ -1028,7 +1035,22 @@ showstringspaces=false,
 escapeinside={\#!}{\^^M},
 belowcaptionskip=0pt,
 belowskip=0pt,
-aboveskip=0pt,
+aboveskip=10pt,
+float,
+}
+\lstloadlanguages{Python}
+
+\lstdefinelanguage{JavaScript}{
+keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break},
+keywordstyle=\color{blue}\bfseries,
+ndkeywords={class, export, boolean, throw, implements, import, this},
+% ndkeywordstyle=\color{darkgray}\bfseries,
+% identifierstyle=\color{black},
+sensitive=false,
+comment=[l]{//},
+morecomment=[s]{/*}{*/},
+morestring=[b]',
+morestring=[b]"
 }
 
 \lstdefinelanguage{json}{
@@ -1073,33 +1095,17 @@ literate=
 \newcommand{\ic}[1]{{\lstinline[basicstyle=\ttfamily\color{codeprimary},breaklines=true]|#1|}}
 \makeatother
 
-\lstset{
-basicstyle=\ttfamily,
-columns=fullflexible,
-showstringspaces=false,
-commentstyle=\color{gray}\upshape,
-captionpos=b
-}
+%\lstset{
+%basicstyle=\ttfamily,
+%columns=fullflexible,
+%showstringspaces=false,
+%commentstyle=\color{gray}\upshape,
+%captionpos=b
+%}
 
 \lstnewenvironment{code}[1][]%
 {\noindent\lstset{frameround=fttf,#1}}%
 {}%
-
-\lstdefinestyle{csh}{language=[Sharp]C,
-showspaces=false,
-showtabs=false,
-breaklines=false,
-showstringspaces=false,
-breakatwhitespace=true,
-escapeinside={(*@}{@*)},
-commentstyle=\color{greencomments},
-keywordstyle=\color{bluekeywords},
-stringstyle=\color{redstrings},
-basicstyle=\ttfamily,
-captionpos=b,
-numbers=left,
-frame=single,
-}
 
 \lstdefinelanguage{XML}
 {
@@ -1110,41 +1116,6 @@ stringstyle=\color{black},
 identifierstyle=\color{darkblue},
 keywordstyle=\color{cyan},
 morekeywords={xmlns,version,type} % list your attributes here
-}
-
-\lstdefinestyle{npl}{language=c,
-showspaces=false,
-showtabs=false,
-breaklines=true,
-showstringspaces=false,
-breakatwhitespace=true,
-escapeinside={(*@}{@*)},
-commentstyle=\color{greencomments},
-keywordstyle=\color{bluekeywords},
-stringstyle=\color{redstrings},
-basicstyle=\ttfamily,
-captionpos=b,
-numbers=left,
-frame=single,
-morekeywords={UINT8, UINT16, UINT32, INT8, INT16, INT32, Post, Properties, Protocol, AsciiString, String, StringTerm, BLOB, FormatString, this},
-}
-
-
-\lstdefinestyle{c++}{language=c,
-showspaces=false,
-showtabs=false,
-breaklines=true,
-showstringspaces=false,
-breakatwhitespace=true,
-escapeinside={(*@}{@*)},
-commentstyle=\color{greencomments},
-keywordstyle=\color{bluekeywords},
-stringstyle=\color{redstrings},
-basicstyle=\ttfamily,
-captionpos=b,
-numbers=left,
-frame=single,
-morekeywords={UINT8, UINT16, UINT32, INT8, INT16, INT32, Post, Properties, Protocol, AsciiString, String, StringTerm, BLOB, FormatString, this},
 }
 
 %END Jan Pluskal (ipluskal) listings
