@@ -1007,42 +1007,56 @@ faculty.en=,faculty=FIT
 \definecolor{codeprimary}{HTML}{3300CC}
 \colorlet{keywordstyle}{codeprimary!50!black}
 \colorlet{stringstyle}{codeprimary!25!red}
+\colorlet{commentstyle}{purple!90!white}
+
+\colorlet{jsonNumb}{codeprimary}
+\colorlet{jsonDelim}{black}
+\colorlet{jsonPunct}{black}
 
 
 % custom joe
+\hyphenation{Node-RED}
 \renewcommand\lstlistlistingname{Seznam zdrojových kódů}
 \renewcommand\lstlistingname{Zdrojový kód}
 
 \usepackage{newverbs}
 \lstset{
 % language=Python,
-frameround=ftff,
+frameround=tfft,
+frame=single,
 breaklines=true,
-keywordstyle=\color{codeprimary}\ttfamily,
-basicstyle=\color{codeprimary},
-commentstyle=\color{purple}\ttfamily,
+keywordstyle=\color{keywordstyle}\bfseries,
+basicstyle=\color{codeprimary}\ttfamily,
+commentstyle=\color{commentstyle}\ttfamily,
 stringstyle=\color{stringstyle},
 %numberstyle=\color{black},
 %backgroundcolor=\color{white},
-frame=single,
+% frame=single,
 tabsize=4,
-breaklines=true,
 captionpos=b,
 xleftmargin=\dimexpr\fboxsep+1pt\relax,
 xrightmargin=\fboxsep,
-numbers=none,
-showstringspaces=false,
 escapeinside={\#!}{\^^M},
-belowcaptionskip=0pt,
+abovecaptionskip=.5\baselineskip,
 belowskip=0pt,
-aboveskip=10pt,
+aboveskip=\baselineskip,
 float,
+columns=fullflexible,
+keepspaces=true,
+%
+numberstyle=\tiny\color{black}, % TODO: chci cisla radku?
+% numberblanklines=false,
+stepnumber=2,
+% numberfirstline=true,
+numbers=left,
+numbers=none,
+%
+%gobble=4, % auto strip spaces
 }
 \lstloadlanguages{Python}
 
 \lstdefinelanguage{JavaScript}{
 keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break},
-keywordstyle=\color{blue}\bfseries,
 ndkeywords={class, export, boolean, throw, implements, import, this},
 % ndkeywordstyle=\color{darkgray}\bfseries,
 % identifierstyle=\color{black},
@@ -1054,31 +1068,26 @@ morestring=[b]"
 }
 
 \lstdefinelanguage{json}{
-basicstyle=\normalfont\ttfamily,
-numbers=left,
-numberstyle=\scriptsize,
-stepnumber=1,
-numbersep=8pt,
-showstringspaces=false,
+showstringspaces=true,
 breaklines=true,
 frame=lines,
 literate=
-*{0}{{{\color{numb}0}}}{1}
-{1}{{{\color{numb}1}}}{1}
-{2}{{{\color{numb}2}}}{1}
-{3}{{{\color{numb}3}}}{1}
-{4}{{{\color{numb}4}}}{1}
-{5}{{{\color{numb}5}}}{1}
-{6}{{{\color{numb}6}}}{1}
-{7}{{{\color{numb}7}}}{1}
-{8}{{{\color{numb}8}}}{1}
-{9}{{{\color{numb}9}}}{1}
-{:}{{{\color{punct}{:}}}}{1}
-{,}{{{\color{punct}{,}}}}{1}
-{\{}{{{\color{delim}{\{}}}}{1}
-{\}}{{{\color{delim}{\}}}}}{1}
-{[}{{{\color{delim}{[}}}}{1}
-{]}{{{\color{delim}{]}}}}{1},
+*{0}{{{\color{jsonNumb}0}}}{1}
+{1}{{{\color{jsonNumb}1}}}{1}
+{2}{{{\color{jsonNumb}2}}}{1}
+{3}{{{\color{jsonNumb}3}}}{1}
+{4}{{{\color{jsonNumb}4}}}{1}
+{5}{{{\color{jsonNumb}5}}}{1}
+{6}{{{\color{jsonNumb}6}}}{1}
+{7}{{{\color{jsonNumb}7}}}{1}
+{8}{{{\color{jsonNumb}8}}}{1}
+{9}{{{\color{jsonNumb}9}}}{1}
+{:}{{{\color{jsonPunct}{:}}}}{1}
+{,}{{{\color{jsonPunct}{,}}}}{1}
+{\{}{{{\color{jsonDelim}{\{}}}}{1}
+{\}}{{{\color{jsonDelim}{\}}}}}{1}
+{[}{{{\color{jsonDelim}{[}}}}{1}
+{]}{{{\color{jsonDelim}{]}}}}{1},
 }
 
 
@@ -1092,19 +1101,13 @@ literate=
 %\def\@@ic#1#2#3{%
 %{\lstinline[basicstyle=\ttfamily\color{codeprimary},breaklines=true]|#3|}%
 %}
-\newcommand{\ic}[1]{{\lstinline[basicstyle=\ttfamily\color{codeprimary},breaklines=true]|#1|}}
+\newcommand{\ic}[1]{{\lstinline[]|#1|}}
+\newcommand{\json}[1]{{\lstinline[language=json]|#1|}}
 \makeatother
 
-%\lstset{
-%basicstyle=\ttfamily,
-%columns=fullflexible,
-%showstringspaces=false,
-%commentstyle=\color{gray}\upshape,
-%captionpos=b
-%}
 
 \lstnewenvironment{code}[1][]%
-{\noindent\lstset{frameround=fttf,#1}}%
+{\noindent\lstset{#1}}%
 {}%
 
 \lstdefinelanguage{XML}

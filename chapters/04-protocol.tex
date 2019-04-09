@@ -1,21 +1,21 @@
 \chapter{Návrh rozšíření Node-RED a komunikačního protokolu}
 \label{ch:protokol}
 
-V této kapitole bude popsán princip funkce koncových uzlů a způsob, kterým s nimi bude komunikováno.
-S využitím možností, které nabízí jazyk MicroPython, popsaných v kapitole~\ref{sec:micropython}, jsem se rozhodl
-koncové uzly používat víceúčelově -- v jeden moment na uzlu může více instancí aplikací.
-\textbf{Aplikace} je v kontextu této práce jednoúčelový program ovládající konkrétní periferii uzlu -- pro svou činnost
+V~této kapitole bude popsán princip funkce koncových uzlů a způsob, kterým s~nimi bude komunikováno.
+S~využitím možností, které nabízí jazyk MicroPython, popsaných v~kapitole~\ref{sec:micropython}, jsem se rozhodl
+koncové uzly používat víceúčelově -- v~jeden moment na uzlu může více instancí aplikací.
+\textbf{Aplikace} je v~kontextu této práce jednoúčelový program ovládající konkrétní periferii uzlu -- pro svou činnost
 využívá rozhraní poskytnutého operačním systémem běžícím na ESP32.
-O přepínání kontextu se stará operační systém, stejně jako připojení k Internetu, brokeru MQTT a o správu uzlu jako
+O~přepínání kontextu se stará operační systém, stejně jako připojení k~Internetu, brokeru MQTT a o~správu uzlu jako
 takového.
 
-Aplikace je možné dělit na vstupní (data z reálného světa posílají pomocí zpráv do sítě) a na výstupní (data ze sítě
-transformují na interakci s okolním světem).
+Aplikace je možné dělit na vstupní (data z~reálného světa posílají pomocí zpráv do sítě) a na výstupní (data ze sítě
+transformují na interakci s~okolním světem).
 
 \section{Požadavky na protokol}\label{sec:pozadavky-na-protokol}
 Základním spojovacím prvkem nástroje Node-RED a vlastních uzlů je rozhraní, pomocí kterého budou
 komunikovat.
-S využitím protokolu MQTT a jeho vlastností popíšu v této kapitole základní požadavky na komunikační protokol a
+S~využitím protokolu MQTT a jeho vlastností popíšu v~této kapitole základní požadavky na komunikační protokol a
 následně jej navrhnu -- ze základních požadavků poté budou plynout i požadavky na obě strany komunikace (uzly i
 Node-RED -- centrální uzel).
 
@@ -23,45 +23,45 @@ Na základě povahy a potřeb obou komunikujících stran jsem navrhnul tyto zá
 \begin{enumerate}
     \item \textbf{Pro zprávy je použit formát JSON} \\
     Důvodem je jeho jednoduchost, kvalitní podpora a textová podstata (tedy i snažší ladění).
-    Ze strany Node-RED je tento formát implicitní -- jedná se o \uv{Javascript Object Notation} -- serializace a
+    Ze strany Node-RED je tento formát implicitní -- jedná se o~\uv{Javascript Object Notation} -- serializace a
     deserializace probíhají zcela přirozeně.
     Na straně uzlů pak poskytuje MicroPython kompletní podporu pro tento formát -- deserializace probíhá do
     vestavěných typů.
 
-    \item \textbf{Samostatné kanály pro směry \uv{do uzlu} a \uv{z uzlu}} \\
+    \item \textbf{Samostatné kanály pro směry \uv{do uzlu} a \uv{z~uzlu}} \\
     Pro snížení datového toku a cílení zpráv pro konkrétní uzly je nutné oddělit komunikační kanály pro každý
     samostatný uzel -- rozšíření na straně Node-RED zajistí směřování do konkrétních kanálů dle konfigurace a uzly
     naopak odběr kanálů pouze příslušících danému uzlu.
 
     \item \textbf{Samostatné kanály pro jednotlivé aplikace na uzlu} \\
-    Jednotlivé aplikace běžící na uzlech je nutné v protokolu od sebe oddělovat -- tzn. kromě rozlišení na úrovni
-    všech uzlů musí dojít k rozlišení běžících aplikací na úrovni jednoho uzlu.
+    Jednotlivé aplikace běžící na uzlech je nutné v~protokolu od sebe oddělovat -- tzn. kromě rozlišení na úrovni
+    všech uzlů musí dojít k~rozlišení běžících aplikací na úrovni jednoho uzlu.
 
-    \item \textbf{Obsah zprávy je plně v režii aplikace} \\
-    Protokol jako takový nepožaduje (kromě vlastních režijních zpráv) konkrétní obsah zpráv -- jejich schéma a datové
-    typy obsahu jsou plně v režii komunikující dvojice aplikace na uzlu a bloku v nástroji Node-RED.
+    \item \textbf{Obsah zprávy je plně v~režii aplikace} \\
+    Protokol jako takový nevyžaduje \emph{(kromě vlastních režijních zpráv)} konkrétní obsah zpráv -- jejich schéma a
+    datové typy obsahu jsou plně v~režii komunikující dvojice aplikace na uzlu a bloku v~nástroji Node-RED.
 
     \item \textbf{Kanály pro status a konfiguraci uzlu} \\
-    Pro režijní komunikaci s uzlem je nutný samostatný konfigurační kanál, pomocí kterého bude uzel příjmat příkazy k
-    zavedení aplikace, její překonfigurování či ukončení -- dále pomocí něj mohou být přenášeny informace o vytížení
-    uzlu, chybách aplikací či nastavení připojení k nástroji Node-RED, potažmo MQTT brokeru.
+    Pro režijní komunikaci s~uzlem je nutný samostatný konfigurační kanál, pomocí kterého bude uzel příjmat příkazy
+    k~zavedení aplikace, její překonfigurování či ukončení -- dále pomocí něj mohou být přenášeny informace o~vytížení
+    uzlu, chybách aplikací či nastavení připojení k~nástroji Node-RED, potažmo MQTT brokeru.
     Druhým nutným kanálem je zpětný kanál statusu, kterým bude uzel oznamovat do sítě svůj stav (připojen či
     nepřipojen), případně další informace (využití úložiště, čekající data).
 \end{enumerate}
 
 \section{MQTT kanály}\label{sec:mqtt-kanaly}
-Na základě všech vlastností protokolu MQTT popsaných v kapitole~\ref{sec:mqtt} jsem právě jej zvolil za spojovací
+Na základě všech vlastností protokolu MQTT popsaných v~kapitole~\ref{sec:mqtt} jsem právě jej zvolil za spojovací
 prvek koncových uzlů a uzlu centrálního.
-V popisu navrhnutých kanálů budou použity následující symboly:
+V~popisu navrhnutých kanálů budou použity následující symboly:
 \begin{itemize}
-    \item \ic{NODE_ID} je jednoznačná identifikace uzlu v síti
-    \item \ic{APP_ID} je jednoznačná identifikace instance aplikace v rámci uzlu
-    \item \ic{\#} je zástupný znak popsaný v kapitole~\ref{sec:mqtt}
-    \item \ic{fis} \textbf{je zkratka z Fast IoT Solution -- programového názvu pro tento projekt} (bude použito i dále)
+    \item \ic{NODE_ID} je jednoznačná identifikace uzlu v~síti
+    \item \ic{APP_ID} je jednoznačná identifikace instance aplikace v~rámci uzlu
+    \item \ic{\#} je zástupný znak popsaný v~kapitole~\ref{sec:mqtt}
+    \item \ic{fis} \textbf{je zkratka z~Fast IoT Solution -- programového názvu pro tuto práci}
 \end{itemize}
 
-Na základě požadavků stanovených v kapitole~\ref{sec:pozadavky-na-protokol} jsem navrhnul použití následujících kanálů
-MQTT (funkce budou popsány z pohledu centrálního uzlu):
+Na základě požadavků stanovených v~kapitole~\ref{sec:pozadavky-na-protokol} jsem navrhnul použití následujících kanálů
+MQTT (funkce budou popsány z~pohledu centrálního uzlu):
 
 \begin{itemize}
     \item \ic{fis/to/NODE_ID/app/APP_ID} \\
@@ -69,40 +69,39 @@ MQTT (funkce budou popsány z pohledu centrálního uzlu):
     všechny jeho podkanály (\ic{fis/to/NODE_ID/app/APP_ID/\#}) také míří do dané aplikace.
 
     \item \ic{fis/from/NODE_ID/app/APP_ID} \\
-    Tento kanál je určen pro odběr zpráv z konkrétní aplikace na uzlu --
-    všechny jeho podkanály (\ic{fis/from/NODE_ID/app/APP_ID/\#}) také míří z dané aplikace.
+    Tento kanál je určen pro odběr zpráv z~konkrétní aplikace na uzlu --
+    všechny jeho podkanály (\ic{fis/from/NODE_ID/app/APP_ID/\#}) také míří z~dané aplikace.
 
     \item \ic{fis/from/NODE_ID/status} \\
-    Slouží pro signalizaci stavu uzlu pro Node-RED -- s pomocí parametru zpráv \uv{retain} (popsaného v
-    kapitole~\ref{subsec:priznak-zpravy-retain}), zde dochází k zachování posledního známého stavu uzlu.
+    Slouží pro signalizaci stavu uzlu pro Node-RED -- s~pomocí parametru zpráv \uv{retain} (popsaného
+    v~kapitole~\ref{subsec:priznak-zpravy-retain}), zde dochází k~zachování posledního známého stavu uzlu.
 \end{itemize}
 
 \todo{zapnout JSON pro IC}
 \begin{table}
     \centering
-    \caption{Příklady využití navrhnutého prokolu pro komunikaci -- řádek vždy představuje jednu konkrétní zprávu v
-    protokolu MQTT}
+    \caption{Příklady využití navrhnutého prokolu pro komunikaci -- řádek vždy představuje jednu konkrétní zprávu
+    v~protokolu MQTT.}
     \begin{tabularx}{\textwidth}{s|l|s}
         \textbf{kanál} & \textbf{zpráva} & \textbf{význam} \\
         \hline
-        \ic{fis/from/25a8ced/status} & \ic{\{"online": true\}} & uzel \uv{25a8ced} oznamuje změnu svého stavu -- své
-        připojení \\
+        \ic{fis/from/25a8ced/status} & \json{\{"online": true\}} & uzel \uv{25a8ced} oznamuje změnu svého
+        stavu -- své připojení \\
 
-        \ic{fis/from/25a8ced/app/74cae6f} & \ic{\{"value": 0.3745\}} & aplikace publikuje obecná data bez rozlišení
+        \ic{fis/from/25a8ced/app/74cae6f} & \json{\{"value": 0.3745\}} & aplikace publikuje obecná data bez rozlišení
         subkanálu\\
 
-        \ic{fis/from/25a8ced/app/74cae6f/temperature} & \ic{\{"value": 18.9\}} & aplikace publikuje data do svého
+        \ic{fis/from/25a8ced/app/74cae6f/temperature} & \json{\{"value": 18.9\}} & aplikace publikuje data do svého
         subkanálu \uv{temperature} \\
 
-        \ic{fis/to/25a8ced/app/config} & \ic{\{"action": "reload"\}} & centrální uzel zasílá zprávu pro aplikaci
+        \ic{fis/to/25a8ced/app/config} & \json{\{"action": "reload"\}} & centrální uzel zasílá zprávu pro aplikaci
         \uv{config} \\
 
-        \ic{fis/to/25a8ced/app/3b1cef/bottom} & \ic{\{"color": "orange"\}} & centrální uzel zasílá aplikaci
+        \ic{fis/to/25a8ced/app/3b1cef/bottom} & \json{\{"color": "orange"\}} & centrální uzel zasílá aplikaci
         \uv{3b1cef} zprávu do jejího subkanálu \uv{bottom} \\
 
-
     \end{tabularx}
-    \label{table:mqtt-subscribes}
+    \label{table:protocol-examples}
 \end{table}
 
 \section{Navržený protokol}

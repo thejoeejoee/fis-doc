@@ -15,7 +15,7 @@ rozšiřování.
 \end{figure}
 
 \subsubsection{Programování datového toku}
-Programovací paradigma založené na editaci datového toku bylo popsáno v~již v dubnu roku 1974 vědcem Dennisem. Jeho
+Programovací paradigma založené na editaci datového toku bylo popsáno v~již v~dubnu roku 1974 vědcem Dennisem. Jeho
 principem je programování pomocí vytváření datových spojů mezi funkčními bloky.
 Ve své knize \uv{First Version of a Data Flow Procedure Language}~\cite{FirstVersionOfDataflow} popisuje sémantický
 význam funkčních bloků propojených pomocí propojů, které zajištují vzájemnou komunikaci. \todo{Dataflow/flow based
@@ -66,9 +66,9 @@ Node-RED bez dalších rozšíření nabízí základní sadu uzlů, mezi ty nej
 \end{itemize}
 
 Pro bloky využívající externí služby nabízí Node-RED institut konfiguračních bloků.
-Tyto bloky jsou pouze virtuální, v síti nástroje Node-RED se viditelně nevyskytují, ale je
-s jejich pomocí možné sdílet a znovupoužívat statickou konfiguraci v dalších blocích -- tedy např. údaje pro
-připojení k MQTT brokeru není nutné zadávat do každého bloku zvlášť, ale jsou sdílené pro jeden konfigurační blok,
+Tyto bloky jsou pouze virtuální, v~síti nástroje Node-RED se viditelně nevyskytují, ale je
+s~jejich pomocí možné sdílet a znovupoužívat statickou konfiguraci v~dalších blocích -- tedy např. údaje pro
+připojení k~MQTT brokeru není nutné zadávat do každého bloku zvlášť, ale jsou sdílené pro jeden konfigurační blok,
 který je následně přiřazen ke každému bloku vyžadující MQTT broker.
 
 \begin{figure}%
@@ -76,7 +76,7 @@ který je následně přiřazen ke každému bloku vyžadující MQTT broker.
     \subfloat[konfigurace výstupního MQTT bloku -- modře zvýrazněn vybraný MQTT broker]%
     {{\includegraphics[valign=t,width=.45\textwidth]{figures/node-red-mqtt-out-conf.png}}}%
     \qquad
-    \subfloat[konfigurace připojení k MQTT brokeru -- konfigurační blok]%
+    \subfloat[konfigurace připojení k~MQTT brokeru -- konfigurační blok]%
     {{\includegraphics[valign=t,width=.45\textwidth]{figures/node-red-mqtt-broker-conf.png} }}%
     %
     \caption{%
@@ -91,34 +91,37 @@ který je následně přiřazen ke každému bloku vyžadující MQTT broker.
 
 \section{Rozšíření pomocí vlastních modulů}\label{sec:node-red-rozsireni}
 
-Nástroj Node-RED mj. díky své otevřenosti nabízí rozšiřování pomocí vlastních bloků s vlastním
+Nástroj Node-RED mj. díky své otevřenosti nabízí rozšiřování pomocí vlastních bloků s~vlastním
 chování.
-Ve chvíli svého startu tento nástroj proskenuje jmenný prostor nainstalovaných knihoven a do užšího výběru bere
-knihovny s názvem začínajícím na \ic{node-red-contrib-} -- tento prefix značí, že knihovna může obsahovat rozšiřující
-bloky.
-Standardem v ekosystému jazyka Javascript je soubor \texttt{package.json} obsahující metainformace o konkrétním
-balíčku (knihovně) -- v tomto souboru vyhledává Node-RED klíč \texttt{node-red} a následně \texttt{nodes}.
+Při startu tento nástroj proskenuje jmenný prostor nainstalovaných knihoven a do užšího výběru vybere
+knihovny s~názvem začínajícím na {\ic{node-red-contrib-}} -- tento prefix značí, že knihovna může obsahovat
+rozšiřující bloky. % mbox hack to no break in the middle
+Standardem v~ekosystému jazyka Javascript je soubor \texttt{package.json} obsahující metainformace o~konkrétním
+balíčku (knihovně) -- v~tomto souboru vyhledává Node-RED klíč \texttt{node-red} a následně \texttt{nodes}.
 
-Balíček takto exportuje uzly, které jsou zařazeny do galerie všech dostupných uzlů -- reprezentaci v galerii zajišťuje
-soubor se zdrojovým kódem v jazyce HTML.
-V tomto souboru je pro uzel definován název, nápověda či ikona, ale především počet vstupů a výstupů a vlastní
-konfigurační parametry, které se následně zobrazují jako nastavitelné přímo v editoru -- kromě standardních vstupů
-pro řetězce se může jednat o výběr z výčtu, výběr barvy či výběr konfiguračního bloku popsaného výše.
+Balíček takto exportuje uzly, které jsou zařazeny do galerie všech dostupných uzlů -- reprezentaci v~galerii zajišťuje
+soubor se zdrojovým kódem v~jazyce HTML.
+V~tomto souboru je pro uzel definován název, nápověda či ikona, ale především počet vstupů a výstupů a vlastní
+konfigurační parametry, které se následně zobrazují jako nastavitelné přímo v~editoru -- kromě standardních vstupů
+pro řetězce se může jednat o~výběr z~výčtu, výběr barvy či výběr konfiguračního bloku popsaného výše
+(obrázek~\ref{fig:node-red-mqtt-out-conf} zachycuje možnosti definice parametrů).
 
-Druhým souborem je soubor v jazyce Javascript popisující chování samotného uzlu -- zde jsou definovány reakce na
+Druhým souborem je soubor v~jazyce Javascript popisující chování samotného uzlu -- zde jsou definovány reakce na
 přicházející zprávy (implementace zpracovávající příchozí zprávy), ale také připojení na služby dalších stran.
 Standardním obsahem tohoto souboru je funkce, která ve svém těle registruje konkrétní blok do centrálního registru
-bloků a následně i implemnetace tohoto bloku.
-Z editoru jsou zde dostupné nakonfigurované parametry (v parametru funkce), které mohou být následně použity pro
+bloků a následně i implementace tohoto bloku.
+Z~editoru jsou zde dostupné nakonfigurované parametry (v~parametru funkce), které mohou být následně použity pro
 úpravu chování bloku.
 Ve zdrojovém kódu~\ref{code:node-red-custom-block} se nachází ukázka implementace jednoduchého rozšiřujícího bloku --
-v bloku hlavní funkce je navázána funkce obsluhující událost \ic{input}.
+v~bloku hlavní funkce je navázána funkce obsluhující událost \ic{input}.
 Na základě této události je zpracována příchozivší zpráva a výsledek je opět dál odeslán jako zpráva datového typu
 \ic{Object}.
 
 % @formatter:off
 \begin{code}[%
-    caption={Ukázka implementace vlastního rozšiřujícího bloku do nástroje Node-RED.},
+    caption={Ukázka implementace vlastního rozšiřujícího bloku do nástroje Node-RED -- uzel s~jedním vstupem a
+výstupem, jehož funkcí je určení délky příchozí zprávy (řetězce).
+\emph{Implementace pro jednoduchost neobsahuje kontrolu datových typů či práci s~konfiguračními parametry uzlu.}},
     label=code:node-red-custom-block,
     language=Javascript
 ]
