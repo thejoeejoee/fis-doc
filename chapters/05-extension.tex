@@ -4,9 +4,84 @@
 Na základně poznatků z~kapitoly~\ref{sec:node-red-rozsireni} a komunikačního protokolu zde navrhnu a zrealizuji vlastní
 rozšíření nástroje Node-RED -- předmětem bude základní infrastruktura bloků a poté několik konkrétních aplikací
 nasaditelných přímo v~reálném provozu.
+% \marginpar{\small Poznámky na okraji}
 
-\section{Základní konfigurační blok}
-Základním stavebním prvkem pro další bloky je konfigurační blok \ic{fis-node}.
+\section{Základní konfigurační blok}\label{sec:zakladni-konfiguracni-blok}
+Základním stavebním prvkem pro další bloky je \ic{fis-node} (reprezentovaný třídou \ic{FisNode}) -- využije se tak
+konfiguračních bloků, díky kterým
+nebude nutné přihlašovací údaje k MQTT brokeru nebo identifikacím jednotlivých uzlů zadávat více než jednou.
+V konstruktoru této třídy, zobrazeném v ukázce~\ref{code:fis-node-constructor}, dochází k získání konfiguračních
+parametrů z formuláře (bude popsán níže), získání instance konfiguračního bloku pro MQTT připojení a přípravu kanálu
+na základě \ic{NODE_ID}.
+
+Získaná instance bloku pro MQTT je zodpovědná za správu připojení -- není tedy nutné brát v potaz možné odpojení a
+nutnost znovupřipojení -- tato instance bude následně použita k registraci odběrů a publikování zpráv do jednotlivých
+MQTT kanálů protokolu.
+Implementace tohoto bloku bohužel nemá zveřejněnou dokumentaci, veškeré poznatky o jeho funkci jsou tedy brány přímo
+z jeho zdrojového kódu\footnote{\url{https://github
+.com/node-red/node-red/blob/master/packages/node_modules/\%40node-red/nodes/core/io/10-mqtt.js}}.
+
+% @formatter:off
+\begin{code}[
+    numbers=left,
+    language=Javascript,
+    label=code:fis-node-constructor,
+    caption={Část konstruktoru třídy \ic{FisNode} obluhující připojení MQTT brokeru a přípravu kanálů pro komunikaci.}
+]
+class FisNode {
+    constructor(config) {
+        RED.nodes.createNode(this, config);
+        this.broker = RED.nodes.getNode(config.broker);
+        this.broker.connect(); // manually connect to MQTT broker
+        // prepare topics for further usage
+        this._publish_topic = ['fis', 'to', config.nodeId].join('/');
+        this._subscribe_topic = ['fis', 'from', config.nodeId].join('/');
+    }
+    #!\ldots
+    RED.nodes.registerType("fis-node", FisNode);
+}
+\end{code}
+
+Nedělitelnou součástí každébo bloku v Node-RED je jeho konfigurační formulář.
+
+\begin{code}[
+    numbers=left,
+    language=HTML,
+]
+<script type="text/javascript">
+    RED.nodes.registerType('fis-node', {
+        category: 'config',
+        defaults: {
+            broker: {type: "mqtt-broker", required: true, value: ""},
+            nodeId: {value: "", required: true, validate: RED.validators.regex(/^[a-z0-9]{12}$/i)},
+            name: {},
+        },
+        label: function () {
+            return this.name || this.broker;
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="fis-node">
+    <div class="form-row" id="node-config-row-broker">
+        <label for="node-config-input-broker">MQTT</label>
+        <input type="text" id="node-config-input-broker">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-nodeId">Node ID</label>
+        <input type="text" id="node-config-input-nodeId">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-name">Name</label>
+        <input type="text" id="node-config-input-name">
+    </div>
+</script>
+\end{code}
+% @formatter:on
+
+\section{Aplikace a jejich správa na uzlu}
+\todo{Vysledek}
+\blind{3}
 
 \section{Práce s~MQTT}
 \todo{Jak poslouchat, jak publish atd.}

@@ -51,11 +51,11 @@ Na základě povahy a potřeb obou komunikujících stran jsem navrhnul tyto zá
 
 \section{MQTT kanály}\label{sec:mqtt-kanaly}
 Na základě všech vlastností protokolu MQTT popsaných v~kapitole~\ref{sec:mqtt} jsem právě jej zvolil za spojovací
-prvek koncových uzlů a uzlu centrálního.
+prvek koncových uzlů a uzlu centrálního. \todo{podivný oslí můstek}
 V~popisu navrhnutých kanálů budou použity následující symboly:
 \begin{itemize}
-    \item \ic{NODE_ID} je jednoznačná identifikace uzlu v~síti
-    \item \ic{APP_ID} je jednoznačná identifikace instance aplikace v~rámci uzlu
+    \item \ic{NODE_ID} je jednoznačná textová identifikace uzlu v~síti
+    \item \ic{APP_ID} je jednoznačná textová identifikace instance aplikace v~rámci uzlu
     \item \ic{\#} je zástupný znak popsaný v~kapitole~\ref{sec:mqtt}
     \item \ic{fis} \textbf{je zkratka z~Fast IoT Solution -- programového názvu pro tuto práci}
 \end{itemize}
@@ -103,9 +103,5 @@ MQTT (funkce budou popsány z~pohledu centrálního uzlu):
     \end{tabularx}
     \label{table:protocol-examples}
 \end{table}
-
-\section{Navržený protokol}
-\todo{Vysledek}
-\blind{3}
 
 \missingfigure{Schema komunikace}

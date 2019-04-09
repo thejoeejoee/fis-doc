@@ -1041,12 +1041,13 @@ abovecaptionskip=.5\baselineskip,
 belowskip=0pt,
 aboveskip=\baselineskip,
 float,
+floatplacement=h,
 columns=fullflexible,
 keepspaces=true,
 %
 numberstyle=\tiny\color{black}, % TODO: chci cisla radku?
 % numberblanklines=false,
-stepnumber=2,
+% stepnumber=2,
 % numberfirstline=true,
 numbers=left,
 numbers=none,
@@ -1070,7 +1071,6 @@ morestring=[b]"
 \lstdefinelanguage{json}{
 showstringspaces=true,
 breaklines=true,
-frame=lines,
 literate=
 *{0}{{{\color{jsonNumb}0}}}{1}
 {1}{{{\color{jsonNumb}1}}}{1}
@@ -1107,21 +1107,14 @@ literate=
 
 
 \lstnewenvironment{code}[1][]%
-{\noindent\lstset{#1}}%
-{}%
-
-\lstdefinelanguage{XML}
-{
-morestring=[b]",
-morestring=[s]{>}{<},
-morecomment=[s]{<?}{?>},
-stringstyle=\color{black},
-identifierstyle=\color{darkblue},
-keywordstyle=\color{cyan},
-morekeywords={xmlns,version,type} % list your attributes here
-}
-
-%END Jan Pluskal (ipluskal) listings
+{\noindent\lstset{#1}%
+\minipage{\textwidth}%
+%\beginfigure
+}%
+{%
+%\endfigure
+\endminipage%
+}%
 
 
 % Příkazy pro TODO (3 alternativy - lze zvolit preferovanou)
