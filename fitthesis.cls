@@ -1036,7 +1036,8 @@ tabsize=4,
 captionpos=b,
 xleftmargin=\dimexpr\fboxsep+1pt\relax,
 xrightmargin=\fboxsep,
-escapeinside={\#!}{\^^M},
+% start delimiter: (*, end delimiter: *)
+escapeinside={(*}{*)},
 abovecaptionskip=.5\baselineskip,
 belowskip=0pt,
 aboveskip=\baselineskip,
@@ -1109,10 +1110,8 @@ literate=
 \lstnewenvironment{code}[1][]%
 {\noindent\lstset{#1}%
 \minipage{\textwidth}%
-%\beginfigure
 }%
 {%
-%\endfigure
 \endminipage%
 }%
 

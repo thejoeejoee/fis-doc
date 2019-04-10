@@ -32,7 +32,8 @@ clean:
 	rm -f *~
 
 pack:
-	tar czvf $(CO).tar.gz *.tex *.bib *.bst ./template-fig/* ./bib-styles/* ./cls/* zadani.pdf $(CO).pdf Makefile Changelog
+	tar czvf $(CO).tar.gz *.tex *.bib *.bst template-fig/* chapters/* figures/* bib-styles/* *.cls zadani.pdf $(CO).pdf
+	Makefile
 
 rename:
 	mv $(CO).tex $(NAME).tex

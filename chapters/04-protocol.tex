@@ -52,7 +52,7 @@ Na základě povahy a potřeb obou komunikujících stran jsem navrhnul tyto zá
 \section{MQTT kanály}\label{sec:mqtt-kanaly}
 Na základě všech vlastností protokolu MQTT popsaných v~kapitole~\ref{sec:mqtt} jsem právě jej zvolil za spojovací
 prvek koncových uzlů a uzlu centrálního. \todo{podivný oslí můstek}
-V~popisu navrhnutých kanálů budou použity následující symboly:
+V~popisu navržených kanálů budou použity následující symboly:
 \begin{itemize}
     \item \ic{NODE_ID} je jednoznačná textová identifikace uzlu v~síti
     \item \ic{APP_ID} je jednoznačná textová identifikace instance aplikace v~rámci uzlu
@@ -77,10 +77,9 @@ MQTT (funkce budou popsány z~pohledu centrálního uzlu):
     v~kapitole~\ref{subsec:priznak-zpravy-retain}), zde dochází k~zachování posledního známého stavu uzlu.
 \end{itemize}
 
-\todo{zapnout JSON pro IC}
 \begin{table}
     \centering
-    \caption{Příklady využití navrhnutého prokolu pro komunikaci -- řádek vždy představuje jednu konkrétní zprávu
+    \caption{Příklady využití navrženého prokolu pro komunikaci -- řádek vždy představuje jednu konkrétní zprávu
     v~protokolu MQTT.}
     \begin{tabularx}{\textwidth}{s|l|s}
         \textbf{kanál} & \textbf{zpráva} & \textbf{význam} \\
