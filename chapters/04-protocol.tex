@@ -84,18 +84,18 @@ MQTT (funkce budou popsány z~pohledu centrálního uzlu):
     \begin{tabularx}{\textwidth}{s|l|s}
         \textbf{kanál} & \textbf{zpráva} & \textbf{význam} \\
         \hline
-        \ic{fis/from/25a8ced/status} & \json{\{"online": true\}} & uzel \uv{25a8ced} oznamuje změnu svého
-        stavu -- své připojení \\
-
-        \ic{fis/from/25a8ced/app/74cae6f} & \json{\{"value": 0.3745\}} & aplikace publikuje obecná data bez rozlišení
-        subkanálu\\
-
+        \ic{fis/from/25a8ced/status} & \json{\{"online": true\}} & uzel s identifikátorem \uv{25a8ced} oznamuje změnu
+        svého stavu -- své připojení \\
+        \hline
+        \ic{fis/from/25a8ced/app/74cae6f} & \json{\{"value": 0.3745\}} & aplikace s identifikátorem \uv{74cae6f} publikuje
+        obecná data bez rozlišení subkanálu \\
+        \hline
         \ic{fis/from/25a8ced/app/74cae6f/temperature} & \json{\{"value": 18.9\}} & aplikace publikuje data do svého
         subkanálu \uv{temperature} \\
-
+        \hline
         \ic{fis/to/25a8ced/app/config} & \json{\{"action": "reload"\}} & centrální uzel zasílá zprávu pro aplikaci
         \uv{config} \\
-
+        \hline
         \ic{fis/to/25a8ced/app/3b1cef/bottom} & \json{\{"color": "orange"\}} & centrální uzel zasílá aplikaci
         \uv{3b1cef} zprávu do jejího subkanálu \uv{bottom} \\
 

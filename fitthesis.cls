@@ -1015,6 +1015,7 @@ faculty.en=,faculty=FIT
 
 
 % custom joe
+\def\arraystretch{1.3}
 \hyphenation{Node-RED}
 \renewcommand\lstlistlistingname{Seznam zdrojových kódů}
 \renewcommand\lstlistingname{Zdrojový kód}
