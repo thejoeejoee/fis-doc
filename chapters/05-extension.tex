@@ -12,7 +12,8 @@ Základním stavebním prvkem pro další bloky je \ic{fis-node} (reprezentovan�
 konfiguračních bloků, díky kterým nebude nutné přihlašovací údaje k MQTT brokeru nebo identifikacím jednotlivých
 uzlů zadávat více než jednou.
 
-Nedělitelnou součástí každého bloku v Node-RED je jeho konfigurační formulář v editoru.
+Jak uvádí dokumentace k nástroji Node-RED~\cite{NodeRedDocs}, nedělitelnou součástí každého bloku v Node-RED je jeho
+konfigurační formulář pro editor.
 Ten se skládá ze dvou povinných částí a jedné nepovinné -- z povinných částí jedná se o programovou definici pro editor
 sítě v jazyce Javascript a o samotnou definici konfiguračního formuláře popsanou v jazyce HTML.
 Nepovinnou částí je poté uživatelská dokumentace dostupná přímo z editoru.
@@ -28,8 +29,8 @@ První parametr typu \ic{\'mqtt-broker\'} je určen pro konkrétní MQTT broker,
 Druhým parametrem je jednoznačná identifikace bloku, jejíž formát je omezen regulárním výrazem -- tento
 parametr vychází z navrženého protokolu popsaného v kapitole~\ref{sec:mqtt-kanaly}\todo{čárka před "a"?} a to
 konkrétně ze zástupného symbolu \ic{NODE\_ID}, který od sebe odlišuje jednotlivé uzly\footnote{Konkrétní tvar
-identifikátoru (a jeho regulárního výrazu) není pro Node-RED podstatný, k jeho upřesnění dojde v rámci popisu firmwaru
-uzlů v kapitole~\ref{ch:firmware}.}.
+identifikátoru (a jeho regulárního výrazu) není pro nástroj Node-RED podstatný, k jeho upřesnění dojde až rámci
+firmwaru uzlů, popsaného v kapitole~\ref{ch:firmware}.}.
 Parametr \ic{nodeId} tedy následně bude použit pro sestavení MQTT kanálů pro odběr a publikaci zpráv.
 
 % @formatter:off
@@ -186,8 +187,9 @@ appSubscribe(appId, callback, subtopic = null, qos = 1, ref = 0) {
 % @formatter:on
 
 \section{Implementace bloku pro vstupní aplikaci}\label{sec:implementace-bloku-pro-vstupni-aplikaci}
-
-Implemnetace bloku pro konkrétní aplikaci vychází ze základního konfiguračního bloku -- s využitím pomocné funkce
+Blok pro vstupní aplikaci je z pohledu nástroje Node-RED blokem, který do sítě produkuje zprávy (přijaté z třetí
+strany).
+Implementace bloku pro konkrétní aplikaci vychází ze základního konfiguračního bloku -- s využitím pomocné funkce
 nástroje Node-RED \ic{RED.nodes.getNode} lze získat instanci bloku, která reprezentuje IoT uzel připojený přes MQTT
 kanály.
 V ukázce~\ref{code:fis-dht-app} lze ve spodní části těla konstruktoru vidět dvě volání -- nad konfiguračním blokem se
@@ -195,7 +197,7 @@ prvně volá metoda \ic{config}.
 Tato metoda zajišťuje napojení na servisní aplikaci určenou pro správu uzlu jako takového a dalších aplikací --
 detaily její funkce budou popsány v kapitole~\ref{ch:firmware}.
 Volání konkrétně odešle do uzlu uživatelské nastavení společně s identifikátorem aplikace \ic{\'dht-sensor\'} -- zahrnut
-je typ DHT senzoru a pin, na kterém je na uzlu připojen.
+je typ senzoru a pin, na kterém je na uzlu připojen.
 Pro konkrétní spárování dotčeného bloku s aplikací na uzlu je odeslán i atribut bloku \ic{this.id}, který slouží v
 rámci nástroje Node-RED k unikátní identifikaci uzlu v celé síti\footnote{Atribut \ic{id} instancí bloků je
 odsledován z interní implementace běhového prostředí Node-RED -- \url{https://github
@@ -213,7 +215,7 @@ do sítě nástroje Node-RED (skrz volání metody \ic{this.send}).
     language=Javascript,
     label=code:fis-dht-app,
     caption={Detail implementace vstupní aplikace (z hlediska centrálního uzlu) -- konkrétně se jedná o aplikaci pro
-senzory typu DHT měřící teplotu a vlhkost okolí. }
+    senzory typu DHT měřící teplotu a vlhkost okolí. }
 ]
 class DhtSensor {
     constructor(config) {
@@ -237,10 +239,49 @@ class DhtSensor {
 \end{code}
 % @formatter:on
 
+\section{Implementace bloku pro výstupní aplikaci}\label{sec:implementace-bloku-pro-vystupni-aplikace}
+Blok pro výstupní aplikaci je z pohledu nástroje Node-RED blokem, který ze sítě konzumuje zprávy (a distribuuje je
+dále třetím stranám).
+V ukázce~\ref{code:fis-node-neopixel-display} lze vidět implementaci bloku pro aplikaci ovládající bodový displej,
+jejíž detaily budou popsány v kapitole~\ref{ch:firmware}.
+Po standardním zavedením cílové aplikace na uzel si blok registruje odběr pomocí vlastní metody \ic{on} -- ta slouží
+k odběru příchozí zpráv do bloku, v tomto případě převezme příchozí zprávu a zformátuje zprávu pro aplikaci
+(kromě samotného textu k zobrazení podporuje volitelně i požadovanou barvu).
+Sestavená zpráva je odeslána pomocí \ic{appPublish} odpovídající aplikaci do subkanálu \ic{\'text\'}.
 
-\section{Práce s~MQTT}
-\todo{Jak poslouchat, jak publish atd.}
-\blind{2}
+% @formatter:off
+\begin{code}[
+    language=Javascript,
+    label=code:fis-node-neopixel-display,
+    caption={Implementace bloku pro aplikaci ovládající bodový displej -- kromě samotné konfigurace na cílovém uzlu
+    si uzel zaregistruje funkci pro odběr události typu \ic{\'input\'}.
+    Událost tohoto typu notifikuje blok o příchozí zprávě, které je v tomto případě odeslána do aplikace k zobrazení
+    na displeji.}
+]
+class NeoPixelDisplay {
+    constructor(config) {
+        RED.nodes.createNode(this, config);
+        this.fisNode = RED.nodes.getNode(config.node);
+
+        this.fisNode.config('neopixel-display', this.id, {
+            port: config.displayPort,
+            width: config.width,
+            height: config.height,
+        });
+
+        this.on('input', msg => {
+            let payload = {text: msg.payload};
+
+            if (msg.color)
+                payload.color = msg.color;
+            payload.retain = true;
+
+            this.fisNode.appPublish(this.id, payload, 'text');
+        });
+    }
+}
+\end{code}
+% @formatter:on
 
 \section{Detail implementace uzlu}
 \todo{Jak se to da dal rozsirovat? a proc zrovna takhle?}
