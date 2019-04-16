@@ -9,7 +9,7 @@ aplikací nasaditelných přímo v~reálném provozu.
 
 \section{Základní konfigurační blok}\label{sec:zakladni-konfiguracni-blok}
 Základním stavebním prvkem pro další bloky je \ic{fis-node} (reprezentovaný třídou \ic{FisNode}) -- využije se tak
-konfiguračních bloků, díky kterým nebude nutné přihlašovací údaje k MQTT brokeru nebo identifikacím jednotlivých
+konfiguračních bloků, díky kterým nebude nutné přihlašovací údaje k brokeru MQTT nebo identifikacím jednotlivých
 uzlů zadávat více než jednou.
 
 Jak uvádí dokumentace k nástroji Node-RED~\cite{NodeRedDocs}, nedělitelnou součástí každého bloku v Node-RED je jeho
@@ -23,7 +23,7 @@ obsahuje dva důležité aspekty.
 Prvním je registrace do kategorie \ic{\'config\'} což značí registraci konfigurační bloku pro reprezentaci jednoho IoT
 uzlu (uzel tedy nemá grafickou reprezentaci v síti).
 Druhým aspektem je výčet parametrů pro formulář, které následně bude možné použít pro samotné chování uzlu v síti.
-První parametr typu \ic{\'mqtt-broker\'} je určen pro konkrétní MQTT broker, pomocí kterého bude blok s uzlem spojen
+První parametr typu \ic{\'mqtt-broker\'} je určen pro konkrétní broker MQTT, pomocí kterého bude blok s uzlem spojen
 (jedná se opět o konfigurační blok poskytnutý přímo nástrojem Node-RED).
 
 Druhým parametrem je jednoznačná identifikace bloku, jejíž formát je omezen regulárním výrazem -- tento
@@ -31,7 +31,7 @@ parametr vychází z navrženého protokolu popsaného v kapitole~\ref{sec:mqtt-
 konkrétně ze zástupného symbolu \ic{NODE\_ID}, který od sebe odlišuje jednotlivé uzly\footnote{Konkrétní tvar
 identifikátoru (a jeho regulárního výrazu) není pro nástroj Node-RED podstatný, k jeho upřesnění dojde až rámci
 firmwaru uzlů, popsaného v kapitole~\ref{ch:firmware}.}.
-Parametr \ic{nodeId} tedy následně bude použit pro sestavení MQTT kanálů pro odběr a publikaci zpráv.
+Parametr \ic{nodeId} tedy následně bude použit pro sestavení kanálů MQTT pro odběr a publikaci zpráv.
 
 % @formatter:off
 \begin{code}[
@@ -54,7 +54,7 @@ RED.nodes.registerType('fis-node', {
 
 V ukázce~\ref{code:fis-node-constructor} je zobrazena část třídy \ic{FisNode}, reprezentující blok z hlediska sítě. V
 konstruktoru této třídy dochází k získání konfiguračních
-parametrů z formuláře, získání instance konfiguračního bloku pro MQTT připojení a přípravu kanálu na základě
+parametrů z formuláře, získání instance konfiguračního bloku pro připojení MQTT a přípravu kanálu na základě
 \ic{NODE_ID}, resp. \ic{nodeId}.
 
 Získaná instance bloku pro MQTT je zodpovědná za správu připojení -- není tedy nutné brát v potaz možné odpojení a
@@ -69,7 +69,7 @@ z jeho zdrojového kódu\footnote{\url{https://github
     language=Javascript,
     numbers=left,
     label=code:fis-node-constructor,
-    caption={Část konstruktoru třídy \ic{FisNode} obluhující připojení MQTT brokeru a přípravu kanálů pro komunikaci.}
+    caption={Část konstruktoru třídy \ic{FisNode} obluhující připojení brokeru MQTT a přípravu kanálů pro komunikaci.}
 ]
 class FisNode {
     constructor(config) {
@@ -153,9 +153,8 @@ Posledním zmínění-hodným detailem implementace třídy \ic{FisNode} je meto
 \ic{appSubscribe}.
 Tu mohou implementace jednotlivých bloků využít k zaregistrování odběru konkrétního kanálu, resp. konkrétní aplikace
 -- výsledný kanál je složen ze základního kanálu (pro směr do nástroje Node-RED sestaveného již v konstruktoru),
-identifikace aplikace \ic{appId} a volitelně podkanálu, opět dle navržené struktury protokolu z kapitoly
-\ref{sec:mqtt-kanaly}.
-Uložená instance připojení k MQTT brokeru poté slouží k zaregistrování samotného odběru -- ten je realizován pomocí
+identifikace aplikace \ic{appId} a volitelně podkanálu, opět dle navržené struktury protokolu z kapitoly~\ref{sec:mqtt-kanaly}.
+Uložená instance připojení k brokeru MQTT poté slouží k zaregistrování samotného odběru -- ten je realizován pomocí
 funkce, kterou pro každou příchozí zprávu MQTT klient invokuje.
 S příchozími parametry je následně (po konverzi do formátu JSON) invokována funkce předaná při registraci konkrétního
 odběru.
@@ -207,7 +206,7 @@ odsledován z interní implementace běhového prostředí Node-RED -- \url{http
 Druhé volání je použití již popsané metody \ic{appSubscribe}, blok si zde registruje odběr na data přicházející z
 uzlu.
 Používá k tomu vlastní atribut \ic{id}, kterým cílí na spárovanou aplikaci na uzlu, podkanál \ic{\'data\'}, který
-následně použije i aplikace na uzlu, a funkci, pomocí které bude předávat příchozí zprávu z uzlu, resp. MQTT brokeru,
+následně použije i aplikace na uzlu, a funkci, pomocí které bude předávat příchozí zprávu z uzlu, resp. brokeru MQTT,
 do sítě nástroje Node-RED (skrz volání metody \ic{this.send}).
 
 % @formatter:off

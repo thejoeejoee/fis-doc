@@ -44,12 +44,12 @@ Na základě povahy a potřeb obou komunikujících stran jsem navrhnul tyto zá
     \item \textbf{Kanály pro status a konfiguraci uzlu} \\
     Pro režijní komunikaci s~uzlem je nutný samostatný konfigurační kanál, pomocí kterého bude uzel příjmat příkazy
     k~zavedení aplikace, její překonfigurování či ukončení -- dále pomocí něj mohou být přenášeny informace o~vytížení
-    uzlu, chybách aplikací či nastavení připojení k~nástroji Node-RED, potažmo MQTT brokeru.
+    uzlu, chybách aplikací či nastavení připojení k~nástroji Node-RED, potažmo brokeru MQTT.
     Druhým nutným kanálem je zpětný kanál statusu, kterým bude uzel oznamovat do sítě svůj stav (připojen či
     nepřipojen), případně další informace (využití úložiště, čekající data).
 \end{enumerate}
 
-\section{MQTT kanály}\label{sec:mqtt-kanaly}
+\section{Kanály MQTT}\label{sec:mqtt-kanaly}
 Na základě všech vlastností protokolu MQTT popsaných v~kapitole~\ref{sec:mqtt} jsem právě jej zvolil za spojovací
 prvek koncových uzlů a uzlu centrálního. \todo{podivný oslí můstek}
 V~popisu navržených kanálů budou použity následující symboly:
@@ -60,8 +60,8 @@ V~popisu navržených kanálů budou použity následující symboly:
     \item \ic{fis} \textbf{je zkratka z~Fast IoT Solution -- programového názvu pro tuto práci}
 \end{itemize}
 
-Na základě požadavků stanovených v~kapitole~\ref{sec:pozadavky-na-protokol} jsem navrhnul použití následujících kanálů
-MQTT (funkce budou popsány z~pohledu centrálního uzlu):
+Na základě požadavků stanovených v~kapitole~\ref{sec:pozadavky-na-protokol} jsem navrhnul použití následujících
+kanálů MQTT (funkce budou popsány z~pohledu centrálního uzlu):
 
 \begin{itemize}
     \item \ic{fis/to/NODE_ID/app/APP_ID} \\
@@ -81,24 +81,25 @@ MQTT (funkce budou popsány z~pohledu centrálního uzlu):
     \centering
     \caption{Příklady využití navrženého prokolu pro komunikaci -- řádek vždy představuje jednu konkrétní zprávu
     v~protokolu MQTT.}
-    \begin{tabularx}{\textwidth}{s|l|s}
+    \begin{tabularx}{\textwidth}{@{}sls@{}}
+        \toprule
         \textbf{kanál} & \textbf{zpráva} & \textbf{význam} \\
         \hline
-        \ic{fis/from/25a8ced/status} & \json{\{"online": true\}} & uzel s identifikátorem \uv{25a8ced} oznamuje změnu
+        \ic{fis/from/25a8ced/status} & \json{\{"online": true\}} & uzel s identifikátorem \ic{25a8ced} oznamuje změnu
         svého stavu -- své připojení \\
-        \hline
-        \ic{fis/from/25a8ced/app/74cae6f} & \json{\{"value": 0.3745\}} & aplikace s identifikátorem \uv{74cae6f} publikuje
+        \midrule
+        \ic{fis/from/25a8ced/app/74cae6f} & \json{\{"value": 0.3745\}} & aplikace s identifikátorem \ic{74cae6f} publikuje
         obecná data bez rozlišení subkanálu \\
-        \hline
+        \midrule
         \ic{fis/from/25a8ced/app/74cae6f/temperature} & \json{\{"value": 18.9\}} & aplikace publikuje data do svého
-        subkanálu \uv{temperature} \\
-        \hline
+        subkanálu \ic{temperature} \\
+        \midrule
         \ic{fis/to/25a8ced/app/config} & \json{\{"action": "reload"\}} & centrální uzel zasílá zprávu pro aplikaci
-        \uv{config} \\
-        \hline
+        \ic{config} \\
+        \midrule
         \ic{fis/to/25a8ced/app/3b1cef/bottom} & \json{\{"color": "orange"\}} & centrální uzel zasílá aplikaci
-        \uv{3b1cef} zprávu do jejího subkanálu \uv{bottom} \\
-
+        \ic{3b1cef} zprávu do jejího subkanálu \ic{bottom} \\
+        \bottomrule
     \end{tabularx}
     \label{table:protocol-examples}
 \end{table}

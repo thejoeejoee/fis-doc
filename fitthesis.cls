@@ -1020,6 +1020,7 @@ faculty.en=,faculty=FIT
 \renewcommand\lstlistlistingname{Seznam zdrojových kódů}
 \renewcommand\lstlistingname{Zdrojový kód}
 
+
 \usepackage{newverbs}
 \lstset{
 % language=Python,

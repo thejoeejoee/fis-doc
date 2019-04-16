@@ -24,19 +24,21 @@ https://dzone.com/articles/the-internet-of-things-why-decentralization-must-b
 \begin{table}
     \centering
     \caption{Srovnání vlastností základních koncepcí systému Internetu věcí.}
-    \begin{tabularx}{\textwidth}{r|r|r}
+    \begin{tabularx}{\textwidth}{@{}rrr@{}}
+        \toprule
         & \textbf{centralizovaný} & \textbf{decentralizovaný} \\
-        \hline
+        \midrule
         vliv selhání uzlu na síť & v~případě centrálního uzlu fatální & absence pouze konkrétního uzlu \\
-        \hline
+        \midrule
         bezpečnost dat sítě & závislá na bezpečnosti centrálního uzlu & v~případě použití blockchainu
         velmi vysoká~\cite{IoTeX} \\
-        \hline
+        \midrule
         zdroj pravdy v~síti & centrální uzel & bez jednotného zdroje \\
-        \hline
+        \midrule
         konfigurace uzlů & z~centrálního uzlu principem \uv{master-slave} & specifická pouze pro dotčené uzly \\
-        \hline
-        odolnost proti ztrátě dat & nižší vinou jednotného úložiště & vyšší v~případě dat uložených v~uzlech
+        \midrule
+        odolnost proti ztrátě dat & nižší vinou jednotného úložiště & vyšší v~případě dat uložených v~uzlech \\
+        \bottomrule
     \end{tabularx}
     \label{table:iot-types}
 \end{table}
@@ -116,7 +118,7 @@ Jakožto nástupce řady \textit{ESP8266} nabízí na jediném čipu ve standard
 \begin{itemize}
     \item dvoujádrový 32 bitový mikroprocesor Xtensa LX6, taktovaný na 160 či 240 MHz
     \item 520 KiB statické operační paměti
-    \item Wi-Fi ve stadardu 802.11 b/g/n
+    \item Wi-Fi ve standardu 802.11 b/g/n (včetně podpory \textit{Long range} Wi-Fi~\cite{Esp32LongRangeWifi})
     \item Bluetooth v4.2 včetně nízkoodběrového režimu BLE
     \item 12 bitový ADC až s~18 kanály
     \item dva 2 bitové DAC
@@ -308,10 +310,11 @@ MQTT tímto nabízí možnost klientům informovat o~svém stavu odpojení auton
     \centering
     \caption{Možnosti odběru zpráv v~protokolu MQTT -- používají se dva typy zástupných znaků pro zaregistrování
     odběru více kanálů naráz.}
-    \begin{tabularx}{\textwidth}{ssr}
+    \begin{tabularx}{\textwidth}{@{}sp{5cm}r@{}}
+        \toprule
         \textbf{kanál zaregistrovaný k~odběru} & \textbf{kanál zprávy} & \textbf{bude zpráva zahrnuta?} \\
-        \hline
-        \ic{node/1}
+        \midrule
+        \raisebox{-2.5\height}{\ic{node/1}}
         &
         \texttt{node/1} \newline
         \texttt{node} \newline
@@ -324,8 +327,8 @@ MQTT tímto nabízí možnost klientům informovat o~svém stavu odpojení auton
         \falsemark
         \\
 
-        \hline
-        \ic{node/+/status}
+        \midrule
+        \raisebox{-3\height}{\ic{node/+/status}}
         &
         \texttt{node/1/status} \newline
         \texttt{node/2/status} \newline
@@ -342,8 +345,8 @@ MQTT tímto nabízí možnost klientům informovat o~svém stavu odpojení auton
         \falsemark
         \\
 
-        \hline
-        \ic{node/\#}
+        \midrule
+        \raisebox{-2.5\height}{\ic{node/\#}}
         &
         \texttt{node/1} \newline
         \texttt{node/2/status} \newline
@@ -358,8 +361,8 @@ MQTT tímto nabízí možnost klientům informovat o~svém stavu odpojení auton
         \falsemark
         \\
 
-        \hline
-        \ic{node/+/data/\#}
+        \midrule
+        \raisebox{-2.5\height}{\ic{node/+/data/\#}}
         &
         \texttt{node/1/data/value} \newline
         \texttt{node/2/data/value/degrees} \newline
@@ -375,7 +378,7 @@ MQTT tímto nabízí možnost klientům informovat o~svém stavu odpojení auton
         \falsemark \newline
         \falsemark
         \\
-
+        \bottomrule
     \end{tabularx}
     \label{table:mqtt-subscribes}
 \end{table}

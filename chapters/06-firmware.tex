@@ -1,11 +1,18 @@
 \chapter{Micropython firmware pro ESP32}
 \label{ch:firmware}
 
-\blind{1}
+V této kapitole bude popsán návrh a implementace řídícího softwaru, tzv. firmwaru pro čipy ESP32 -- od základního
+jádra zodpovědného za zavedení aplikací či připojení k brokeru MQTT až k aplikacím a jejich asynchronnímu principu.
 
-\section{Jádro firmwaru pro uzly}
-\todo{jádro firmware}
-\blind{2}
+\section{Základní požadavky pro jádro}\label{sec:základní-požadavky-pro-jádro}
+Na základě navrženého protokolu a vlastního úsudku jsem navrhl následující požadavky na implementaci jádra firmwaru:
+
+\begin{itemize}
+    \item Jádro je koncový bod pro komunikační kanál s Node-RED\\
+    \item
+\end{itemize}
+
+
 
 \subsection{Využití režimu nízkého odběru}
 \todo{Uspavani jadra, odber}
