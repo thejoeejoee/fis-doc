@@ -1005,7 +1005,7 @@ faculty.en=,faculty=FIT
 \definecolor{cyan}{rgb}{0.0,0.6,0.6}
 
 \definecolor{codeprimary}{HTML}{3300CC}
-\colorlet{keywordstyle}{codeprimary!50!black}
+\colorlet{keywordstyle}{codeprimary!70!red}
 \colorlet{stringstyle}{codeprimary!25!red}
 \colorlet{commentstyle}{purple!90!white}
 
@@ -1017,6 +1017,7 @@ faculty.en=,faculty=FIT
 % custom joe
 \def\arraystretch{1.3}
 \hyphenation{Node-RED}
+\usepackage{tablefootnote}
 \renewcommand\lstlistlistingname{Seznam zdrojových kódů}
 \renewcommand\lstlistingname{Zdrojový kód}
 
@@ -1054,6 +1055,8 @@ numberstyle=\tiny\color{black}, % TODO: chci cisla radku?
 % numberfirstline=true,
 numbers=left,
 numbers=none,
+showstringspaces=false,
+otherkeywords={self,async,await},
 %
 %gobble=4, % auto strip spaces
 }

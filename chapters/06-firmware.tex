@@ -4,23 +4,67 @@
 V této kapitole bude popsán návrh a implementace řídícího softwaru, tzv. firmwaru pro čipy ESP32 -- od základního
 jádra zodpovědného za zavedení aplikací či připojení k brokeru MQTT až k aplikacím a jejich asynchronnímu principu.
 
-\section{Základní požadavky pro jádro}\label{sec:základní-požadavky-pro-jádro}
+\section{Základní požadavky pro jádro firmwaru}\label{sec:základní-požadavky-pro-jádro}
 Na základě navrženého protokolu a vlastního úsudku jsem navrhl následující požadavky na implementaci jádra firmwaru:
 
 \begin{itemize}
-    \item Jádro je koncový bod pro komunikační kanál s Node-RED\\
-    \item
+    \item Jádro je koncový bod pro komunikační linku s nástrojem Node-RED -- zpracování příchozích zpráv deleguje na
+    aplikace.
+    \item Jádro je zodpovědné za správu připojení k internetu, potažmo brokeru MQTT, včetně přihlašovacích údajů.
+    \item Jádro má ve správě asynchronní smyčku s požadavky aplikací.
+    \item Jádro je zodpovědné za restartování uzlu v případě neočekávaného chybového stavu.
+    \item Jádro hlásí stav připojení uzlu k síti a spravuje sběr logů z uzlu, které následně odesílá do příslušných
+    kanálů.
 \end{itemize}
-
-
 
 \subsection{Využití režimu nízkého odběru}
 \todo{Uspavani jadra, odber}
 \blind{2}
 
-\section{Aplikace}
+\section{Aplikace a jejich programová struktura}\label{sec:aplikace-a-jejich-programova-struktura}
+
+
+
+\section{Implementace vstupní aplikace}\label{sec:implementace-vstupni-aplikace}
 \todo{Princip aplikaci, nodered-node === aplikace}
 \blind{2}
+\begin{code}[
+    language=Python,
+    caption={Implementace vstupní aplikace pro měření teploty a vlhkosti pomocí senzoru DHT.}
+]
+class App(BaseApp):
+    _dht = None
+    _interval = 10
+    MEASURE_EXPORT_DELAY = 3
+
+    async def init(self):
+        self._dht = dht.DHT22(Pin(int(self._config.get('port'))))
+
+        self._interval = max((
+            float(self._config.get('interval') or 0),
+            self.MEASURE_EXPORT_DELAY
+        )) - self.MEASURE_EXPORT_DELAY  # export
+
+        self._plan_app_task(self._run_measurement())
+
+    async def _run_measurement(self):
+        while True:
+            try:
+                self._dht.measure()
+            except OSError as e:
+                await self._error(e)
+                await asyncio.sleep(self._interval)
+                continue
+
+            await asyncio.sleep(self.MEASURE_EXPORT_DELAY)
+            await self._publish(dict(
+                temperature=self._dht.temperature(),
+                humidity=self._dht.humidity(),
+            ), 'data')
+
+            await asyncio.sleep(self._interval)
+\end{code}
+
 
 \subsection{Možnosti aplikace}
 \todo{Rozbor moznosti aplikace}

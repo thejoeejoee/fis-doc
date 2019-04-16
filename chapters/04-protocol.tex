@@ -41,18 +41,22 @@ Na základě povahy a potřeb obou komunikujících stran jsem navrhnul tyto zá
     Protokol jako takový nevyžaduje \emph{(kromě vlastních režijních zpráv)} konkrétní obsah zpráv -- jejich schéma a
     datové typy obsahu jsou plně v~režii komunikující dvojice aplikace na uzlu a bloku v~nástroji Node-RED.
 
-    \item \textbf{Kanály pro status a konfiguraci uzlu} \\
+    \item \textbf{Kanály pro status a sběr běhových informací z uzlu} \\
+    Jedním z požadovaných kanálů je zpětný kanál statusu uzlu, kterým bude uzel oznamovat do sítě svůj stav (připojen či
+    nepřipojen), případně další informace (využití úložiště, čekající data).
+    Další požadovaný kanál z tohoto hlediska je kanál pro běhové informace z uzlu -- logy, které budou obsahovat
+    stručný popis stavu, ke kterému na uzlu došlo -- od vyjímkových stavů až k čistě ladícím informacím.
+
+    \item \textbf{Kanál pro konfiguraci uzlu} \\
     Pro režijní komunikaci s~uzlem je nutný samostatný konfigurační kanál, pomocí kterého bude uzel příjmat příkazy
     k~zavedení aplikace, její překonfigurování či ukončení -- dále pomocí něj mohou být přenášeny informace o~vytížení
-    uzlu, chybách aplikací či nastavení připojení k~nástroji Node-RED, potažmo brokeru MQTT.
-    Druhým nutným kanálem je zpětný kanál statusu, kterým bude uzel oznamovat do sítě svůj stav (připojen či
-    nepřipojen), případně další informace (využití úložiště, čekající data).
+    uzlu či nastavení připojení k~nástroji Node-RED, potažmo brokeru MQTT.
 \end{enumerate}
 
 \section{Kanály MQTT}\label{sec:mqtt-kanaly}
 Na základě všech vlastností protokolu MQTT popsaných v~kapitole~\ref{sec:mqtt} jsem právě jej zvolil za spojovací
-prvek koncových uzlů a uzlu centrálního. \todo{podivný oslí můstek}
-V~popisu navržených kanálů budou použity následující symboly:
+prvek koncových uzlů a uzlu centrálního (nástroje Node-RED).
+V popisu navržených kanálů budou použity následující symboly:
 \begin{itemize}
     \item \ic{NODE_ID} je jednoznačná textová identifikace uzlu v~síti
     \item \ic{APP_ID} je jednoznačná textová identifikace instance aplikace v~rámci uzlu
@@ -71,16 +75,22 @@ kanálů MQTT (funkce budou popsány z~pohledu centrálního uzlu):
     \item \ic{fis/from/NODE_ID/app/APP_ID} \\
     Tento kanál je určen pro odběr zpráv z~konkrétní aplikace na uzlu --
     všechny jeho podkanály (\ic{fis/from/NODE_ID/app/APP_ID/\#}) také míří z~dané aplikace.
+    Z těchto podkanálů je poté jeden stanovený protokolem -- je jím \ic{log}, který sbírá běhové informace z kontextu
+    konkrétní aplikace.
 
     \item \ic{fis/from/NODE_ID/status} \\
     Slouží pro signalizaci stavu uzlu pro Node-RED -- s~pomocí parametru zpráv \uv{retain} (popsaného
     v~kapitole~\ref{subsec:priznak-zpravy-retain}), zde dochází k~zachování posledního známého stavu uzlu.
+
+    \item \ic{fis/from/NODE_ID/log} \\
+    Slouží pro proud logů z uzlu -- v kontextu celého uzlu, ne konkrétních aplikací, tedy zprávy o vyjímkách na uzlu
+    či ladících informacích.
 \end{itemize}
 
 \begin{table}
     \centering
     \caption{Příklady využití navrženého prokolu pro komunikaci -- řádek vždy představuje jednu konkrétní zprávu
-    v~protokolu MQTT.}
+    v~protokolu MQTT (pro účely tohoto přehledu jsou obsahy zpráv zkráceny).}
     \begin{tabularx}{\textwidth}{@{}sls@{}}
         \toprule
         \textbf{kanál} & \textbf{zpráva} & \textbf{význam} \\
@@ -94,6 +104,12 @@ kanálů MQTT (funkce budou popsány z~pohledu centrálního uzlu):
         \ic{fis/from/25a8ced/app/74cae6f/temperature} & \json{\{"value": 18.9\}} & aplikace publikuje data do svého
         subkanálu \ic{temperature} \\
         \midrule
+        \ic{fis/from/25a8ced/app/74cae6f/log} & \json{\{"msg": "invalid Pin(3)"\}} & aplikace reportuje chybový
+        stav -- pin s číslem 3 není pro aplikaci vhodný/použitelný \\
+        \midrule
+        \ic{fis/to/25a8ced/log} & \json{\{"msg": "42 loop tasks"\}} & uzel informuje o stavu
+        smyčky\footnotemark \\
+        \midrule
         \ic{fis/to/25a8ced/app/config} & \json{\{"action": "reload"\}} & centrální uzel zasílá zprávu pro aplikaci
         \ic{config} \\
         \midrule
@@ -103,5 +119,7 @@ kanálů MQTT (funkce budou popsány z~pohledu centrálního uzlu):
     \end{tabularx}
     \label{table:protocol-examples}
 \end{table}
+\footnotetext{Princip asynchronní smyčky bude popsán v rámci firmwaru uzlů v kapitole~\ref{ch:firmware}.}
+
 
 \missingfigure{Schema komunikace}
