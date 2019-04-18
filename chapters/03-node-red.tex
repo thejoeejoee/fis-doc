@@ -126,21 +126,19 @@ výstupem, jehož funkcí je určení délky příchozí zprávy (řetězce).
     label=code:node-red-custom-block,
     language=Javascript
 ]
-module.exports = function(RED) {
-    function StringLengthNode(config) {
-        RED.nodes.createNode(this, config);
-        var node = this;
-        node.on('input', function(msg) {
-            msg.payload = msg.payload.length;
-            node.send(msg);
-        });
-    }
-    RED.nodes.registerType("string-length", StringLengthNode);
+function StringLengthNode(config) {
+    RED.nodes.createNode(this, config);
+    var node = this;
+    node.on('input', function(msg) {
+        msg.payload = msg.payload.length;
+        node.send(msg);
+    });
 }
+RED.nodes.registerType("string-length", StringLengthNode);
 \end{code}
 % @formatter:on
 
 \section{Node-RED Dashboard}\label{sec:node-red-dashboard}
-\todo{něco o dashboardu a možnostech?}
+\todo{něco o~dashboardu a možnostech?}
 
 \missingfigure{Node-RED spojeni}

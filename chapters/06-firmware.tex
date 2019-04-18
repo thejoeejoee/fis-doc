@@ -1,23 +1,87 @@
 \chapter{Micropython firmware pro ESP32}
 \label{ch:firmware}
 
-V této kapitole bude popsán návrh a implementace řídícího softwaru, tzv. firmwaru pro čipy ESP32 -- od základního
-jádra zodpovědného za zavedení aplikací či připojení k brokeru MQTT až k aplikacím a jejich asynchronnímu principu.
+V~této kapitole bude popsán návrh a implementace řídícího softwaru, tzv. firmwaru pro čipy ESP32 -- od základního
+jádra zodpovědného za zavedení aplikací či připojení k~brokeru MQTT až k~aplikacím a jejich asynchronnímu principu.
 
 \section{Základní požadavky pro jádro firmwaru}\label{sec:základní-požadavky-pro-jádro}
 Na základě navrženého protokolu a vlastního úsudku jsem navrhl následující požadavky na implementaci jádra firmwaru:
 
 \begin{itemize}
-    \item Jádro je koncový bod pro komunikační linku s nástrojem Node-RED -- zpracování příchozích zpráv deleguje na
+    \item Jádro je koncový bod pro komunikační linku s~nástrojem Node-RED -- zpracování příchozích zpráv deleguje na
     aplikace.
-    \item Jádro je zodpovědné za správu připojení k internetu, potažmo brokeru MQTT, včetně přihlašovacích údajů.
-    \item Jádro má ve správě asynchronní smyčku s požadavky aplikací.
-    \item Jádro je zodpovědné za restartování uzlu v případě neočekávaného chybového stavu.
-    \item Jádro hlásí stav připojení uzlu k síti a spravuje sběr logů z uzlu, které následně odesílá do příslušných
+    \item Jádro je zodpovědné za správu připojení k~internetu, potažmo brokeru MQTT, včetně přihlašovacích údajů.
+    \item Jádro má ve správě asynchronní smyčku s~požadavky aplikací.
+    \item Jádro je zodpovědné za restartování uzlu v~případě neočekávaného chybového stavu.
+    \item Jádro hlásí stav připojení uzlu k~síti a spravuje sběr logů z~uzlu, které následně odesílá do příslušných
     kanálů.
 \end{itemize}
 
-\subsection{Využití režimu nízkého odběru}
+\section{Detaily z~implementace jádra}\label{sec:detaily-z-implementace-jadra}
+V~této kapitole budou představeny a popsány některé důležité implementační detaily jádra firmwaru.
+Středobodem z~hlediska funkce je asynchronní smyčka událostí, jejíž implementace pochází z~veřejně dostupného balíčku
+\texttt{micropython-async}\footnote{\url{https://github.com/peterhinch/micropython-async}}.
+Princip této smyčky vychází ze standardního balíku modulu \ic{asyncio} programovacího jazyka Python a nabízí
+jejím uživatelům přístup k~konkurentně asynchronnímu kódu -- na nejvyšší úrovni programátor definuje pouze jednotlivé
+korutiny\footnote{Korutina (coroutine) je z~pohledu asynchronního přístupu k~programování podpogram,
+jehož kód lze provádět asynchronně a zároveň má možnost jiný kód tohoto typu invokovat.} (coroutines) a smyčka samotná
+se stará o~rozdělování procesorového času a kontextu.
+
+Vstupní bod pro zavedení jádra je metoda \ic{Core.start}, která dělá jedinou věc -- do inicializované smyčky zavede
+korutinu \ic{Core._run}, která je zodpovědná za připojení uzlu k~síti.
+Obě tyto metody lze vidět v~ukázce~\ref{code:firmware-core-start}, kde lze v~rámci druhé zmíněné také upozornit na
+práci s~atributem \ic{_status_led}.
+V~tomto atributu je uložena instance třídy \ic{Signal}\footnote{Třída \ic{Signal} je vyšší abstrakcí pro hardwarový pin
+GPIO než, v~kapitole~\ref{sec:micropython} zmíněná, třída \ic{Pin} -- prvně jmenovaná podporuje piny \uv{aktivní v~0}.}
+nad pinem s~číslem $2$, na který je připojena na vývojové desce modrá LED dioda, s~pomocí které uzel
+realizuje stavový barevný kód -- tento kód jsem navrhl pro snažší testování a ladění uzlů, jeho popis se shrnut
+v~tabulce~\ref{table:esp32-state-key}.
+
+\begin{table}
+    \centering
+    \begin{tabularx}{\textwidth}{@{}ccs@{}}
+        \toprule
+        \textbf{červená stavová dioda} & \textbf{modrá stavová dioda} & \textbf{notifikovaný stav uzlu} \\
+        \midrule
+        nesvítí & -- & uzel není připojen k~napájení \\
+        \midrule
+        svítí & nesvítí & uzel běží a čeká na zprávy či naplánované úlohy \\
+        \midrule
+        svítí & bliká nepravidelně & uzel zpracovává zprávy či je odesílá \\
+        \midrule
+        svítí & bliká s~periodou 0,5 s~& uzel se připojuje k~WiFi a brokeru \\
+        \midrule
+        svítí & svítí & chyba firmwaru \\
+        \bottomrule
+    \end{tabularx}
+    \caption{Popis barevného stavového kódu uzlu -- na základě chování dvou vestavěných LED diod lze odpozorovat
+    chování uzlu a jeho stav.}
+    \label{table:esp32-state-key}
+\end{table}
+
+\begin{code}[
+    language=Python,
+    caption={Metody jádra firmwaru -- blokující metoda \ic{start} je vstupní bod jádra z~hlediska veřejného
+    rozhranní, je zodpovědná za rozběhnutí smyčky událostí a naplánování běhové korutiny \ic{_run}.
+    Té poté stačí pouze zaktivovat klienta připojení k~internetu, veškeré další operace již obstarává klient.},
+    label=code:firmware-core-start
+]
+class Core:
+    def start(self):
+        self._loop.create_task(self._run())
+        self._loop.run_forever()
+
+    async def _run(self):
+        self._status_led.on()
+        try:
+            await self._connection.connect()
+        except OSError as e:
+            print('Connection failed: {}.'.format(str(e)))
+            return
+        self._status_led.off()
+    (*\ldots*)
+\end{code}
+
 \todo{Uspavani jadra, odber}
 \blind{2}
 
@@ -66,9 +130,12 @@ class App(BaseApp):
 \end{code}
 
 
-\subsection{Možnosti aplikace}
+
+
+\section{Implementace výstupní aplikace}\label{subsec:implementace-vystupni-aplikace}
 \todo{Rozbor moznosti aplikace}
-\blind{2}
+Příkladem uvedeným v~ukázce XX je výstupní aplikace řídící displej složený z~LED diod
+technologie NeoPixel. Neopixel \ldots~\cite{Esp32KolbansBook}.
 
 \subsection{Detail implementace aplikace}
 \todo{Jedna nazorna aplikace}
