@@ -1,4 +1,4 @@
-\chapter{Micropython firmware pro ESP32}
+\chapter{MicroPython firmware pro ESP32}
 \label{ch:firmware}
 
 V~této kapitole bude popsán návrh a implementace řídícího softwaru, tzv. firmwaru pro čipy ESP32 -- od základního
@@ -32,8 +32,8 @@ korutinu \ic{Core._run}, která je zodpovědná za připojení uzlu k~síti.
 Obě tyto metody lze vidět v~ukázce~\ref{code:firmware-core-start}, kde lze v~rámci druhé zmíněné také upozornit na
 práci s~atributem \ic{_status_led}.
 V~tomto atributu je uložena instance třídy \ic{Signal}\footnote{Třída \ic{Signal} je vyšší abstrakcí pro hardwarový pin
-GPIO než, v~kapitole~\ref{sec:micropython} zmíněná, třída \ic{Pin} -- prvně jmenovaná podporuje piny \uv{aktivní v~0}.}
-nad pinem s~číslem $2$, na který je připojena na vývojové desce modrá LED dioda, s~pomocí které uzel
+GPIO než, v~kapitole~\ref{sec:micropython} zmíněná, třída \ic{Pin} -- prvně jmenovaná podporuje i piny \uv{aktivní
+v~0}.} nad pinem s~číslem $2$, na který je připojena na vývojové desce modrá LED dioda, s~pomocí které uzel
 realizuje stavový barevný kód -- tento kód jsem navrhl pro snažší testování a ladění uzlů, jeho popis se shrnut
 v~tabulce~\ref{table:esp32-state-key}.
 
@@ -59,10 +59,11 @@ v~tabulce~\ref{table:esp32-state-key}.
     \label{table:esp32-state-key}
 \end{table}
 
+% @formatter:off
 \begin{code}[
     language=Python,
     caption={Metody jádra firmwaru -- blokující metoda \ic{start} je vstupní bod jádra z~hlediska veřejného
-    rozhranní, je zodpovědná za rozběhnutí smyčky událostí a naplánování běhové korutiny \ic{_run}.
+    rozhraní, je zodpovědná za rozběhnutí smyčky událostí a naplánování běhové korutiny \ic{_run}.
     Té poté stačí pouze zaktivovat klienta připojení k~internetu, veškeré další operace již obstarává klient.},
     label=code:firmware-core-start
 ]
@@ -81,6 +82,7 @@ class Core:
         self._status_led.off()
     (*\ldots*)
 \end{code}
+% @formatter:on
 
 \todo{Uspavani jadra, odber}
 \blind{2}
@@ -90,24 +92,42 @@ class Core:
 
 
 \section{Implementace vstupní aplikace}\label{sec:implementace-vstupni-aplikace}
-\todo{Princip aplikaci, nodered-node === aplikace}
-\blind{2}
+Vstupní aplikací je z hlediska IoT sítě aplikace, která s pomocí ovladače některé z periférií získá data a dále je
+distribuuje do sítě pomocí protokolu MQTT.
+V ukázce~\ref{code:dht-sensor-app} se nachází kód vstupní aplikace pro export dat ze senzoru DHT, který měří okolní
+teplotu a vlhkost a jehož ovladač je obsažen ve standardní distribuci jazyka MicroPython.m
+Jedním z jeho specifik je neblokující chování při požadavku na změření, je tedy nutné po požadavku počkat
+2-3 sekundy, než dojde k exportu hodnot. \todo{citace vole}
+V případě selhání komunikace se senzorem dojde ze strany ovladače k vyhození výjimky \ic{OSError}, na kterou aplikace
+reaguje zalogováním chybového stavu a počkáním na další interal měření.
+Díky použití asynchronní smyčky události není nutné v korutině \ic{_run_measurement} při čekání na další měření
+používat aktivní čekání, které by blokovalo kontext procesoru pro další aplikace.
+Základní struktura vstupních aplikací založena na dvou metodách:
+\begin{itemize}
+    \item Korutina \ic{init} má na starost načtení konfigurace pro aplikaci, inicializaci ovladačů a zavedení
+    měřící korutiny do asynchronní smyčky. Měla by být schopna na základě jiné konfigurace (jiného obsahu atributu
+    \ic{_config}) přijmout novou konfiguraci a reinicializovat ovladače a celkové nastavení.
+    \item Metoda \ic{_plan_app_task} slouží k registraci aplikační smyčky do asynchronní smyčky jádra -- v případě
+    rekonfigurace je v její kompetenci resetovat již běžící aplikační korutinu a odstranit její další naplánování ve
+    smyčce, aby mohlo dojít k opětovnému naplánování při reinicializaci aplikace.nn
+\end{itemize}
+
+% @formatter:off
 \begin{code}[
     language=Python,
-    caption={Implementace vstupní aplikace pro měření teploty a vlhkosti pomocí senzoru DHT.}
+    caption={Implementace vstupní aplikace pro měření teploty a vlhkosti pomocí senzoru DHT -- inicializační metoda
+    \ic{init} načítá parametry z přijaté konfigurace a inicializuje řadič pro DHT senzor.
+    Asynchronní měřící smyčka následně požádá ovladač o změření, počká a vyexportuje data.
+    \textit{Kód aplikace je pro zachování jednoduchosti zkrácen a upraven.}},
+    label=code:dht-sensor-app
 ]
 class App(BaseApp):
-    _dht = None
-    _interval = 10
+    _dht = _interval = None
     MEASURE_EXPORT_DELAY = 3
 
     async def init(self):
-        self._dht = dht.DHT22(Pin(int(self._config.get('port'))))
-
-        self._interval = max((
-            float(self._config.get('interval') or 0),
-            self.MEASURE_EXPORT_DELAY
-        )) - self.MEASURE_EXPORT_DELAY  # export
+        self._dht = dht.DHT22(Pin(self._config.get('port')))
+        self._interval = self._config.get('interval')
 
         self._plan_app_task(self._run_measurement())
 
@@ -124,20 +144,64 @@ class App(BaseApp):
             await self._publish(dict(
                 temperature=self._dht.temperature(),
                 humidity=self._dht.humidity(),
-            ), 'data')
+            ), 'data')  # custom data subtopic
 
             await asyncio.sleep(self._interval)
 \end{code}
-
-
-
+% @formatter:on
 
 \section{Implementace výstupní aplikace}\label{subsec:implementace-vystupni-aplikace}
-\todo{Rozbor moznosti aplikace}
-Příkladem uvedeným v~ukázce XX je výstupní aplikace řídící displej složený z~LED diod
-technologie NeoPixel. Neopixel \ldots~\cite{Esp32KolbansBook}.
+
+Výstupní aplikace je aplikací, které reaguje na příchozí zprávy ve svém kanálu MQTT a reaguje na ně pomocí ovladačů
+periférií uzlu. Příkladem uvedeným v~ukázce~\ref{code:np-display-app} je výstupní aplikace řídící displej složený z~LED
+diod technologie NeoPixel \cite{Esp32KolbansBook}.
+Z hlediska porovnání se vstupní aplikací se jedná o jednodušší implementaci, vzhledem k tomu, že aplikace není povinna
+aktivně sledovat kanál MQTT, ale činí to za ni jádro. Kromě již zmíněné korutiny \ic{init}, ve které inicializuje
+ovladač k displeji se zde nachází korutina \ic{process} zodpovědná za zpracování zprávy.
+Kromě parametru \ic{payload} se samotným osahem zprávy uloženém ve slovníku příjmá korutina i parametr obsahující
+seznam podkanálů, ve kterých zpráva přišla -- tyto subkanály jsou relativní vůči adresaci aplikace\footnote{Subkanály
+předané do korutiny \ic{process} pro příchozí kanál \ic{fis/to/NODE_ID/app/APP_ID/sub1/sub2} jsou uloženy v seznamu
+jako \ic{[\'sub1\', \'sub2\']} -- aplikace může použít tuto informaci k bližší specifikaci zprávy.}.
+
+\begin{code}[
+    language=Python,
+    caption={Ukázka z implementace výstupní aplikace.},
+    label=code:np-display-app
+]
+class App(BaseApp):
+    _display = _color = None
+
+    async def init(self):
+        width = int(self._config.get('width'))
+        height = int(self._config.get('height'))
+
+        self._display = NeoPixelDisplay(
+            neopixel.NeoPixel(
+                machine.Pin(self._config.get('port'), mode=Pin.OUT),
+                width * height,  # total count of LEDs
+            ),
+            width, height,
+            first_line_backward=True,
+        )
+        self._color = self._color or 0b00100101  # low white by default
+
+    async def process(self, payload: dict, subtopics: list):
+        if payload.get('color'):
+            self._color = self._display.rgb_to_color(\*payload.get('color'))
+
+        if payload.get('text'):
+            self._display.fill(0)
+            self._display.compact_text(
+                text=payload.get('text'),
+                x=0,
+                y=1,
+                color=self._color,
+            )
+            self._display.show()
+
+\end{code}
 
 \subsection{Detail implementace aplikace}
 \todo{Jedna nazorna aplikace}
-\blind{3}
+
 

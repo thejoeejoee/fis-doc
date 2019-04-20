@@ -87,10 +87,40 @@ class FisNode {
 \end{code}
 % @formatter:on
 
-\todo{Ještě trochu o~FisNode a jeho kontrole statusu}
+Třída \ic{FisNode} nabízí díky své implementace další vlastnosti\todo{weird}:
+\begin{itemize}
+    \item Signalizace stavu do editoru -- tato třída signalizuje skrz blok do editoru stav uzlu a konkrétní
+    aplikace -- jak lze vidět na obrázku~\ref{fig:fis-node-status}, stav může nabývat tří hodnot:
+    \begin{enumerate}
+        \item uzel je online, aplikace je online -- vše v pořádku, u uzlu nedošlo k odpojení či vypršení limitu
+        \item pro odpověd dle parametru \uv{Keep Alive}, aplikace zasílá data
+        \item uzel je online, aplikace offline -- uzel je připojen, avšak aplikace loguje zprávy na úrovni chyba
+        \item uzel je offline -- u uzlu došlo k odpojení, buď vypnutím uzlu nebo chybou sítě (a vypršením limitu pro
+        \uv{Keep Alive})
+    \end{enumerate}
+    \item Při smazání bloku dojde ke smazání aplikace -- instance třídy \ic{FisNode} je zaregistrovaná k odběru
+    události typu \ic{\'close\'} nad konkrétním blokem, čímž získá informaci od nástroje Node-RED, že došlo k
+    odstranění bloku ze sítě.
+    U tohoto procesu je využit konfigurační kanál do uzlu společně s resetováním parametru \uv{retain}, díky čemuž
+    nedojde k opětovnému zaslání konfigurace k již neexistujícímu bloku.
+    \item Fronta zpráv do brokeru -- implementace je připravena i na stav, kdy dojde k odpojení brokeru MQTT a bloky
+    přesto chtějí komunikovat.
+    Práce s frontou typu \textit{FIFO} je umístěna v metodě \ic{_publish} a pro jednotlivé bloky je tato fronta zcela
+    transparentní.
+\end{itemize}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=.5\textwidth]{figures/fis-node-status.png}
+    \caption{Výčet stavů bloku konkrétní aplikace -- třída \ic{FisNode} vyhodnocuje na základě dostupných informací
+    (kanál pro logy, data a status uzlu) stav odpovídajícího uzlu a aplikace a tento stav signalizuje do editoru
+    nástroje Node-RED.}
+    \label{fig:fis-node-status}
+\end{figure}
 
 Druhá povinná část, šablona konfiguračního formuláře do editoru, je úzce spjata s~registrací bloku -- jednotlivé
-parametry musí zde odpovídat formulářovým prvkům, resp. jejím názvům, viz ukázka~\ref{code:fis-node-template}.
+parametry musí zde odpovídat formulářovým prvkům, resp. jejím názvům, jak je uvedeno v
+ukázce~\ref{code:fis-node-template}.
 Dle konvence editoru Node-RED musí odpovídat jednotlivé atributy HTML elementů, aby byl editor schopen učinit
 formulář interaktivním a zároveň i srozumitelným pro jádro editoru a získávání hodnot z~něj.
 V~ukázce lze také vidět speciální způsob definice šablony -- šablona je obalena do elementu \ic{<script>} se
@@ -168,7 +198,7 @@ odběru.
     label=code:fis-node-app-subscribe,
     caption={Detail z~implementace třídy \ic{FisNode} -- metoda \ic{appSubscribe} je určená k~zaregistrování odběru
     kanálu odpovídajícího konkrétní aplikaci na konkrétním uzlu.
-    Parametr \ic{qos} slouží k~nastavení konkrétní QoS pro tento odběr, \ic{ref} je volitelná identifikace
+    Parametr \ic{qos} slouží k~nastavení konkrétní hodnoty QoS pro tento odběr, \ic{ref} je volitelná identifikace
     odběru s pomocí které lze mazat konkrétní odběry.}
 ]
 appSubscribe(appId, callback, subtopic = null, qos = 1, ref = 0) {
@@ -192,8 +222,8 @@ appSubscribe(appId, callback, subtopic = null, qos = 1, ref = 0) {
 Blok pro vstupní aplikaci je z~pohledu nástroje Node-RED blokem, který do sítě produkuje zprávy (přijaté z~třetí
 strany).
 Implementace bloku pro konkrétní aplikaci vychází ze základního konfiguračního bloku -- s~využitím pomocné funkce
-nástroje Node-RED \ic{RED.nodes.getNode} lze získat instanci bloku, která reprezentuje IoT uzel připojený přes MQTT
-kanály.
+nástroje Node-RED \mbox{\ic{RED.nodes.getNode}} lze získat instanci bloku, která reprezentuje IoT uzel připojený přes
+MQTT kanály.
 V~ukázce~\ref{code:fis-dht-app} lze ve spodní části těla konstruktoru vidět dvě volání -- nad konfiguračním blokem se
 prvně volá metoda \ic{config}.
 Tato metoda zajišťuje napojení na servisní aplikaci určenou pro správu uzlu jako takového a dalších aplikací --
@@ -257,7 +287,7 @@ Sestavená zpráva je odeslána pomocí \ic{appPublish} odpovídající aplikaci
     label=code:fis-node-neopixel-display,
     caption={Implementace bloku pro aplikaci ovládající bodový displej -- kromě samotné konfigurace na cílovém uzlu
     si uzel zaregistruje funkci pro odběr události typu \ic{\'input\'}.
-    Událost tohoto typu notifikuje blok o~příchozí zprávě, které je v~tomto případě odeslána do aplikace k~zobrazení
+    Událost tohoto typu notifikuje blok o~příchozí zprávě, která je v~tomto případě odeslána do aplikace k~zobrazení
     na displeji.}
 ]
 class NeoPixelDisplay {

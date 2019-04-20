@@ -1107,7 +1107,8 @@ literate=
 %\def\@@ic#1#2#3{%
 %{\lstinline[basicstyle=\ttfamily\color{codeprimary},breaklines=true]|#3|}%
 %}
-\newcommand{\ic}[1]{{\lstinline[]|#1|}}
+\newcommand{\ic}[1]{{\mbox{\lstinline[]|#1|}}}
+\newcommand{\icb}[1]{{\lstinline[]|#1|}}
 \newcommand{\json}[1]{{\lstinline[language=json]|#1|}}
 \makeatother
 
