@@ -12,7 +12,10 @@ jeho rozšiřování.
 \begin{figure}
     \includegraphics[width=\textwidth]{figures/node-red-example.png}
     \label{fig:node-red-example}
-    \caption{Ukázka z~Node-RED -- vstupy a výstupy jednotlivých uzlů spojené pro vzájemnou komunikaci.}
+    \caption{Ukázka z~Node-RED -- vstupy a výstupy jednotlivých uzlů spojené pro vzájemnou komunikaci. V levé části
+    se nachází soustava bloků typu \uv{inject}, pomocí kterých lze manuálně odeslat zprávu do vlastního bloku
+    ovládající periferii červené LED diody. Pravá spodní část patří měření teploty pomocí bloku s DHT senzorem, který
+    data předává do grafu a na blok reprezentující LED displej.}
 \end{figure}
 
 \subsubsection{Programování datového toku}

@@ -165,7 +165,9 @@ jako \ic{[\'sub1\', \'sub2\']} -- aplikace může použít tuto informaci k bli�
 
 \begin{code}[
     language=Python,
-    caption={Ukázka z implementace výstupní aplikace.},
+    caption={Ukázka z implementace výstupní aplikace -- v korutině \ic{init} aplikace připraví ovladač na základě
+    parametrů doručených z editoru. Korutina \ic{process} zodpovědná za zpracování příchozí zprávy následně tento
+    ovladač řídí -- dle nastavené barvy a textu odešle požadavek na displej.},
     label=code:np-display-app
 ]
 class App(BaseApp):
@@ -181,7 +183,6 @@ class App(BaseApp):
                 width * height,  # total count of LEDs
             ),
             width, height,
-            first_line_backward=True,
         )
         self._color = self._color or 0b00100101  # low white by default
 

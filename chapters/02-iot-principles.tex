@@ -311,13 +311,14 @@ MQTT tímto nabízí možnost klientům informovat o~svém stavu odpojení auton
 
 \begin{table}
     \centering
-    \caption{Možnosti odběru zpráv v~protokolu MQTT -- používají se dva typy zástupných znaků pro zaregistrování
-    odběru více kanálů naráz.}
+    \caption{Možnosti odběru zpráv v~protokolu MQTT -- protokol nabízí dva typy zástupných znaků pro zaregistrování
+    odběru více kanálů naráz. Pomocí znaku \ic{+} lze docílit zahrnutí celé jedné úrovně kanálů, znak \ic{\#}
+    je poté určen k neomezenému zanoření.}
     \begin{tabularx}{\textwidth}{@{}sp{5cm}r@{}}
         \toprule
-        \textbf{kanál zaregistrovaný k~odběru} & \textbf{kanál zprávy} & \textbf{bude zpráva zahrnuta?} \\
+        \textbf{kanál odběru} & \textbf{kanál zprávy} & \textbf{bude zpráva zahrnuta?} \\
         \midrule
-        \raisebox{-2.5\height}{\ic{node/1}}
+        \ic{node/1}
         &
         \texttt{node/1} \newline
         \texttt{node} \newline
@@ -331,7 +332,7 @@ MQTT tímto nabízí možnost klientům informovat o~svém stavu odpojení auton
         \\
 
         \midrule
-        \raisebox{-3\height}{\ic{node/+/status}}
+        \ic{node/+/status}
         &
         \texttt{node/1/status} \newline
         \texttt{node/2/status} \newline
@@ -349,7 +350,7 @@ MQTT tímto nabízí možnost klientům informovat o~svém stavu odpojení auton
         \\
 
         \midrule
-        \raisebox{-2.5\height}{\ic{node/\#}}
+        \ic{node/\#}
         &
         \texttt{node/1} \newline
         \texttt{node/2/status} \newline
@@ -365,7 +366,7 @@ MQTT tímto nabízí možnost klientům informovat o~svém stavu odpojení auton
         \\
 
         \midrule
-        \raisebox{-2.5\height}{\ic{node/+/data/\#}}
+        \ic{node/+/data/\#}
         &
         \texttt{node/1/data/value} \newline
         \texttt{node/2/data/value/degrees} \newline
