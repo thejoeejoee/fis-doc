@@ -89,8 +89,6 @@ class Core:
 
 \section{Aplikace a jejich programová struktura}\label{sec:aplikace-a-jejich-programova-struktura}
 
-
-
 \section{Implementace vstupní aplikace}\label{sec:implementace-vstupni-aplikace}
 Vstupní aplikací je z hlediska IoT sítě aplikace, která s pomocí ovladače některé z periférií získá data a dále je
 distribuuje do sítě pomocí protokolu MQTT.
@@ -188,14 +186,16 @@ class App(BaseApp):
 
     async def process(self, payload: dict, subtopics: list):
         if payload.get('color'):
-            self._color = self._display.rgb_to_color(\*payload.get('color'))
+            self._color = self._display.rgb_to_color(
+                (*\textasteriskcentered*)payload.get('color')
+            )  # from (R, G, B)[0-255] to binary format (3b, 3b, 2b)
 
         if payload.get('text'):
-            self._display.fill(0)
+            self._display.fill(0)  # reset display
             self._display.compact_text(
                 text=payload.get('text'),
-                x=0,
-                y=1,
+                x=payload.get('x') or 0,
+                y=payload.get('y') or 0,
                 color=self._color,
             )
             self._display.show()
