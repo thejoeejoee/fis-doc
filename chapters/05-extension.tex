@@ -2,9 +2,7 @@
 \label{ch:rozsireni}
 
 Na základně poznatků z~kapitoly~\ref{sec:node-red-rozsireni} a navrženého komunikačního protokolu zde navrhnu a
-zrealizuji\todo{weird} vlastní rozšíření nástroje Node-RED -- předmětem budou detaily ze základní infrastruktury bloků a
-následně několik konkrétních
-aplikací nasaditelných přímo v~reálném provozu.
+zrealizuji\todo{weird} vlastní rozšíření nástroje Node-RED -- předmětem budou detaily ze základní infrastruktury bloků a následně příklady konkrétních aplikací přímo přímo nasaditelných.
 % \marginpar{\small Poznámky na okraji}
 
 \section{Základní konfigurační blok}\label{sec:zakladni-konfiguracni-blok}
@@ -15,8 +13,7 @@ uzlů zadávat více než jednou.
 
 Jak uvádí dokumentace k~nástroji Node-RED~\cite{NodeRedDocs}, nedělitelnou součástí každého bloku v~Node-RED je jeho
 konfigurační formulář pro editor.
-Ten se skládá ze dvou povinných částí a jedné nepovinné -- z~povinných částí jedná se o~programovou definici pro editor
-sítě v~jazyce Javascript a o~samotnou definici konfiguračního formuláře popsanou v~jazyce HTML.
+Ten se skládá ze dvou povinných částí a jedné nepovinné -- z~povinných částí jedná se o~programovou definici pro editor sítě v~jazyce Javascript a o~samotnou definici konfiguračního formuláře popsanou v~jazyce HTML.
 Nepovinnou částí je poté uživatelská dokumentace dostupná přímo z~editoru.
 Zkracenou definici bloku pro editor lze vidět v~ukázce~\ref{code:fis-node-editor}, která kromě samotné registrace
 obsahuje dva důležité aspekty.

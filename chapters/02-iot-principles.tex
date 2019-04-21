@@ -157,10 +157,12 @@ protokolu dále v~práci.
 \begin{figure}
     \centering
 
-    \subfloat[čip ESP32 integrovaný na vývojovém kitu ESP32 Devkit C]%
+    \subfloat[čip ESP32 integrovaný na vývojovém kitu ESP32 Devkit C -- převzato z SOS electronic s.r.o.
+    \cite{ESP32Devkit}]%
     {{\includegraphics[valign=t,width=.35\textwidth]{figures/esp-devkitc.jpg}}}%
     \quad%
-    \subfloat[samotný čip ESP32]%
+    \subfloat[samotný čip ESP32, v plechovém pouzdru je vestavěn samotný čip i taktovací krystal, vně poté anténa pro
+    bezdrátové sítě -- převzato z Digi-Key Electronics \cite{ESP32Chips}]%
     {{\includegraphics[valign=t,width=.6\textwidth]{figures/esp-chip.jpg}}}%
 
     \caption{Mikrokontrolér ESP32 je pro vývojové a výukové účely nejčastěji distribuován jako kompletní kit s~USB
@@ -233,6 +235,14 @@ zaregistrování odběru více kanálů zároveň.
 Této vlastnosti bude využito v~pozdější části práce pro komunikaci s~uzly.
 Znak \ic{+} je použit pro zastoupení jedné úrovně kanálu, znak \ic{#} pro víceúrovňové zahrnutí -- demonstrace těchto
 principů je shrnuta v~tabulce~\ref{table:mqtt-subscribes}.
+
+Z hlediska bezpečnosti nabízí protokol možnosti na několika úrovních -- tou základní a téměř nutnou je základní
+autentizace klienta na serveru pomocí dvojice uživatelského jména a hesla. Druhou možností je provoz protokolu MQTT nad
+technologií TLS/SSL, což s sebou kromě bezpečenosti přináší několik nevýhod. Tou první jsou zvýšené nároky na výkon
+koncových zařízení (z hlediska této práce možný problém při použití na uzlech ESP32) a kapacitu datové linky
+(šifrování tímto způsobem přináší datovou režii přenášených zpráv) -- další nevýhodou je nutnost distribuce
+certifikátů na obě strany komunikace. Alternativa k TLS/SSL existuje ve formě protokolu SMQTT \cite{SMQTT}, který
+ovšem existuje pouze ve formě návrhu a experimentální implementace, bez verze vhodné k produkčnímu nasazení.
 
 V~následujících podkapitolách budou popsány specifické vlastnosti protokolu MQTT důležité pro další postup v~této
 práci.

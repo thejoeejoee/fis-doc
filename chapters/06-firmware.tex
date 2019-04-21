@@ -84,10 +84,24 @@ class Core:
 \end{code}
 % @formatter:on
 
-\todo{Uspavani jadra, odber}
-\blind{2}
+Z hlediska kompozice je do běhu firmwaru zapojena i třída \ic{MQTTConnection}. Ta, jakožto potomek třídy \ic{MQTTClient}
+z balíčku TODO, je zodpovědná za správu připojení k internetu a brokeru MQTT. Vlastní implementace v rámci této práce
+přidává do základních funkcionality třídy dvě vlastnosti. Tou první je využití ovládání stavové LED diody pro signalizaci
+barevného kódu a tou druhou je podpora více dvojic přihlašovacích údajů k sítím WiFi. Díky tomu lze do uzlu nakonfigurovat
+více podporovaných bezdrátových sítí a uzel v případě nedostupnosti sítě či chyby ověření okamžitě zkouší připojení
+na další v pořadí -- uzel tak v případě statických sítí není geograficky závislý. Ve chvíli úspěšeného navázání komunikace
+a potvrzení, že připojení k brokeru MQTT je v pořádku, uzel uloží síť na první místo seznamu -- při příštím startu je tak
+zvýšena pravděpodobnost, že dojde k rychlejšímu připojení do sítě.
 
-\section{Aplikace a jejich programová struktura}\label{sec:aplikace-a-jejich-programova-struktura}
+Lokální správu konfiguace řeší jádro pomocí souboru \texttt{config.json}, který je lokálně uložen na
+systému souborů na uzlu -- je tedy persistentní mezi jednotlivými běhy uzlu.
+Při startu je tento soubor načten a převeden z formátu JSON do slovníku, který je
+zpřístupněn pro použití jádru a aplikacím. Konfigurační soubor uchovává seznam přihlašovacích údajů
+k bezdrátovým sítím, přihlašovací údaje a adresu k brokeru MQTT.
+
+\todo{Uspavani jadra, odber}
+
+% \section{Aplikace a jejich programová struktura}\label{sec:aplikace-a-jejich-programova-struktura}
 
 \section{Implementace vstupní aplikace}\label{sec:implementace-vstupni-aplikace}
 Vstupní aplikací je z hlediska IoT sítě aplikace, která s pomocí ovladače některé z periférií získá data a dále je
@@ -161,6 +175,7 @@ seznam podkanálů, ve kterých zpráva přišla -- tyto subkanály jsou relativ
 předané do korutiny \ic{process} pro příchozí kanál \ic{fis/to/NODE_ID/app/APP_ID/sub1/sub2} jsou uloženy v seznamu
 jako \ic{[\'sub1\', \'sub2\']} -- aplikace může použít tuto informaci k bližší specifikaci zprávy.}.
 
+% @formatter:off
 \begin{code}[
     language=Python,
     caption={Ukázka z implementace výstupní aplikace -- v korutině \ic{init} aplikace připraví ovladač na základě
@@ -199,8 +214,38 @@ class App(BaseApp):
                 color=self._color,
             )
             self._display.show()
-
 \end{code}
+% @formatter:on
+
+
+\section{Konfigurační aplikace}\label{sec:konfiguracni-aplikace}
+
+Tato aplikace je speciální režijní aplikací sloužící pro obsluhu další aplikací a
+konfiguraci celého uzlu. V registru aplikací používá statický identifikátor \ic{\'config\'},
+díky čemuž nemusí znát konfigurační blok \ic{FisNode} na druhé straně komunikace konkrétní
+identifikaci aplikace (konkrétní \ic{APP\_ID} dle potokolu). Tato aplikace je tedy svázaná
+s metodou \ic{FisNode.config}, která již byla zmíněna v rámci kapitoly
+\ref{sec:implementace-bloku-pro-vstupni-aplikaci}. Mezi její funkce patří následující:
+
+\begin{enumerate}
+    \item \textbf{(Re)inicializace dalších aplikací} \\
+    Při přijetí zprávy ze strany brokeru s obsahem \icb{\{action: \"init\", config: ...\}}
+    aplikace provede detekci, zda se jedná o zcela novou aplikaci zaváděnou do registru či
+    o rekonfiguraci již existující aplikace. V obou případech provede nastavení konfiguračního
+    slovníku do aplikace a asynchronně zažádá aplikaci o inicializaci pomocí korutiny \ic{init}.
+    Do registru aplikací je zavedena pod svým unikátním identifikátorem, který se nachází v použitém
+    subkanálu konfigurační zprávy\footnote{Zprávy pro konfigurační aplikaci používají subkanál vytvořený
+    z unikátní identifikace dotčené aplikace -- tedy např. pro \ic{fis/to/NODE\_ID/app/config/42abdef87}
+    je \ic{\'config\'} identifikace konfigurační aplikace a \ic{\'42abdef87\'} identifikace aplikace,
+    o které je zaslána zpráva.}.
+    \item \textbf{Odebírání aplikací} \\
+    Konfigurační aplikace umožňuje mazání běžících aplikací z uzlu -- vyzvána je k tomu pomocí zprávy
+    \ic{\{action: "remove"\}} ve svém kanálu -- díky použití subkanálu s identifiátorem aplikace
+    není nutné v rámci obsahu zprávy přenášet aplikaci znovu. Konfigurační aplikace v tomto případě
+    nabídne možnost aplikaci uzavřít ovladače pomocí korutiny \ic{deinit}, odebrere její případnou
+    naplánovanou korutinu z asynchronní smyčky událostí na uzlu a následně ji z registru (a paměti uzlu)
+    odstraní pomocí operátoru \ic{del}.
+\end{enumerate}
 
 \subsection{Detail implementace aplikace}
 \todo{Jedna nazorna aplikace}

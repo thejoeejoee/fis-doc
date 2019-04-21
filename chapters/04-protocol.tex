@@ -35,7 +35,8 @@ Na základě povahy a potřeb obou komunikujících stran jsem navrhnul tyto zá
 
     \item \textbf{Samostatné kanály pro jednotlivé aplikace na uzlu} \\
     Jednotlivé aplikace běžící na uzlech je nutné v~protokolu od sebe oddělovat -- tzn. kromě rozlišení na úrovni
-    všech uzlů musí dojít k~rozlišení běžících aplikací na úrovni jednoho uzlu.
+    všech uzlů musí dojít k~rozlišení běžících aplikací na úrovni jednoho uzlu. Bloky budou s aplikacemi
+    budou komunikovat na bázi kanálového multiplexu.
 
     \item \textbf{Obsah zprávy je plně v~režii aplikace} \\
     Protokol jako takový nevyžaduje \emph{(kromě vlastních režijních zpráv)} konkrétní obsah zpráv -- jejich schéma a
