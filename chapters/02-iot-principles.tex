@@ -1,7 +1,7 @@
-\chapter{Internet věcí dnes}
+\chapter{Aktuální situace v oblasti Internetu věcí}
 \label{ch:principy-iot}
 Internet věcí lze z~odborného hlediska klasifikovat jako síť fyzických zařízení komunikujících mezi sebou.
-Primárním obsahem zpráv jsou hodnoty získané v~koncových zařízeních a příkazy pro jejich interkaci se světem.
+Primárním obsahem zpráv jsou hodnoty získané v~koncových zařízeních a příkazy pro jejich interakci se světem.
 Data pro síť získává zařízení z~okolního prostředí pomocí senzorů (nejčastěji neelektrických) veličin, přímé
 uživatelské vstupy pomocí mechanických ovládacích prvků (tlačítka, přepínače, spínače), výstupy systému mohou být
 realizovány pomocí zobrazovacích jednotek, signalizačních světel či reproduktorů, stejně tak jako pomocí motorů,
@@ -10,20 +10,19 @@ elektrických relé či krokových motorů.
 Existuje několik hlavních motivací pro zavedení Internetu věcí.
 Tou první je možnost globální automatizace procesů okolo nás -- chytré domácnosti či chytré podniky.
 Díky snadno získatelným datům pro metriky je možné je vyhodnocovat v~reálném čase a rozhodovat na základě nich bez
-přítomnosti nutné interakce od člověka.
+přítomnosti interakce od člověka.
 
 \subsubsection{Základní rozdělení Internetu věcí}
 Systémy pro Internet věcí lze v~zásadě rozdělit dle vnitřní struktury na centralizované a decentralizované --
 sítě centralizovaných systémů obsahují centrální prvek řídící okolní zařízení a nejčastěji i distribuující data mezi
 nimi.
-Decentralizované sítě jsou poté složeny pouze z~množiny zařízení, u~kterých dochází výhradně ke komunikaci mezi
-samotnými uzly bez dodatečného prostředníka.
+Decentralizované sítě jsou poté složeny pouze z~množiny rovnocenných zařízení, u~kterých dochází výhradně ke komunikaci
+mezi samotnými uzly bez dodatečného prostředníka.
 Porovnání základních vlastností těchto dvou konceptů lze nalézt v~tabulce~\ref{table:iot-types}.
 
-https://dzone.com/articles/the-internet-of-things-why-decentralization-must-b
 \begin{table}
     \centering
-    \caption{Srovnání vlastností základních koncepcí systému Internetu věcí.}
+    \caption{Srovnání vlastností základních koncepcí systému Internetu věcí~\cite{IoTDecentralization}.}
     \begin{tabularx}{\textwidth}{@{}rrr@{}}
         \toprule
         & \textbf{centralizovaný} & \textbf{decentralizovaný} \\
@@ -49,8 +48,6 @@ https://dzone.com/articles/the-internet-of-things-why-decentralization-must-b
 \todo{Duraz na bezpecnost a uzivatelskou privetivost}
 \blind{2}
 
-\todo{Rozdelit na SW a HW casti}
-\blind{1}
 
 \section{Existující řešení}\label{sec:existujici-reseni}
 
@@ -58,25 +55,26 @@ Na realizaci systémů IoT se v~dnešní době zaměřuje mnoho firem, stejně t
 Často se jedná o~kombinaci obou potřebných stránek pro provoz -- tedy, k~hardwarovému řešení je poskytnuto i řešení
 softwarové, ale existují i pouze jednostranné nástroje.
 Dále budou představeni největší hráči na poli jak komerční sféry, tak sféry otevřeného zdrojového kódu.
-\todo{citace https://chytrydumsvepomoci.cz/blog/vyber-systemu-pro-inteligentni-dum}
+% \todo{citace https://chytrydumsvepomoci.cz/blog/vyber-systemu-pro-inteligentni-dum}
 
 \subsection{OpenHAB -- open Home Automation Bus}\label{subsec:openhab}
-OpenHAB je zástupcem softwarového řešení s~otevřeným zdrojovým kódem v~programovacím jazyce Java.
+Nástroj OpenHAB je zástupcem softwarového řešení s~otevřeným zdrojovým kódem v~programovacím jazyce Java.
 Díky tomu jej lze spustit prakticky na všech dostupných hardwarových řešeních\footnote{Jazyk Java pro svůj běh
-používá JVM, což je prostředí obdobné k~již zmíněnému Node.js, a které je schopno běhu na zařízeních založených nad
-architekturami \textit{x86}, \textit{x86\_64}, \textit{ARM} a dalšími -- podpora architektury \textit{ARM} je
-významná vzhledem k~populárnímu mikropočítači Raspberry Pi, který je na ní založen.}.
+používá Java Virtual Machine (JVM), což je běhové prostředí pro tento jazyk, a které je schopno běhu na zařízeních
+založených nad architekturami \textit{x86}, \textit{x86\_64}, \textit{ARM} a dalšími -- podpora architektury
+\textit{ARM} je významná vzhledem k~populárnímu mikropočítači Raspberry Pi.}.
 Toto řešení nabízí možnost kompletní konfigurace serveru pro řízení IoT, jednotlivé uzly sítě mohou být k~serveru
 připojeny jak po síti Internet, tak lokálně např. pomocí rozhraní USB -- k~rozšíření je dostupná obsáhlá
 knihovna přídavných modulů.
-OpenHAB je primárně založen na sestavení uživatelského rozhraní pro ovládání systému, ve kterém uživatel ovládá
+Nástroj OpenHAB je primárně založen na sestavení uživatelského rozhraní pro ovládání systému, ve kterém uživatel ovládá
 připojená zařízení na základě pravidel, které mohou být nakonfigurována staticky či dynamicky pomocí dostupného
 skriptování.
 
 \subsection{Loxone -- Loxone Smart Home}\label{subsec:loxone}
-Loxone je otevřený, avšak komerční systém nabízející jak hardwarové řešení, tak odpovídající softwarové řešení --
-jádrem systému je miniserver s~proprietárním programovou výbavou, která zajišťuje obsluhu pro karty tzv. \uv{Loxone
-extension}, která jsou poté rozhraním pro komunikaci s~okolním světem.
+Platforma Loxone je otevřený, avšak komerční systém, nabízející jak hardwarové řešení, tak odpovídající softwarové
+řešení --
+jádrem systému je miniserver s~proprietárním programovou výbavou, která zajišťuje obsluhu pro karty \uv{Loxone
+extension}, jež jsou poté rozhraním pro komunikaci s~okolním světem.
 
 Toto řešení také nabízí experimentální funkci automatického naučení pravidel pro funkci celého systému, kdy
 systém detekuje své vstupy a výstupy a na základě již existujících řešení vygeneruje pravidla.
@@ -86,34 +84,29 @@ obrázku~\ref{fig:iot-loxone-config}.
 
 \begin{figure}%
     \centering
-    % TODO: loxone from https://www.loxone.com/cscz/loxone-config-8
     \includegraphics[width=\textwidth]{figures/iot-loxone-config.png}
     \caption{Detail z~nástroje Loxone Config -- v~levé části se nachází zařízení připojené do Loxone miniserveru
-    figurující jako vstupy pro samotné pravidlo chování figurující uprostřed. %
-    Vpravo jsou poté výstupy, pomocí kterých je rozhodnutí z~pravidla aplikováno zpět do reálného světa.}
+    figurující jako vstupy pro samotné pravidlo chování figurující uprostřed.
+    Vpravo jsou poté výstupy, pomocí kterých je rozhodnutí z~pravidla aplikováno zpět do reálného světa\protect\footnotemark.}
     \label{fig:iot-loxone-config}
     %
 \end{figure}
+\footnotetext{Převzato z \url{https://www.loxone.com/cscz/loxone-config-8}.}
 
 \subsection{Domoticz}\label{subsec:domoticz}
-http://www.domoticz.com/
-https://doc.turris.cz/gadgets/domoticz
-http://www.stehlikovi.eu/zapisky/raspberry-pi-z-wave-a-domoticz/
-
-\subsection{Hardware}
-\todo{Resit jeste nejak hardware?}
-\blind{1}
-
-\subsection{Software}
-\todo{Resit jeste nejak software?}
-\blind{1}
+Nástroj Domoticz je založen na otevřeném zdrojovém kódu kombinující řešení jak pro fyzické uzly, tak centrální řídící
+prvek.
+Jednotlivé uzly mezi s sebou a centrálním prvkem komunikují na frekvenci pomocí několika podporovaných technologií,
+ať už se jedná o signál na otevřené frekvenci 433 MHz, nebo standardizovaný protokol Z-Wave.
+Z hlediska automatizace domácnosti je pro tento systém zajímavá podpora internetového směrovače (serveru)
+Turris\footnote{\url{https://doc.turris.cz/gadgets/domoticz}} a automatická definice pravidel na základě připojených zařízení.
 
 \section{ESP32}\label{sec:esp32}
 \textit{ESP32} je řada nízkonákladových SoC\footnote{\textit{System on Chip} je integrovaný obvod obsahující veškeré
 periferie (digitální, analogové a často i rádiová rozhraní) zabudované přímo v~čipu.
-Tento princip bývá použit ve vestavěných systémech díky jeho nízké spotřebě.} mikrokontrolérů představená čínskou
+Tento princip sep používá ve vestavěných systémech díky jeho nízké spotřebě.} mikrokontrolérů představená čínskou
 firmou Espressif Systems.
-Jakožto nástupce řady \textit{ESP8266} nabízí na jediném čipu ve standardní distribuci následující\cite{ESP32Datasheet}:
+Jakožto nástupce řady \textit{ESP8266} nabízí na jediném čipu ve standardní distribuci následující~\cite{ESP32Datasheet}:
 
 \begin{itemize}
     \item dvoujádrový 32 bitový mikroprocesor Xtensa LX6, taktovaný na 160 či 240 MHz
@@ -142,16 +135,16 @@ Jakožto nástupce řady \textit{ESP8266} nabízí na jediném čipu ve standard
 
 Důležitou periférií je modul pro WiFi a Bluetooth komunikaci, který je obsluhován druhým jádrem procesoru.
 Toto chování vyžaduje podporu od běžícího operačního systému, vzhledem k~tomu, že je nutné přepínat kontext procesoru
-právě pro správu připojení -- z~tohoto principu kooperace jader bohužel plyne řada bugů v~čipu, které vývojáři čipu
+právě pro správu připojení -- z~tohoto principu kooperace jader plyne řada bugů v~čipu, které vývojáři čipu
 popsali v~dokumentu \uv{ECO and Workarounds for Bugs}~\cite{ESP32KnownBugs}.
-Pro část chyb existuje alternativní způsob, jak potlačit jejich dopad na standardní běh procesoru, stejně tak část
+Pro část chyb existuje alternativní způsob, jak potlačit jejich dopad na standardní běh procesoru, část
 chyb byla vyřešena vydáním dalších revizí čipu ESP32.
 
-Komunikace na WiFi protokolech využívá standardní model ISO/OSI, kdy na druhé, linkové vrstvě modul používá MAC
+Komunikace na WiFi protokolech využívá standardní model ISO/OSI, kdy na druhé, linkové vrstvě, modul používá MAC
 adresu, která je zabudována přímo v~čipu při jeho výrobě\footnote{MAC adresa složená ze 48 bitů je na čipu
 zaznamenána pomocí technologie eFuse.}.\todo{efuse}
 Tato adresa je pro všechny vyrobené čipy ESP32 jedinečná a díky tomu, že je přístupná i pro uživatelskou programovou
-výbavu, je možné i používat jako unikátní identifikátor jednotlivých čipů -- této vlastnosti bude využito při návrhu
+výbavu, je možné ji používat jako unikátní identifikátor jednotlivých čipů -- této vlastnosti bude využito při návrhu
 protokolu dále v~práci.
 
 \begin{figure}
@@ -179,20 +172,21 @@ protokolu dále v~práci.
 \blind{1}
 
 \section{MicroPython}\label{sec:micropython}
-MicroPython je derivátem vysokoúrovňového skriptovacího programovacího jazyka Python určený pro běh na vestavěných
+MicroPython je derivát vysokoúrovňového skriptovacího programovacího jazyka Python určený pro běh na vestavěných
 systémech a dalších aplikacích s~nízkým výpočetním výkonem.
-Z~hlediska vestavěné knihovny nabízí naprostou většinu základní knihovny z~původní distribuce a navíc knihovny
+Z~hlediska vestavěné knihovny nabízí téměř celou základní knihovnu z~původní distribuce\footnote{Podporovaná část
+vestavěné knihovny původní jazyka je vývojíři specifikována na \url{https://docs.micropython.org/en/latest/library/index
+.html\#micropython-libraries}.} a navíc knihovny
 zodpovědné za manipulaci s~rozhraním mikropočítače, na kterém běží.
-Kromě oficiálního sestavení pro pyboard\footnote{Oficiální (výukový) vývojový kit pro běh jazyka MicroPython
-s~cenou okolo \pounds30 z~oficiálního e-shopu.}\todo{weird} nabízí komunita i sestavení pro ESP2866, ESP32, WiPy nebo
-Espruino Pico.
+Kromě oficiálně podporovaného sestavení pro vývojový kit \uv{pyboard} správci i komunitní sestavení pro
+vývojové kity založené na čipech \uv{ESP2866}, \uv{ESP32} či \uv{WiPy}.
 
 Sestavení pro kity od společnosti ESP jsou založena na vývojovém frameworku ESP-IDF.
 Ten je zástupcem operačních systémů reálného času (RTOS), tedy systémů pro které je typické časové plánování
-jednotlivých úloh a kritické jejich časově přesné spuštění -- to vše založené na plánovači, který bývá
-napostradatelnou součástí.
-ESP-IDF je konkrétně postaven nad FreeRTOS, který je de facto standardem a největším hráčem na poli RTOS s~otevřeným
-zdrojovým kódem. \todo{citace z~https://www.simform.com/iot-rtos-selection/}
+jednotlivých úloh a kritické jejich časově přesné spuštění -- to vše založené na plánovači, který je
+nedělitelnou součástí.
+Framework ESP-IDF je konkrétně postaven nad operačním systémem FreeRTOS, který je de facto standardem a největším hráčem
+na poli RTOS s~otevřeným zdrojovým kódem~\cite{RTOSSelection}.
 Jedním z~benefitů tohoto typu systému je možnost použití programového řízení komunikačních rozhraní
 (jako je SPI, I\textsuperscript{2}C nebo USART) -- tato rozhraní lze poté naimplementovat, není nutný konkrétní
 hardwarový prvek.
@@ -202,10 +196,10 @@ a to i díky jeho paměťové optimalizaci.
 Nespornou výhodou pro použití v~internetu věcí je i dostupnost základních knihoven pro komunikaci s~okolním světem.
 MicroPython v~základu nabízí knihovnu \ic{machine} s~třídami \ic{Pin}, \ic{PWM} či \ic{ADC} --
 každá z~těchto tříd reprezentuje způsob, jak komunikovat s~okolním světem pomocí vestavěných periférií
--- i vestavěná knihovna je ovšem svým obsahem závislá na konkrétní distribuci pro konkrétní vývojový kit.
+-- tato část vestavěné knihovny je ovšem závislá na konkrétní distribuci interpretu jazyka MicroPython.
 
-Ústřední knihovnou pro pro komunikaci s~okolím na vyšších vrstách poskytuje balíček \ic{network}, který zpřístupňuje
-třídu \ic{WLAN}, která je zodpovědná za práci s~modulem pro WiFi připojení a to jak v~klientském módu, tak v~módu
+Ústřední knihovnou pro komunikaci s~okolím na vyšších vrstách poskytuje balíček \ic{network}, který zpřístupňuje
+třídu \ic{WLAN} -- ta je zodpovědná za práci s~modulem pro WiFi připojení a to jak v~klientském módu, tak v~módu
 přístupového bodu.
 
 % @formatter:off
@@ -224,18 +218,17 @@ measured = adc.read() # read value (0-1024) from ADC
 \end{code}
 % @formatter:on
 
-\section{Message Queuing Telemetry Transport}\label{sec:mqtt}
-Message Queuing Telemetry Transport (MQTT) je protokol definovaný ISO standardem 20922:2016~\cite{ISOMQTT} určený pro
+\section{Message Queuing Telemetry Transport (MQTT)}\label{sec:mqtt}
+Message Queuing Telemetry Transport (MQTT) je protokol definovaný ISO standardem~\cite{ISOMQTT} určený pro
 kanálovou komunikaci zařízení mezi sebou.
 Jedná se o~typ komunikace klient-server nad protokolem TCP/IP, server je dle svých vlastností nazýván
 specificky jako \uv{broker}.
-Klient má možnost si po připojení zaregistrovat odběry jednotlivých kanálů -- jejich identifikace má tvar
-alfanumerických řetězců oddělených pomocí znaku \ic{/}.
+Klient v momentu jeho připojení vytváří sezení (\textit{session}) na brokeru, v rámci kterého má možnost si zaregistrovat
+odběry jednotlivých kanálů -- jejich identifikace má tvar alfanumerických řetězců oddělených pomocí znaku \ic{/}.
 Benefitem přístupu s~jasně definovaným oddělovačem je možnost použití zástupných znaků pro
-zaregistrování odběru více kanálů zároveň.
-Této vlastnosti bude využito v~pozdější části práce pro komunikaci s~uzly.
-Znak \ic{+} je použit pro zastoupení jedné úrovně kanálu, znak \ic{#} pro víceúrovňové zahrnutí -- demonstrace těchto
-principů je shrnuta v~tabulce~\ref{table:mqtt-subscribes}.
+zaregistrování odběru více kanálů zároveň -- této vlastnosti bude využito v~pozdější části práce pro komunikaci s~uzly.
+Znak \ic{+} je použit pro zastoupení jedné úrovně kanálu, znak \ic{#} pro víceúrovňové zahrnutí -- demonstrace tohoto
+principu je shrnuta v~tabulce~\ref{table:mqtt-subscribes}.
 
 Z hlediska bezpečnosti nabízí protokol možnosti na několika úrovních -- tou základní a téměř nutnou je základní
 autentizace klienta na serveru pomocí dvojice uživatelského jména a hesla.
@@ -250,10 +243,10 @@ V~následujících podkapitolách budou popsány specifické vlastnosti protokol
 práci.
 
 \subsection{Příznak zprávy \uv{retain}}\label{subsec:priznak-zpravy-retain}
-Pomocí příznaku \uv{retain} může klient pro zprávu v~konkrétním kanálu zažádat o~její ponechání v~kanálu pro budoucí
-klienty -- tedy, zaregistruje-li si klient kanál k~odběru, broker klientovi automaticky po zaregistrovásíní odešle
-zprávy,
-spadající tohoto kanálu (či kanálů v~případě zástupných znaků), které mají nastavený tento příznak.
+Pomocí příznaku \uv{retain} může klient u brokeru zažídat o persistenci zprávy -- pro zprávu tento parametr nastaví a
+broker zajistí její uložení ke konkrétnímu kanálu.
+Dojde-li následně k zaregistrování odběru (jiným) klientem na tento kanál (včetně kanálů dle zástupných symbolů),
+uložená zpráva je mu automaticky ihned zaslána.
 
 Tohoto chování lze velmi dobře využít pro kanály obsahující stav kterékoliv části ze systému --
 nově připojený klient pak ihned dostane zprávu o~stavu a nedochází k~časovému intervalu, kdy je sice klient
@@ -274,22 +267,20 @@ hodnoty dostupné pro QoS:
     odesílateli potvrdí příjetí a smazání ze svého úložiště -- zpráva poté není distribuována vícenásobně.
 \end{enumerate}
 
-\todo{překreslit to zvládneš, lepší než citace}
 \begin{figure}
     \centering
-    \includegraphics[width=.5\textwidth]{figures/mqtt-qos.png}
+    \includegraphics[width=.6\textwidth]{figures/qos.pdf}
     \caption{Tři typy QoS (Quality of Service) pro MQTT - $0$ pro zprávy bez potvrzování (doručení nejvýše jednou),
     $1$ pro jednosměrné potvrzení (doručení alespoň jednou) a
     $2$ pro obousměrné potvrzení (doručení právě jednou).}
     \label{fig:mqtt-qos}
-    %\todo{obrazek z ROOT.cz https://i.iinfo.cz/images/116/bigclown-2-3-prev.png }
 \end{figure}
 
 \subsection{Identifikace klienta \uv{Client ID}}\label{subsec:identifikace-klienta-client-id}
 Možností klienta je zapsat si při připojení k~brokeru své \uv{Client ID}.
 Jedná se o~řetězec jednoznačně identifikující konkrétního klienta -- hlavním benefitem je (v~případě podpory
 persistentních sezení) je možnost zachování zaregistrovaných kanálů k~odběru v~případě odpojení a
-opětovného připojení klienta a také uschování prozatím nedoručených zpráv s~QoS nastaveným na hodnotu 1 či 2.
+opětovného připojení klienta a také uschování prozatím nedoručených zpráv s~QoS nastaveným na úroveň $1$ či $2$.
 
 Klient tedy zahájí komunikaci zprávou \ic{CONNECT}, která kromě dalšího obsahuje parametry \uv{Client ID} a \uv{Clean
 session} -- druhý zmíněný vynucuje vyčištění sezení (smazání odběru a čekajících zpráv).
@@ -299,7 +290,7 @@ bylo vyčištěno či se podařilo připojit do existujícího).
 \subsection{Parametr spojení \uv{Keep Alive}}\label{subsec:parametr-spojeni-keep-alive}
 Parametr \uv{Keep Alive} určuje časový interval, během kterého musí klient odpovědět na zprávu \ic{PINGREQ} zprávou
 \ic{PINGRESP} -- jestliže se tak nestane, spojení je ukončeno.
-Tento parametr je nutný kvůli nežádoucí vlastnosti protokolu TCP --
+Toto chování je nutné kvůli nežádoucí vlastnosti protokolu TCP --
 v~tomto protokolu, nad kterým je MQTT založen, může dojít k~situaci tzv. polootevřeného spojení.
 
 Je to standardně nežádoucí stav, při kterém je jedna ze stran spojení informována o~ukončení spojení (jakoukoliv
@@ -373,7 +364,7 @@ MQTT tímto nabízí možnost klientům informovat o~svém stavu odpojení auton
         \truemark \newline
         \truemark \newline
         \truemark \newline
-        \falsemark \newline
+        \truemark \newline
         \falsemark
         \\
 

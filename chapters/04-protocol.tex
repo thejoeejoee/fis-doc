@@ -35,18 +35,18 @@ Na základě povahy a potřeb obou komunikujících stran jsem navrhnul tyto zá
 
     \item \textbf{Samostatné kanály pro jednotlivé aplikace na uzlu} \\
     Jednotlivé aplikace běžící na uzlech je nutné v~protokolu od sebe oddělovat -- tzn. kromě rozlišení na úrovni
-    všech uzlů musí dojít k~rozlišení běžících aplikací na úrovni jednoho uzlu. Bloky budou s aplikacemi
-    budou komunikovat na bázi kanálového multiplexu.
+    všech uzlů musí dojít k~rozlišení běžících aplikací na úrovni jednoho uzlu.
+    Komunikaci bloků s příslušnými aplikacemi lze tedy specifikovat jako kanálový multiplex.
 
     \item \textbf{Obsah zprávy je plně v~režii aplikace} \\
     Protokol jako takový nevyžaduje \emph{(kromě vlastních režijních zpráv)} konkrétní obsah zpráv -- jejich schéma a
     datové typy obsahu jsou plně v~režii komunikující dvojice aplikace na uzlu a bloku v~nástroji Node-RED.
 
     \item \textbf{Kanály pro status a sběr běhových informací z~uzlu} \\
-    Jedním z~požadovaných kanálů je zpětný kanál statusu uzlu, kterým bude uzel oznamovat do sítě svůj stav (připojen či
+    Další z~požadovaných kanálů je zpětný kanál statusu uzlu, kterým bude uzel oznamovat do sítě svůj stav (připojen či
     nepřipojen), případně další informace (využití úložiště, čekající data).
-    Další požadovaný kanál z~tohoto hlediska je kanál pro běhové informace z~uzlu -- logy, které budou obsahovat
-    stručný popis stavu, ke kterému na uzlu došlo -- od vyjímkových stavů až k~čistě ladícím informacím.
+    Pro sběr běhových informací z uzlu bude použit samostatný kanál -- zprávy (logy) v něm budou obsahovat stručný
+    popis stavu, ke kterému na uzlu došlo -- od vyjímkových stavů až k~čistě ladícím informacím.
 
     \item \textbf{Kanál pro konfiguraci uzlu} \\
     Pro režijní komunikaci s~uzlem je nutný samostatný konfigurační kanál, pomocí kterého bude uzel příjmat příkazy

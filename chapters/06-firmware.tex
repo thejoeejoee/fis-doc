@@ -8,8 +8,8 @@ jádra zodpovědného za zavedení aplikací či připojení k~brokeru MQTT až 
 Na základě navrženého protokolu a vlastního úsudku jsem navrhl následující požadavky na implementaci jádra firmwaru:
 
 \begin{itemize}
-    \item Jádro je koncový bod pro komunikační linku s~nástrojem Node-RED -- zpracování příchozích zpráv deleguje na
-    aplikace.
+    \item Jádro je koncový bod pro komunikační linku s~nástrojem Node-RED -- příjmá zprávy a deleguje jejich
+    zpracování na aplikace.
     \item Jádro je zodpovědné za správu připojení k~internetu, potažmo brokeru MQTT, včetně přihlašovacích údajů.
     \item Jádro má ve správě asynchronní smyčku s~požadavky aplikací.
     \item Jádro je zodpovědné za restartování uzlu v~případě neočekávaného chybového stavu.
@@ -27,7 +27,7 @@ korutiny\footnote{Korutina (coroutine) je z~pohledu asynchronního přístupu k~
 jehož kód lze provádět asynchronně a zároveň má možnost jiný kód tohoto typu invokovat.} (coroutines) a smyčka samotná
 se stará o~rozdělování procesorového času a kontextu.
 
-Vstupní bod pro zavedení jádra je metoda \ic{Core.start}, která dělá jedinou věc -- do inicializované smyčky zavede
+Vstupní bod pro zavedení jádra je metoda \ic{Core.start}, která zařizuje jedinou věc -- do inicializované smyčky zavede
 korutinu \ic{Core._run}, která je zodpovědná za připojení uzlu k~síti.
 Obě tyto metody lze vidět v~ukázce~\ref{code:firmware-core-start}, kde lze v~rámci druhé zmíněné také upozornit na
 práci s~atributem \ic{_status_led}.
@@ -64,7 +64,7 @@ v~tabulce~\ref{table:esp32-state-key}.
     language=Python,
     caption={Metody jádra firmwaru -- blokující metoda \ic{start} je vstupní bod jádra z~hlediska veřejného
     rozhraní, je zodpovědná za rozběhnutí smyčky událostí a naplánování běhové korutiny \ic{_run}.
-    Té poté stačí pouze zaktivovat klienta připojení k~internetu, veškeré další operace již obstarává klient.},
+    Té poté stačí pouze zaktivovat klienta připojení k~internetu, veškeré další operace obstarává klient.},
     label=code:firmware-core-start
 ]
 class Core:
@@ -85,15 +85,18 @@ class Core:
 % @formatter:on
 
 Z hlediska kompozice je do běhu firmwaru zapojena i třída \ic{MQTTConnection}. Ta, jakožto potomek třídy \ic{MQTTClient}
-z balíčku TODO, je zodpovědná za správu připojení k internetu a brokeru MQTT. Vlastní implementace v rámci této práce
-přidává do základních funkcionality třídy dvě vlastnosti. Tou první je využití ovládání stavové LED diody pro signalizaci
-barevného kódu a tou druhou je podpora více dvojic přihlašovacích údajů k sítím WiFi. Díky tomu lze do uzlu nakonfigurovat
-více podporovaných bezdrátových sítí a uzel v případě nedostupnosti sítě či chyby ověření okamžitě zkouší připojení
-na další v pořadí -- uzel tak v případě statických sítí není geograficky závislý. Ve chvíli úspěšeného navázání komunikace
-a potvrzení, že připojení k brokeru MQTT je v pořádku, uzel uloží síť na první místo seznamu -- při příštím startu je tak
+z balíčku \texttt{micropython-mqtt}\footnotetext{Balíček \texttt{kevinkk525/micropython-mqtt} obsahuje třídu pro
+asynchronní práci s připojením MQTT -- je dostupný skrz službu Githuv v repozitáři autora Kevina Köcka pod licencí MIT
+-- \url{https://github.com/kevinkk525/micropython-mqtt}}, je zodpovědná za správu připojení k internetu a brokeru MQTT.
+Vlastní implementace v rámci této práce přidává do základních funkcionality třídy dvě vlastnosti.
+Tou první je využití ovládání stavové LED diody pro signalizaci barevného kódu a tou druhou je podpora více dvojic
+přihlašovacích údajů k sítím WiFi. Díky tomu lze do uzlu nakonfigurovat více známých bezdrátových sítí a uzel v
+případě nedostupnosti sítě či chyby ověření okamžitě zkouší připojení na další v pořadí -- uzel tak v případě
+statických sítí není geograficky závislý. Ve chvíli úspěšeného navázání komunikace a potvrzení, že připojení k
+brokeru MQTT je v pořádku, uzel uloží síť na první místo seznamu -- při příštím startu je tak
 zvýšena pravděpodobnost, že dojde k rychlejšímu připojení do sítě.
 
-Lokální správu konfiguace řeší jádro pomocí souboru \texttt{config.json}, který je lokálně uložen na
+Lokální správu konfiguace řeší jádro pomocí souboru \texttt{config.json}, který je uložen na
 systému souborů na uzlu -- je tedy persistentní mezi jednotlivými běhy uzlu.
 Při startu je tento soubor načten a převeden z formátu JSON do slovníku, který je
 zpřístupněn pro použití jádru a aplikacím. Konfigurační soubor uchovává seznam přihlašovacích údajů
@@ -107,11 +110,11 @@ k bezdrátovým sítím, přihlašovací údaje a adresu k brokeru MQTT.
 Vstupní aplikací je z hlediska IoT sítě aplikace, která s pomocí ovladače některé z periférií získá data a dále je
 distribuuje do sítě pomocí protokolu MQTT.
 V ukázce~\ref{code:dht-sensor-app} se nachází kód vstupní aplikace pro export dat ze senzoru DHT, který měří okolní
-teplotu a vlhkost a jehož ovladač je obsažen ve standardní distribuci jazyka MicroPython.m
+teplotu a vlhkost a jehož ovladač je obsažen ve standardní distribuci jazyka MicroPython.
 Jedním z jeho specifik je neblokující chování při požadavku na změření, je tedy nutné po požadavku počkat
-2-3 sekundy, než dojde k exportu hodnot. \todo{citace vole}
-V případě selhání komunikace se senzorem dojde ze strany ovladače k vyhození výjimky \ic{OSError}, na kterou aplikace
-reaguje zalogováním chybového stavu a počkáním na další interal měření.
+více jak 2 sekundy, než vůbec může dojít k exportu hodnot \cite{dht22}.
+V případě selhání komunikace se senzorem dojde ze strany ovladače k signalizaci výjimky \ic{OSError}, na kterou aplikace
+reaguje zalogováním chybového stavu a počkáním na další interval měření.
 Díky použití asynchronní smyčky události není nutné v korutině \ic{_run_measurement} při čekání na další měření
 používat aktivní čekání, které by blokovalo kontext procesoru pro další aplikace.
 Základní struktura vstupních aplikací založena na dvou metodách:
@@ -121,7 +124,7 @@ Základní struktura vstupních aplikací založena na dvou metodách:
     \ic{_config}) přijmout novou konfiguraci a reinicializovat ovladače a celkové nastavení.
     \item Metoda \ic{_plan_app_task} slouží k registraci aplikační smyčky do asynchronní smyčky jádra -- v případě
     rekonfigurace je v její kompetenci resetovat již běžící aplikační korutinu a odstranit její další naplánování ve
-    smyčce, aby mohlo dojít k opětovnému naplánování při reinicializaci aplikace.nn
+    smyčce, aby mohlo dojít k opětovnému naplánování při reinicializaci aplikace.
 \end{itemize}
 
 % @formatter:off
@@ -171,7 +174,7 @@ Z hlediska porovnání se vstupní aplikací se jedná o jednodušší implement
 aktivně sledovat kanál MQTT, ale činí to za ni jádro. Kromě již zmíněné korutiny \ic{init}, ve které inicializuje
 ovladač k displeji se zde nachází korutina \ic{process} zodpovědná za zpracování zprávy.
 Kromě parametru \ic{payload} se samotným osahem zprávy uloženém ve slovníku příjmá korutina i parametr obsahující
-seznam podkanálů, ve kterých zpráva přišla -- tyto subkanály jsou relativní vůči adresaci aplikace\footnote{Subkanály
+seznam podkanálů, ve kterých zpráva nachází -- tyto subkanály jsou relativní vůči adresaci aplikace\footnote{Subkanály
 předané do korutiny \ic{process} pro příchozí kanál \ic{fis/to/NODE_ID/app/APP_ID/sub1/sub2} jsou uloženy v seznamu
 jako \ic{[\'sub1\', \'sub2\']} -- aplikace může použít tuto informaci k bližší specifikaci zprávy.}.
 
@@ -247,7 +250,7 @@ s metodou \ic{FisNode.config}, která již byla zmíněna v rámci kapitoly
     odstraní pomocí operátoru \ic{del}.
 \end{enumerate}
 
-\subsection{Detail implementace aplikace}
-\todo{Jedna nazorna aplikace}
+\todo{úprava configu pomocí konfigurační aplikace}
+
 
 

@@ -2,7 +2,8 @@
 \label{ch:rozsireni}
 
 Na základně poznatků z~kapitoly~\ref{sec:node-red-rozsireni} a navrženého komunikačního protokolu zde navrhnu a
-zrealizuji\todo{weird} vlastní rozšíření nástroje Node-RED -- předmětem budou detaily ze základní infrastruktury bloků a následně příklady konkrétních aplikací přímo přímo nasaditelných.
+zrealizuji vlastní rozšíření nástroje Node-RED -- předmětem budou detaily ze základní infrastruktury bloků a následně
+příklady konkrétních aplikací přímo přímo nasaditelných.
 % \marginpar{\small Poznámky na okraji}
 
 \section{Základní konfigurační blok}\label{sec:zakladni-konfiguracni-blok}
@@ -13,7 +14,8 @@ uzlů zadávat více než jednou.
 
 Jak uvádí dokumentace k~nástroji Node-RED~\cite{NodeRedDocs}, nedělitelnou součástí každého bloku v~Node-RED je jeho
 konfigurační formulář pro editor.
-Ten se skládá ze dvou povinných částí a jedné nepovinné -- z~povinných částí jedná se o~programovou definici pro editor sítě v~jazyce Javascript a o~samotnou definici konfiguračního formuláře popsanou v~jazyce HTML.
+Ten se skládá ze dvou povinných částí a jedné nepovinné -- z~povinných částí jedná se o~programovou definici pro editor
+sítě v~jazyce Javascript a o~samotnou definici konfiguračního formuláře popsanou v~jazyce HTML.
 Nepovinnou částí je poté uživatelská dokumentace dostupná přímo z~editoru.
 Zkracenou definici bloku pro editor lze vidět v~ukázce~\ref{code:fis-node-editor}, která kromě samotné registrace
 obsahuje dva důležité aspekty.
@@ -22,20 +24,23 @@ Prvním je registrace do kategorie \ic{\'config\'} což značí registraci konfi
 uzlu (uzel tedy nemá grafickou reprezentaci v~síti).
 Druhým aspektem je výčet parametrů pro formulář, které následně bude možné použít pro samotné chování uzlu v~síti.
 První parametr typu \ic{\'mqtt-broker\'} je určen pro konkrétní broker MQTT, pomocí kterého bude blok s~uzlem spojen
-(jedná se opět o~konfigurační blok poskytnutý přímo nástrojem Node-RED).
+(jedná se o konfigurační blok poskytnutý přímo nástrojem Node-RED).
 
 Druhým parametrem je jednoznačná identifikace bloku, jejíž formát je omezen regulárním výrazem -- tento
-parametr vychází z~navrženého protokolu popsaného v~kapitole~\ref{sec:mqtt-kanaly}\todo{čárka před "a"?} a to
-konkrétně ze zástupného symbolu \ic{NODE\_ID}, který od sebe odlišuje jednotlivé uzly\footnote{Konkrétní tvar
+parametr vychází ze zástupného symbolu \ic{NODE\_ID} z~navrženého protokolu popsaného
+v~kapitole~\ref{sec:mqtt-kanaly}.
+Tento symbol slouží pro odlišení jednotlivých uzlů, resp. konfiguračních bloků\footnote{Konkrétní tvar
 identifikátoru (a jeho regulárního výrazu) není pro nástroj Node-RED podstatný, k~jeho upřesnění dojde až rámci
-firmwaru uzlů, popsaného v~kapitole~\ref{ch:firmware}.}.
+firmwaru uzlů popsaného v~kapitole~\ref{ch:firmware}.}.
 Parametr \ic{nodeId} tedy následně bude použit pro sestavení kanálů MQTT pro odběr a publikaci zpráv.
 
 % @formatter:off
 \begin{code}[
     language=Javascript,
     label=code:fis-node-editor,
-    caption={Registrace vlastního bloku do editoru sítě v~nástroji Node-RED.}
+    caption={Registrace vlastního bloku do editoru sítě v~nástroji Node-RED -- kromě identifikačního klíče do
+    registru bloků \ic{\'fis-node\'} se zde nachází definice parametrů a zařazení do konfiguračních bloků
+    pomocí zvolené kategorie \ic{\'config\'}.}
 ]
 RED.nodes.registerType('fis-node', {
     category: 'config',
@@ -58,7 +63,7 @@ parametrů z~formuláře, získání instance konfiguračního bloku pro připoj
 Získaná instance bloku pro MQTT je zodpovědná za správu připojení -- není tedy nutné brát v~potaz možné odpojení a
 nutnost znovupřipojení -- tato instance bude následně použita k~registraci odběrů a publikování zpráv do jednotlivých
 MQTT kanálů protokolu.
-Implementace tohoto bloku bohužel nemá zveřejněnou dokumentaci, veškeré poznatky o~jeho funkci jsou tedy brány přímo
+Implementace tohoto bloku bohužel nemá dostupnou dokumentaci, veškeré poznatky o~jeho funkci jsou tedy brány přímo
 z~jeho zdrojového kódu\footnote{\url{https://github
 .com/node-red/node-red/blob/master/packages/node_modules/\%40node-red/nodes/core/io/10-mqtt.js}}.
 
@@ -67,8 +72,8 @@ z~jeho zdrojového kódu\footnote{\url{https://github
     language=Javascript,
     label=code:fis-node-constructor,
     caption={Část konstruktoru třídy \ic{FisNode} obsluhující připojení brokeru MQTT a přípravu kanálů pro komunikaci.
-    Důležitá je příprava části kanálů, které jsou náledně použity pro publikování a odběr zpráv -- v atributu
-    \ic{_publish_topic} je uložen kanál s identifikací uzlu, identifikace aplikace, dle kapitoly \ref{sec:mqtt-kanaly}, připojí
+    Důležitá je příprava části kanálů, které jsou následně použity pro publikování a odběr zpráv -- v atributu
+    \ic{_publish_topic} je uložen kanál s identifikací uzlu, identifikace aplikace, dle kapitoly~\ref{sec:mqtt-kanaly}, připojí
     třída až při publikování pro konkrétní aplikaci. Druhým předpřipraveným kanálem je kanál pro odběr zprávy z uzlu
     -- ten je uložen v atributu \ic{_subscribe_topic}.}
 ]
@@ -87,7 +92,7 @@ class FisNode {
 \end{code}
 % @formatter:on
 
-Třída \ic{FisNode} nabízí díky své implementace další vlastnosti\todo{weird}:
+Implementace třídy \ic{FisNode} se vyznažuje několika dalšími vlastnostmi:
 \begin{itemize}
     \item Signalizace stavu do editoru -- tato třída signalizuje skrz blok do editoru stav uzlu a konkrétní
     aplikace -- jak lze vidět na obrázku~\ref{fig:fis-node-status}, stav může nabývat tří hodnot:
@@ -103,10 +108,11 @@ Třída \ic{FisNode} nabízí díky své implementace další vlastnosti\todo{we
     odstranění bloku ze sítě.
     U tohoto procesu je využit konfigurační kanál do uzlu společně s resetováním parametru \uv{retain}, díky čemuž
     nedojde k opětovnému zaslání konfigurace k již neexistujícímu bloku.
-    \item Fronta zpráv do brokeru -- implementace je připravena i na stav, kdy dojde k odpojení brokeru MQTT a bloky
+    \item Fronta zpráv do brokeru -- třída je připravena i na stav, kdy dojde k odpojení brokeru MQTT a bloky
     přesto chtějí komunikovat.
-    Práce s frontou typu \textit{FIFO} je umístěna v metodě \ic{_publish} a pro jednotlivé bloky je tato fronta zcela
-    transparentní.
+    Implementace toto řeší pomocí navázání funkcí na událost typu \ic{\'connect\'} nad
+    objektem klienta MQTT spojení -- tyto funkce ve chvíli své invokace odešlou čekající zprávu a ukončí se.
+    Toto chování je pro bloky zcela transparentní.
 \end{itemize}
 
 \begin{figure}
@@ -115,17 +121,16 @@ Třída \ic{FisNode} nabízí díky své implementace další vlastnosti\todo{we
     \caption{Výčet stavů bloku konkrétní aplikace -- třída \ic{FisNode} vyhodnocuje na základě dostupných informací
     (kanál pro logy, data a status uzlu) stav odpovídajícího uzlu a aplikace a tento stav signalizuje do editoru
     nástroje Node-RED. Konkrétně se jedna o stav, kdy je vše v pořádku, aplikace zasílá data (na obrázku první),
-    stav, kdy je uzel připojen, avšak aplikace nezasílá či nepříjmá data (druhý případ na obrázku) a poslední stav,
+    stav, kdy je uzel připojen, avšak aplikace nezasílá či nepříjmá data (druhý případ) a poslední stav,
     kdy je uzel odpojen (spodní případ).}
     \label{fig:fis-node-status}
 \end{figure}
 
 Druhá povinná část, šablona konfiguračního formuláře do editoru, je úzce spjata s~registrací bloku -- jednotlivé
-parametry musí zde odpovídat formulářovým prvkům, resp. jejím názvům, jak je uvedeno v
-ukázce~\ref{code:fis-node-template}.
-Dle konvence editoru Node-RED musí odpovídat jednotlivé atributy HTML elementů, aby byl editor schopen učinit
+parametry zde musí odpovídat formulářovým prvkům, resp. jejím názvům, jak je uvedeno v
+ukázce~\ref{code:fis-node-template} -- kvůli funkci editoru, aby byl schopen učinit
 formulář interaktivním a zároveň i srozumitelným pro jádro editoru a získávání hodnot z~něj.
-V~ukázce lze také vidět speciální způsob definice šablony -- šablona je obalena do elementu \ic{<script>} se
+V~ukázce lze také vidět speciální způsob definice HTML šablony -- šablona je obalena do elementu \ic{<script>} se
 specifickou hodnotou v~atributu \ic{type="text/x-red"}\footnote{Standard HTML při tomto chování označuje
 element \ic{<script>} jako \uv{data block} a prohlížeče jsou povinny obsah elementů s~tímto atributem dále
 neinterpretovat.}.
@@ -168,7 +173,7 @@ uzlu a dojde tak k~zacílení na konkrétní aplikaci na konkrétním uzlu.
     language=Javascript,
     label=code:fis-node-app-publish,
     caption={Detail z~implementace třídy \ic{FisNode} -- metoda \ic{appPublish} poskytuje možnost konkrétnímu bloku
-    odeslání zprávy do odpovídající aplikace na uzlu.}
+    odeslání zprávy do odpovídající aplikace na uzlu, resp. do konkrétního subkanálu.}
 ]
 appPublish(appId, payload, subtopic = null) {
     return this._publish(
@@ -191,7 +196,7 @@ Tu mohou implementace jednotlivých bloků využít k~zaregistrování odběru k
 identifikace aplikace \ic{appId} a volitelně podkanálu, opět dle navržené struktury protokolu z~kapitoly~\ref{sec:mqtt-kanaly}.
 Uložená instance připojení k~brokeru MQTT poté slouží k~zaregistrování samotného odběru -- ten je realizován pomocí
 funkce, kterou pro každou příchozí zprávu MQTT klient invokuje.
-S~příchozími parametry je následně (po konverzi do formátu JSON) invokována funkce předaná při registraci konkrétního
+S~příchozími parametry je následně (po konverzi do formátu JSON) spuštěna funkce předaná při registraci konkrétního
 odběru.
 
 % @formatter:off
@@ -201,7 +206,7 @@ odběru.
     caption={Detail z~implementace třídy \ic{FisNode} -- metoda \ic{appSubscribe} je určená k~zaregistrování odběru
     kanálu odpovídajícího konkrétní aplikaci na konkrétním uzlu.
     Parametr \ic{qos} slouží k~nastavení konkrétní hodnoty QoS pro tento odběr, \ic{ref} je volitelná identifikace
-    odběru s pomocí které lze mazat konkrétní odběry.}
+    odběru, s jejíž pomocí lze mazat konkrétní odběry.}
 ]
 appSubscribe(appId, callback, subtopic = null, qos = 1, ref = 0) {
     const topic = [
@@ -225,20 +230,20 @@ Blok pro vstupní aplikaci je z~pohledu nástroje Node-RED blokem, který do sí
 strany).
 Implementace bloku pro konkrétní aplikaci vychází ze základního konfiguračního bloku -- s~využitím pomocné funkce
 nástroje Node-RED \mbox{\ic{RED.nodes.getNode}} lze získat instanci bloku, která reprezentuje IoT uzel připojený přes
-MQTT kanály.
+MQTT kanály. \todo{zbytečně brzo zmínka o getNode, trochu přeformulovat}
 V~ukázce~\ref{code:fis-dht-app} lze ve spodní části těla konstruktoru vidět dvě volání -- nad konfiguračním blokem se
 prvně volá metoda \ic{config}.
 Tato metoda zajišťuje napojení na servisní aplikaci určenou pro správu uzlu jako takového a dalších aplikací --
-detaily její funkce budou popsány v~kapitole~\ref{ch:firmware}.
+detaily její funkce budou popsány v~kapitole~\ref{sec:konfiguracni-aplikace}.
 Volání konkrétně odešle do uzlu uživatelské nastavení společně s~identifikátorem aplikace \ic{\'dht-sensor\'} -- zahrnut
 je typ senzoru a pin, na kterém je na uzlu připojen.
 Pro konkrétní spárování dotčeného bloku s~aplikací na uzlu je odeslán i atribut bloku \ic{this.id}, který slouží
 v~rámci nástroje Node-RED k~unikátní identifikaci uzlu v~celé síti\footnote{Atribut \ic{id} instancí bloků je
 odsledován z~interní implementace běhového prostředí Node-RED -- \url{https://github
 .com/node-red/node-red/blob/ed2a45e97551d9e43f079d69be8a490574e98559/packages/node_modules/\%40node-red/runtime/lib
-/nodes/flows/Subflow.js}}, generován je náhodně.
+/nodes/flows/Subflow.js}}, generován je náhodně implementací sítě:
 
-Druhé volání je použití již popsané metody \ic{appSubscribe}, blok si zde registruje odběr na data přicházející
+Druhé volání je použití již popsané metody \ic{appSubscribe}, blok si zde registruje odběr dat přicházejících
 z~uzlu.
 Používá k~tomu vlastní atribut \ic{id}, kterým cílí na spárovanou aplikaci na uzlu, podkanál \ic{\'data\'}, který
 následně použije i aplikace na uzlu, a funkci, pomocí které bude předávat příchozí zprávu z~uzlu, resp. brokeru MQTT,
@@ -248,10 +253,11 @@ do sítě nástroje Node-RED (skrz volání metody \ic{this.send}).
 \begin{code}[
     language=Javascript,
     label=code:fis-dht-app,
-    caption={Detail implementace vstupní aplikace (z~hlediska centrálního uzlu) -- konkrétně se jedná o~aplikaci pro
-    senzory typu DHT měřící teplotu a vlhkost okolí. Konstruktor této třídy je zodpovědný za konfiguraci aplikace na
-    uzlu za pomoci metody \ic{config} a následnou registrace odběru zprávy z uzlu -- funkce volaná na příchozí zprávy
-    z nich přejímá data a zasílá je dále do sítě nástroje Node-RED (volání \ic{this.send})}.
+    caption={Detail implementace vstupní aplikace (z~hlediska centrálního uzlu) -- jedná se o~aplikaci pro
+    senzory měřící teplotu a vlhkost okolí.
+    Konstruktor této třídy je zodpovědný za konfiguraci aplikace na uzlu za pomoci metody \ic{config} a následnou
+    registrace odběru zprávy z uzlu -- funkce volaná na příchozí zprávy z nich přejímá data a zasílá je dále do sítě
+    nástroje Node-RED (volání \ic{this.send})}.
 ]
 class DhtSensor {
     constructor(config) {
@@ -276,10 +282,9 @@ class DhtSensor {
 % @formatter:on
 
 \section{Implementace bloku pro výstupní aplikaci}\label{sec:implementace-bloku-pro-vystupni-aplikace}
-Blok pro výstupní aplikaci je z~pohledu nástroje Node-RED blokem, který ze sítě konzumuje zprávy (a distribuuje je
-dále třetím stranám).
+Blok pro výstupní aplikaci je z~pohledu nástroje Node-RED blokem, který ze sítě konzumuje zprávy a zpracovává je dále.
 V~ukázce~\ref{code:fis-node-neopixel-display} lze vidět implementaci bloku pro aplikaci ovládající bodový displej,
-jejíž detaily budou popsány v~kapitole~\ref{ch:firmware}.
+jejíž detaily budou popsány v~kapitole~\ref{subsec:implementace-vystupni-aplikace}.
 Po standardním zavedením cílové aplikace na uzel si blok registruje odběr pomocí vlastní metody \ic{on} -- ta slouží
 k~odběru příchozí zpráv do bloku, v~tomto případě převezme příchozí zprávu a zformátuje zprávu pro aplikaci
 (kromě samotného textu k~zobrazení podporuje volitelně i požadovanou barvu).
@@ -298,13 +303,13 @@ class NeoPixelDisplay {
     constructor(config) {
         RED.nodes.createNode(this, config);
         this.fisNode = RED.nodes.getNode(config.node);
-
+        // send app configuration to node
         this.fisNode.config('neopixel-display', this.id, {
             port: config.displayPort,
             width: config.width,
             height: config.height,
         });
-
+        // send command to app on
         this.on('input', msg => {
             let payload = {text: msg.payload};
 
@@ -319,6 +324,6 @@ class NeoPixelDisplay {
 \end{code}
 % @formatter:on
 
-\section{Detail implementace uzlu}
-\todo{Jak se to da dal rozsirovat? a proc zrovna takhle?}
-\blind{3}
+\section{Použití v dalších rozšířeních}\label{sec:pouziti-v-dalsich-rozsirenich}
+\todo{princip konfiguracniho bloku je dobry pro pouziti v dalsich rozsirenich, popsat}
+

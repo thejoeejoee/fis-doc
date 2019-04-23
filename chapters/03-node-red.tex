@@ -1,6 +1,8 @@
 \chapter{Nástroj Node-RED}
 \label{ch:nastroj-node-red}
 
+V této kapitole budou popsány základní principy nástroje Node-RED vzhledem k jeho funkci ve světě Internetu věcí a
+jeho důležité aspekty
 Node-RED je nástroj tvůrci popsaný jako \uv{Flow-based programming for the Internet of Things}, tedy nástroj založený na
 programování na datovém toku určený pro IoT. Uživateli-programátorovi nabízí jednotlivé funkční bloky (či \emph{uzly}
 dle kontextu),
@@ -12,10 +14,11 @@ jeho rozšiřování.
 \begin{figure}
     \includegraphics[width=\textwidth]{figures/node-red-example.png}
     \label{fig:node-red-example}
-    \caption{Ukázka z~Node-RED -- vstupy a výstupy jednotlivých uzlů spojené pro vzájemnou komunikaci. V levé části
-    se nachází soustava bloků typu \uv{inject}, pomocí kterých lze manuálně odeslat zprávu do vlastního bloku
-    ovládající periferii červené LED diody. Pravá spodní část patří měření teploty pomocí bloku s DHT senzorem, který
-    data předává do grafu a na blok reprezentující LED displej.}
+    \caption{Ukázka z~nástroje Node-RED -- vstupy a výstupy jednotlivých uzlů spojené pro vzájemnou komunikaci.
+    V levé části se nachází soustava bloků typu \uv{inject}, pomocí kterých lze manuálně odeslat zprávu do vlastního
+    bloku ovládající periferii červené LED diody.
+    Pravá spodní část patří měření teploty pomocí bloku teploměru, který data předává do grafu a na blok
+    reprezentující displej.}
 \end{figure}
 
 \subsubsection{Programování datového toku}
@@ -26,7 +29,7 @@ význam funkčních bloků propojených pomocí propojů, které zajištují vz�
 programming}
 \blind{2}
 
-\section{Základní principy Node-RED}\label{sec:zakladni-principy-node-red}
+\section{Základní principy nástroje Node-RED}\label{sec:zakladni-principy-node-red}
 
 Vnitřní architektura nástroje Node-RED je rozdělena na dva samostatné funkční části.
 V~pohledu samotného běhu je důležitější částí jádro provádějící veškeré datové operace nad samotným nadefinovaným
@@ -44,17 +47,17 @@ sítě i snadno sdílet.
 
 Mechanika samotných zpráv a jejich doručování je založena na několika základních premisách~\cite{NodeRedFlows}:
 \begin{enumerate}
-    \item Zprávy jsou obecně \emph{Javascript} hodnoty, v~naprosté většině případů datového typu \ic{Object},
+    \item Zprávy jsou obecně \emph{Javascript} hodnoty, standardně datového typu \ic{Object},
     tedy množiny dvojic \emph{klíč-hodnota}.
     \item Každý z~funkčních uzlů může vlastnit $0-N$ vstupních portů, stejně tak $0-M$ výstupních portů.
     \item Jednotlivé výstupy a vstupy lze propojovat, a to i vícenásobně, tedy více výstupů lze připojit na jeden vstup,
     stejně tak z~jednoho výstupu lze použít spojení do více vstupů.
-    \item Zodpovědností uzlů je provedení deterministicky definované funkce na základě přijaté zprávy nebo
+    \item Zodpovědností uzlů je provedení definované funkce na základě přijaté zprávy nebo
     jiného externího vstupu.
     \item Zodpovědností sítě je distribuce zpráv mezi uzly a jejich asynchronní spouštění.
 \end{enumerate}
 
-Node-RED bez dalších rozšíření nabízí základní sadu uzlů, mezi ty nejobecněji použitelné patří:
+Node-RED bez dalších rozšíření nabízí širokou základní sadu uzlů, mezi ty nejobecněji použitelné patří:
 
 \begin{itemize}
     \item\emph{function} -- Blok vykonávající nakonfigurovaný uživatelský kód v~programovacím jazyce Javascript pro
@@ -62,26 +65,28 @@ Node-RED bez dalších rozšíření nabízí základní sadu uzlů, mezi ty nej
     \item\emph{inject} -- Interaktivní blok umožnující uživateli editoru zaslat konkrétní zprávu na výstup tohoto bloku
     přímo z~editoru (tedy internetového prohlížeče) -- vhodné především pro testování či manuální zasílání zpráv.
     \item\emph{debug} -- Blok poskytující logovací službu, dle jeho konfigurace jsou přijaté zprávy logovány do systémové konzole či do
-    bočního panelu v~editoru -- blok vhodný pro testování a monitorování stavu sítě.
-    \item\emph{switch} -- Jeden z~bloků starajících se o~směrování zpráv v~síti -- na základně definovaných pravidel
+    bočního panelu v~editoru -- vhodné pro testování a monitorování stavu sítě.
+    \item\emph{switch} -- Blok starající se o~směrování zpráv v~síti -- na základně definovaných pravidel
     (shoda či porovnání hodnot, regulární výrazy) rozhodne, který z~výstupů bude použit pro další směřování zprávy.
     \item\emph{delay} -- Blok umožňující časové operace nad tokem zpráv zkrz tento blok - dle konfigurace zprávy buď
-    pouze zpožďuje o~konstantní hodnotu, nebo i omezuje průtok (šířku pásma) za časovou jednotku.
+    pouze zpožďuje o~konstantní hodnotu, nebo omezuje průtok (šířku pásma) za časovou jednotku.
 \end{itemize}
 
 Pro bloky využívající externí služby nabízí Node-RED institut konfiguračních bloků.
-Tyto bloky jsou pouze virtuální, v~síti nástroje Node-RED se viditelně nevyskytují, ale je
-s~jejich pomocí možné sdílet a znovupoužívat statickou konfiguraci v~dalších blocích -- tedy např. údaje pro
-připojení k~brokeru MQTT není nutné zadávat do každého bloku zvlášť, ale jsou sdílené pro jeden konfigurační blok,
-který je následně přiřazen ke každému bloku vyžadující broker MQTT.
+Tyto bloky jsou pouze virtuální, v~síti se viditelně nevyskytují, ale je
+s~jejich pomocí možné sdílet a znovupoužívat statickou konfiguraci v~dalších blocích.
+Jedním takovým konfiguračním blokem je blok pro připojení k brokeru MQTT, jehož konfigurační formulář je vyobrazen na
+obrázku~\ref{fig:node-red-mqtt-out-conf:mqtt-broker})
 
 \begin{figure}%
     \centering
     \subfloat[konfigurace výstupního MQTT bloku -- modře zvýrazněn vybraný broker MQTT]%
-    {{\includegraphics[valign=t,width=.45\textwidth]{figures/node-red-mqtt-out-conf.png}}}%
-    \qquad
+    {{\includegraphics[valign=t,width=.49\textwidth]{figures/node-red-mqtt-out-conf.png}}%
+    \label{fig:node-red-mqtt-out-conf:mqtt-out}}%
+    \hfill
     \subfloat[konfigurace připojení k~brokeru MQTT -- konfigurační blok]%
-    {{\includegraphics[valign=t,width=.45\textwidth]{figures/node-red-mqtt-broker-conf.png} }}%
+    {{\includegraphics[valign=t,width=.49\textwidth]{figures/node-red-mqtt-broker-conf.png}%
+    \label{fig:node-red-mqtt-out-conf:mqtt-broker}}}%
     %
     \caption{%
     Konfigurace výstupního MQTT bloku zahrnuje nastavení celého bloku (výstupní kanál, QoS, příznak \uv{retain}
@@ -108,7 +113,7 @@ soubor se zdrojovým kódem v~jazyce HTML.
 V~tomto souboru je pro uzel definován název, nápověda či ikona, ale především počet vstupů a výstupů a vlastní
 konfigurační parametry, které se následně zobrazují jako nastavitelné přímo v~editoru -- kromě standardních vstupů
 pro řetězce se může jednat o~výběr z~výčtu, výběr barvy či výběr konfiguračního bloku popsaného výše
-(obrázek~\ref{fig:node-red-mqtt-out-conf} zachycuje možnosti definice parametrů).
+(obrázek~\ref{fig:node-red-mqtt-out-conf:mqtt-out} zachycuje možnosti definice parametrů ve výstupním bloku MQTT).
 
 Druhým souborem je soubor v~jazyce Javascript popisující chování samotného uzlu -- zde jsou definovány reakce na
 přicházející zprávy (implementace zpracovávající příchozí zprávy), ale také připojení na služby dalších stran.
