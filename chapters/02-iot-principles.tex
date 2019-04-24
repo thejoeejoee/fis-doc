@@ -42,11 +42,29 @@ Porovnání základních vlastností těchto dvou konceptů lze nalézt v~tabulc
     \label{table:iot-types}
 \end{table}
 
-\missingfigure{Schema centralizovaneho iot systemu}
+\missingfigure{centralizovany vs decentralizovany system}
+
+T
+\begin{figure}%
+    \centering
+    \subfloat[Centralizovaný systém IoT lze označit za graf typu hvězda -- výpadek jakéhokoliv komunikačního spoje má
+    za následek odpojení dotčeného uzlu od uzlu centrálního.]%
+    {{\includegraphics[valign=t,width=.47\textwidth]{figures/iot-system-centralized.pdf}}}%
+    \hfill
+    \subfloat[Síť decentralizovaného systému IoT je obecným grafem -- výpadek komunikačního spoje nemusí mít za
+    následek rozdělení grafu na TODO]%
+    {{\includegraphics[valign=t,width=.47\textwidth]{figures/iot-system-decentralized.pdf}}}%
+
+    \caption{%
+    Schémata pro centralizovaný a decentralizovaný systém IoT -- na diagramech jsou naznačeny situace při
+    selhání jedné či více komunikačních linek.
+    }
+\end{figure}
+
+
 
 \subsection*{Bezpečnost systémů}
-\todo{Duraz na bezpecnost a uzivatelskou privetivost}
-\blind{2}
+\todo{bezpečenost na urovni uzlu, na urovni komunikace, na urovni centralniho uzlu, na urovni řízení}
 
 
 \section{Existující řešení}\label{sec:existujici-reseni}
