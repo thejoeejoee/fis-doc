@@ -12,7 +12,7 @@ Tou první je možnost globální automatizace procesů okolo nás -- chytré do
 Díky snadno získatelným datům pro metriky je možné je vyhodnocovat v~reálném čase a rozhodovat na základě nich bez
 přítomnosti interakce od člověka.
 
-\subsubsection{Základní rozdělení Internetu věcí}
+% \subsubsection{Základní rozdělení Internetu věcí}
 Systémy pro Internet věcí lze v~zásadě rozdělit dle vnitřní struktury na centralizované a decentralizované --
 sítě centralizovaných systémů obsahují centrální prvek řídící okolní zařízení a nejčastěji i distribuující data mezi
 nimi.
@@ -42,18 +42,16 @@ Porovnání základních vlastností těchto dvou konceptů lze nalézt v~tabulc
     \label{table:iot-types}
 \end{table}
 
-\missingfigure{centralizovany vs decentralizovany system}
-
-T
 \begin{figure}%
     \centering
     \subfloat[Centralizovaný systém IoT lze označit za graf typu hvězda -- výpadek jakéhokoliv komunikačního spoje má
     za následek odpojení dotčeného uzlu od uzlu centrálního.]%
-    {{\includegraphics[valign=t,width=.47\textwidth]{figures/iot-system-centralized.pdf}}}%
+    {{\includegraphics[valign=t,width=.45\textwidth]{figures/iot-system-centralized.pdf}}}%
     \hfill
     \subfloat[Síť decentralizovaného systému IoT je obecným grafem -- výpadek komunikačního spoje nemusí mít za
-    následek rozdělení grafu na TODO]%
-    {{\includegraphics[valign=t,width=.47\textwidth]{figures/iot-system-decentralized.pdf}}}%
+    následek nesouvislý graf.
+    Případně grafové kružnice v tomto případě zvyšují odolnost vůči výpadkům.]%
+    {{\includegraphics[valign=t,width=.45\textwidth]{figures/iot-system-decentralized.pdf}}}%
 
     \caption{%
     Schémata pro centralizovaný a decentralizovaný systém IoT -- na diagramech jsou naznačeny situace při
@@ -62,12 +60,18 @@ T
 \end{figure}
 
 
-
-\subsection*{Bezpečnost systémů}
+% \subsection*{Bezpečnost systémů}
+Bezpečnost systémů Internetu věcí lze rozdělit do několika úrovní:
 \todo{bezpečenost na urovni uzlu, na urovni komunikace, na urovni centralniho uzlu, na urovni řízení}
+\begin{itemize}
+    \item \textbf{Fyzický uzel} \\
+    \item \textbf{Komunikace} \\
+    \item \textbf{Centrální uzel} \\
+    \item \textbf{Úložiště dat} \\
+\end{itemize}
 
 
-\section{Existující řešení}\label{sec:existujici-reseni}
+\section{Existující řešení pro IoT}\label{sec:existujici-reseni}
 
 Na realizaci systémů IoT se v~dnešní době zaměřuje mnoho firem, stejně tak existuje několik variant s~otevřeným kódem.
 Často se jedná o~kombinaci obou potřebných stránek pro provoz -- tedy, k~hardwarovému řešení je poskytnuto i řešení
@@ -102,7 +106,7 @@ obrázku~\ref{fig:iot-loxone-config}.
 
 \begin{figure}%
     \centering
-    \includegraphics[width=\textwidth]{figures/iot-loxone-config.png}
+    \includegraphics[width=.75\textwidth]{figures/iot-loxone-config.png}
     \caption{Detail z~nástroje Loxone Config -- v~levé části se nachází zařízení připojené do Loxone miniserveru
     figurující jako vstupy pro samotné pravidlo chování figurující uprostřed.
     Vpravo jsou poté výstupy, pomocí kterých je rozhodnutí z~pravidla aplikováno zpět do reálného světa\protect\footnotemark.}
@@ -141,15 +145,16 @@ Jakožto nástupce řady \textit{ESP8266} nabízí na jediném čipu ve standard
 
 \begin{figure}
     \centering
-    \includegraphics[width=\textwidth]{figures/esp-diagram.png}
+    \includegraphics[width=\textwidth]{figures/esp-function-diagram.pdf}
 
     \caption{Diagram jednotlivých dostupných modulů na SoC ESP32 -- od jádra s~procesorem a pamětmi obsahuje čip
     moduly pro bezdrátovou komunikaci, hardwarovou podporu kryptografie, podporu pro nízkoodběrový běh i periferie
-    pro externí sběrnice.}
+    pro externí sběrnice\protect\footnotemark.}
 
     \label{fig:esp-diagram}
-    %\todo{obrazek z https://commons.wikimedia.org/wiki/File:Espressif_ESP32_Chip_Function_Block_Diagram.svg }
 \end{figure}
+\footnotetext{Převzato od autora Briana Krenta -- \url{https://commons.wikimedia
+.org/wiki/File:Espressif_ESP32_Chip_Function_Block_Diagram.svg}.}
 
 Důležitou periférií je modul pro WiFi a Bluetooth komunikaci, který je obsluhován druhým jádrem procesoru.
 Toto chování vyžaduje podporu od běžícího operačního systému, vzhledem k~tomu, že je nutné přepínat kontext procesoru
@@ -160,7 +165,7 @@ chyb byla vyřešena vydáním dalších revizí čipu ESP32.
 
 Komunikace na WiFi protokolech využívá standardní model ISO/OSI, kdy na druhé, linkové vrstvě, modul používá MAC
 adresu, která je zabudována přímo v~čipu při jeho výrobě\footnote{MAC adresa složená ze 48 bitů je na čipu
-zaznamenána pomocí technologie eFuse.}.\todo{efuse}
+zaznamenána pomocí technologie eFuse -- při výrobě dojde k nezvratnému nastavení části paměti na unikátní hodnotu.}.
 Tato adresa je pro všechny vyrobené čipy ESP32 jedinečná a díky tomu, že je přístupná i pro uživatelskou programovou
 výbavu, je možné ji používat jako unikátní identifikátor jednotlivých čipů -- této vlastnosti bude využito při návrhu
 protokolu dále v~práci.
@@ -192,8 +197,8 @@ protokolu dále v~práci.
 \section{MicroPython}\label{sec:micropython}
 MicroPython je derivát vysokoúrovňového skriptovacího programovacího jazyka Python určený pro běh na vestavěných
 systémech a dalších aplikacích s~nízkým výpočetním výkonem.
-Z~hlediska vestavěné knihovny nabízí téměř celou základní knihovnu z~původní distribuce\footnote{Podporovaná část
-vestavěné knihovny původní jazyka je vývojíři specifikována na \url{https://docs.micropython.org/en/latest/library/index
+Z~hlediska vestavěné knihovny nabízí téměř celou základní knihovnu z~původní distribuce\footnote{Podporovaná podmnožina
+vestavěné knihovny původní jazyka je vývojáři specifikována na \url{https://docs.micropython.org/en/latest/library/index
 .html\#micropython-libraries}.} a navíc knihovny
 zodpovědné za manipulaci s~rozhraním mikropočítače, na kterém běží.
 Kromě oficiálně podporovaného sestavení pro vývojový kit \uv{pyboard} správci i komunitní sestavení pro
