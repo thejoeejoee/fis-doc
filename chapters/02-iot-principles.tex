@@ -124,16 +124,18 @@ Z hlediska automatizace domácnosti je pro tento systém zajímavá podpora inte
 Turris\footnote{\url{https://doc.turris.cz/gadgets/domoticz}} a automatická definice pravidel na základě připojených zařízení.
 
 \section{ESP32}\label{sec:esp32}
-\textit{ESP32} je řada nízkonákladových SoC\footnote{\textit{System on Chip} je integrovaný obvod obsahující veškeré
+ESP32 je řada nízkonákladových SoC\footnote{\textit{System on Chip} je integrovaný obvod obsahující veškeré
 periferie (digitální, analogové a často i rádiová rozhraní) zabudované přímo v~čipu.
 Tento princip sep používá ve vestavěných systémech díky jeho nízké spotřebě.} mikrokontrolérů představená čínskou
 firmou Espressif Systems.
-Jakožto nástupce řady \textit{ESP8266} nabízí na jediném čipu ve standardní distribuci následující~\cite{ESP32Datasheet}:
+Na obrázku~\ref{fig:esp32} je zobrazen samotný čip ESP32 a varianta jeho vývojového kitu, který bude použit v této
+práci.
+Jakožto nástupce řady ESP8266 nabízí na jediném čipu ve standardní distribuci následující~\cite{ESP32Datasheet}:
 
 \begin{itemize}
     \item dvoujádrový 32 bitový mikroprocesor Xtensa LX6, taktovaný na 160 či 240 MHz
     \item 520 KiB statické operační paměti
-    \item Wi-Fi ve standardu 802.11 b/g/n (včetně podpory \textit{Long range} Wi-Fi~\cite{Esp32LongRangeWifi})
+    \item WiFi ve standardu 802.11 b/g/n (včetně podpory \textit{Long range} WiFi~\cite{Esp32LongRangeWifi})
     \item Bluetooth v4.2 včetně nízkoodběrového režimu BLE
     \item 12 bitový ADC až s~18 kanály
     \item dva 2 bitové DAC
@@ -182,6 +184,7 @@ protokolu dále v~práci.
     \caption{Mikrokontrolér ESP32 je pro vývojové a výukové účely nejčastěji distribuován jako kompletní kit s~USB
     konektorem pro napájení a vyvedenými piny z~čipu. %
     Pro přímé aplikace je ovšem čip dostupný i ve své surové formě.}
+    \label{fig:esp32}
 \end{figure}
 
 \addtocounter{footnote}{-1}
