@@ -1,4 +1,4 @@
-\chapter{Aktuální situace v oblasti Internetu věcí}
+\chapter{Aktuální situace v Internetu věcí}
 \label{ch:principy-iot}
 Internet věcí lze z~odborného hlediska klasifikovat jako síť fyzických zařízení komunikujících mezi sebou.
 Primárním obsahem zpráv jsou hodnoty získané v~koncových zařízeních a příkazy pro jejich interakci se světem.
@@ -59,14 +59,29 @@ Porovnání základních vlastností těchto dvou konceptů lze nalézt v~tabulc
     }
 \end{figure}
 
-
 % \subsection*{Bezpečnost systémů}
-Bezpečnost systémů Internetu věcí lze rozdělit do několika úrovní:
+Bezpečnost systémů Internetu věcí lze rozdělit do několika úrovní~\cite{IoTSecurity}:
 \todo{bezpečenost na urovni uzlu, na urovni komunikace, na urovni centralniho uzlu, na urovni řízení}
 \begin{itemize}
     \item \textbf{Fyzický uzel} \\
+    Bezpečenost z hlediska fyzického uzlu se týká možnosti přímého přístupu potenciálního útočníka k uzlu -- z
+    principu funkce věci má uzel přístup k síti Internetu věcí.
+    V případě kompromitovaného uzlu má tedy útočník plný přístup k datům, které síť na uzel zasílá, či má možnost do
+    sítě produkovat napadená data.
+    Možnou obranou je zapouzdření komunikačního kanálu uzlu do samotnatného prostoru, ze kterého nemá uzel ani nepřímý
+    přístup k ostatním uzlům.
+
     \item \textbf{Komunikace} \\
+    Od použité technologie použité ke komunikaci uzlů se odvíjí i její bezpečnost -- v případě standardních
+    bezdrátových technologií jako je WiFi, Z-Wave či ZigBee je meritum zabezpečení v použité šifrované verzi
+    konkrétní technologie, pokud existuje.
+
     \item \textbf{Centrální uzel} \\
+    U centralizovaných systémů Internetu věcí je důležitým aspektem bezpečenosti zabezpečení centrálního uzlu.
+    V kontextu této práce se jedná o zabezpečení nástroje Node-RED, \todo{čárka před a?} a to především jeho editoru
+    sítí ve formě webové stránky -- komunikaci s ním lze zabezpečit pomocí šifrovaného protokolu HTTPS, kromě toho
+    nabízí i základní autentizaci uživatelů na základně dvojice jméno-heslo.
+
     \item \textbf{Úložiště dat} \\
 \end{itemize}
 
@@ -214,7 +229,7 @@ nedělitelnou součástí.
 Framework ESP-IDF je konkrétně postaven nad operačním systémem FreeRTOS, který je de facto standardem a největším hráčem
 na poli RTOS s~otevřeným zdrojovým kódem~\cite{RTOSSelection}.
 Jedním z~benefitů tohoto typu systému je možnost použití programového řízení komunikačních rozhraní
-(jako je SPI, I\textsuperscript{2}C nebo USART) -- tato rozhraní lze poté naimplementovat, není nutný konkrétní
+(jako je SPI, I\textsuperscript{2}C nebo UART) -- tato rozhraní lze poté naimplementovat, není nutný konkrétní
 hardwarový prvek.
 
 I~přes omezenou vestavěnou knihovnu a vysokoúrovňovost tohoto jazyka jej lze použít ve světě internetu věcí --
