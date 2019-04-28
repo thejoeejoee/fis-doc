@@ -88,6 +88,13 @@ kanálů MQTT (funkce budou popsány z~pohledu centrálního uzlu):
     či ladících informacích.
 \end{itemize}
 
+Celkové schéma systému, jak bude z pohledu architektury a komunikace realizováno, se ocitá na
+obrázku~\ref{fig:system-schema} -- v kapitole~\ref{ch:rozsireni} budou popsány základní principy pro rozšíření
+nástroje Node-RED, kapitola~\ref{ch:firmware} poté bude patřit realizaci programového vybavení pro uzly.
+Příklady zpráv, pomocí kterých budou tyto dvě strany komunikovat, jsou uvedeny v
+tabulce~\ref{table:protocol-examples} -- konkrétní situace, ke kterým může v rámci spojení dojít, jsou vyobrazeny na
+obrázku~\ref{fig:protocol-messages}.
+
 \begin{table}
     \centering
     \caption{Příklady využití navrženého prokolu pro komunikaci -- řádek vždy představuje jednu konkrétní zprávu
@@ -123,6 +130,21 @@ kanálů MQTT (funkce budou popsány z~pohledu centrálního uzlu):
 \footnotetext{Princip asynchronní smyčky bude popsán v~rámci firmwaru uzlů v~kapitole~\ref{ch:firmware}.}
 
 \begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{figures/system-schema.pdf}
+    \caption{Schématický diagram navrženého systému -- v levé části se nachází nástroj Node-RED, který obsahuje
+    jednotlivé funkční bloky umístěné do sítě, v rámci které dochází ke směrování zpráv.
+    Další bloky v této síti zajištují např. uživatelské rozhraní, směrování zpráv či konkrétní funkci sítě.
+    V prostřední části obrázku se nachází konkrétní kanály v brokeru MQTT -- pomocí nich jsou bloky propojeny s
+    odpovídajícími aplikacemi na uzlech -- každý uzel je takto připojen na specifickou sadu kanálů danou jeho
+    unikátní identifikací.
+    Napravo jsou poté zobrazeny jednotlivé uzly se zavedenými aplikacemi -- šipky značí možný směr komunikace v rámci
+    systému, konkrétní případy jsou uvedeny v diagramu~\ref{fig:protocol-messages}.
+    }
+    \label{fig:system-schema}
+\end{figure}
+
+\begin{figure}
     \begin{minipage}{\textwidth}
         \centering
         \subfloat[Standardní situace, při které se uzel připojí, obdrží konfiguraci a zasílá bez problém %
@@ -137,7 +159,8 @@ kanálů MQTT (funkce budou popsány z~pohledu centrálního uzlu):
     \begin{minipage}{\textwidth}
         \vspace{1.5em}
         \centering
-        \subfloat[TODO]{
+        \subfloat[Situace s více aplikacemi na jednom uzlu -- komunikace samotná není blokující, pro asynchronní
+        jádro uzlu tedy není problém příjímat příkazy z brokeru a zároveň produkovat data zpět.]{
         \includegraphics[valign=t,width=.4\textwidth]{figures/messages-in-time-combined.pdf}
         }\hfill%
         \subfloat[Situace, při které dojde k vypršení časového limitu pro spojení \uv{Keep Alive}, uzel je brokerem
@@ -147,4 +170,5 @@ kanálů MQTT (funkce budou popsány z~pohledu centrálního uzlu):
     \end{minipage}
     \caption{Diagram komunikace navrženého protokolu -- zobrazeny jsou standardní posloupnosti zpráv, ke kterým na
     komunikační lince dochází.}
+    \label{fig:protocol-messages}
 \end{figure}

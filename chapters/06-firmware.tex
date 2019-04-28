@@ -86,7 +86,7 @@ class Core:
 
 Z hlediska kompozice je do běhu firmwaru zapojena i třída \ic{MQTTConnection}. Ta, jakožto potomek třídy \ic{MQTTClient}
 z balíčku \texttt{micropython-mqtt}\footnotetext{Balíček \texttt{kevinkk525/micropython-mqtt} obsahuje třídu pro
-asynchronní práci s připojením MQTT -- je dostupný skrz službu Githuv v repozitáři autora Kevina Köcka pod licencí MIT
+asynchronní práci s připojením MQTT -- je dostupný skrz službu Github v repozitáři autora Kevina Köcka pod licencí MIT
 -- \url{https://github.com/kevinkk525/micropython-mqtt}}, je zodpovědná za správu připojení k internetu a brokeru MQTT.
 Vlastní implementace v rámci této práce přidává do základních funkcionality třídy dvě vlastnosti.
 Tou první je využití ovládání stavové LED diody pro signalizaci barevného kódu a tou druhou je podpora více dvojic
@@ -102,7 +102,15 @@ Při startu je tento soubor načten a převeden z formátu JSON do slovníku, kt
 zpřístupněn pro použití jádru a aplikacím. Konfigurační soubor uchovává seznam přihlašovacích údajů
 k bezdrátovým sítím, přihlašovací údaje a adresu k brokeru MQTT.
 
-\todo{popsat registr běžících a dostupných aplikací}
+Firmware z hlediska správy aplikací rozlišuje pohledy na ně -- v prvním případě se jedná o aplikace dostupné k
+použití, reference na konkrétní třídy aplikací má uložené ve slovníku \ic{APPS} dostupném z modulu \texttt{fis.apps}.
+Tento slovník používá pro klíče jednotlivé unikátní identifikátory typů aplikací, pomocí kterých lze skrz konfigurační
+aplikaci zavádět do uzlu -- tedy např. \ic{\'dht-sensor\'} či \ic{\'neopixel-display\'}.
+Druhým pohledem na aplikace z hlediska jádra jsou instance aplikací -- již zavedené aplikace. Tyto instance jsou
+uloženy pod klíčem svojí unikátní identifikace ve slovníku v atributu \ic{Core.apps} -- do tohoto slovníku je při
+startu přímo zavedena konfigurační aplikace zodpovědná za správnu ostatních aplikací -- její detaily budou popsány v
+kapitole \ref{sec:konfiguracni-aplikace}.
+
 \todo{uspávání smyčky}
 
 % \section{Aplikace a jejich programová struktura}\label{sec:aplikace-a-jejich-programova-struktura}
