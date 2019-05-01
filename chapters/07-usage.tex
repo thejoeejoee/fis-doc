@@ -33,7 +33,29 @@ Pro běh systému s realizovaným rozšířením bylo nutné zajistit následuj�
     \item
 \end{itemize}
 
-Všechny výše uvedené prostředky jsem použil pro sestavení vlastního lokálního systému věcí.
+Všechny výše uvedené prostředky jsem použil pro sestavení vlastního lokálního Internetu věcí, nad kterým jsem následně
+prováděl experimenty a ověřoval funkci realizovaných prostředků.
+Postup spuštění toto systému byl následující:
+\begin{enumerate}
+    \item \textbf{Instalace firmwaru na uzel} \\
+    Pro realizované programové vybavení pro uzly ESP32 existuje také instalátor v podobě předpisu pro standardní
+    utilitu \texttt{make} -- instalace je složena ze tří hlavních kroků.
+    Prvním krokem je zavedení samotného interpretu jazyka MicroPython, následuje instalace externích knihoven jakožto
+    závislostí realizovaného firmwaru a následně samotný kód firmwaru.
+    Po ověření funkce firmwaru je posledním krokem zapnutí automatického zavedení firmwaru při startu -- uzel je v tu
+    chvíli připraven pro provoz čistě přes internetové připojení.
+    Výstupem instalace je, kromě pro provoz připraveného uzlu, unikátní identifikátor uzlu, který bude následně použit
+    pro zacílení ze strany nástroje Node-RED.
+
+    \item \textbf{Instalace Node-RED rozšíření} \\
+    Pro instalaci vlastního rozšíření do tohoto nástroje je nutné dodržet požadavky popsané
+    v~\ref{sec:node-red-rozsireni} -- realizované rozšíření všechny tyto formální požadavky splňuje, je tedy možné jej
+    nainstalovat do jmenného prostoru knihoven nástroje Node-RED.
+    K této instalaci lze použít například nástroj \texttt{npm}, který
+
+
+\end{enumerate}
+
 \todo{vysledky mereni}
 \missingfigure{Fotka z~nasazeneho systemu?}
 
