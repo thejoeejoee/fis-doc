@@ -1,8 +1,8 @@
 \chapter{Nástroj Node-RED}
 \label{ch:nastroj-node-red}
 
-V této kapitole budou popsány základní principy nástroje Node-RED vzhledem k jeho funkci ve světě Internetu věcí a
-jeho důležité aspekty
+V~této kapitole budou popsány základní principy nástroje Node-RED vzhledem k~jeho funkci ve světě Internetu věcí a
+jeho důležité aspekty.
 Node-RED je nástroj tvůrci popsaný jako \uv{Flow-based programming for the Internet of Things}, tedy nástroj založený na
 programování na datovém toku určený pro IoT. Uživateli-programátorovi nabízí jednotlivé funkční bloky (či \emph{uzly}
 dle kontextu),
@@ -15,7 +15,7 @@ jeho rozšiřování.
     \includegraphics[width=\textwidth]{figures/node-red-example.png}
     \label{fig:node-red-example}
     \caption{Ukázka z~nástroje Node-RED -- vstupy a výstupy jednotlivých uzlů spojené pro vzájemnou komunikaci.
-    V levé části se nachází soustava bloků typu \uv{inject}, pomocí kterých lze manuálně odeslat zprávu do vlastního
+    V~levé části se nachází soustava bloků typu \uv{inject}, pomocí kterých lze manuálně odeslat zprávu do vlastního
     bloku ovládající periferii červené LED diody.
     Pravá spodní část patří měření teploty pomocí bloku teploměru, který data předává do grafu a na blok
     reprezentující displej.}
@@ -70,12 +70,14 @@ Node-RED bez dalších rozšíření nabízí širokou základní sadu uzlů, me
     (shoda či porovnání hodnot, regulární výrazy) rozhodne, který z~výstupů bude použit pro další směřování zprávy.
     \item\emph{delay} -- Blok umožňující časové operace nad tokem zpráv zkrz tento blok - dle konfigurace zprávy buď
     pouze zpožďuje o~konstantní hodnotu, nebo omezuje průtok (šířku pásma) za časovou jednotku.
+    \item\emph{link} -- Blok, který je schopen zprávy exportovat do jiné sítě v~rámci jedné instance nástroje
+    Node-RED -- vytváří jednosměrný tunel pro mezi-síťové směřování zpráv.
 \end{itemize}
 
 Pro bloky využívající externí služby nabízí Node-RED institut konfiguračních bloků.
 Tyto bloky jsou pouze virtuální, v~síti se viditelně nevyskytují, ale je
 s~jejich pomocí možné sdílet a znovupoužívat statickou konfiguraci v~dalších blocích.
-Jedním takovým konfiguračním blokem je blok pro připojení k brokeru MQTT, jehož konfigurační formulář je vyobrazen na
+Jedním takovým konfiguračním blokem je blok pro připojení k~brokeru MQTT, jehož konfigurační formulář je vyobrazen na
 obrázku~\ref{fig:node-red-mqtt-out-conf:mqtt-broker})
 
 \begin{figure}%
@@ -147,7 +149,12 @@ RED.nodes.registerType("string-length", StringLengthNode);
 % @formatter:on
 
 \section{Node-RED Dashboard}\label{sec:node-red-dashboard}
-Díky otevřenosti ekosystému nástroje Node-RED je možné
-\todo{něco o~dashboardu a možnostech?}
+Díky otevřenosti ekosystému nástroje Node-RED vznikl populární rozšiřující balíček s~názvem
+\texttt{node-red-dashboard}. Tento balíček nabízí tvůrcům sítí zařadit i uživatelské rozhraní zahrnující dynamické
+popisky, grafy, tlačítka a další akční a informační členy.
+Definice tohoto rozhraní je založena na použití standardních funkčních bloků sítě, vstupní zprávy reflektuje nástroj
+v~uživatelském rozhraní, naopak uživatelská interakce je reflektována výstupními zprávami z~bloků rozhraní.
+Kromě definice samotných bloků lze další vlastnosti rozhraní konfigurovat v~přídavném postranním panelu v~editoru --
+rozšíření definuje rozřazení do záložek, skupin, jejich vzájemné pozicování, pořadí a vzhled.
 
 \missingfigure{Node-RED spojeni}

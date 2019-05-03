@@ -36,7 +36,7 @@ Na základě povahy a potřeb obou komunikujících stran jsem navrhnul tyto zá
     \item \textbf{Samostatné kanály pro jednotlivé aplikace na uzlu} \\
     Jednotlivé aplikace běžící na uzlech je nutné v~protokolu od sebe oddělovat -- tzn. kromě rozlišení na úrovni
     všech uzlů musí dojít k~rozlišení běžících aplikací na úrovni jednoho uzlu.
-    Komunikaci bloků s příslušnými aplikacemi lze tedy specifikovat jako kanálový multiplex.
+    Komunikaci bloků s~příslušnými aplikacemi lze tedy specifikovat jako kanálový multiplex.
 
     \item \textbf{Obsah zprávy je plně v~režii aplikace} \\
     Protokol jako takový nevyžaduje \emph{(kromě vlastních režijních zpráv)} konkrétní obsah zpráv -- jejich schéma a
@@ -45,7 +45,7 @@ Na základě povahy a potřeb obou komunikujících stran jsem navrhnul tyto zá
     \item \textbf{Kanály pro status a sběr běhových informací z~uzlu} \\
     Další z~požadovaných kanálů je zpětný kanál statusu uzlu, kterým bude uzel oznamovat do sítě svůj stav (připojen či
     nepřipojen), případně další informace (využití úložiště, čekající data).
-    Pro sběr běhových informací z uzlu bude použit samostatný kanál -- zprávy (logy) v něm budou obsahovat stručný
+    Pro sběr běhových informací z~uzlu bude použit samostatný kanál -- zprávy (logy) v~něm budou obsahovat stručný
     popis stavu, ke kterému na uzlu došlo -- od vyjímkových stavů až k~čistě ladícím informacím.
 
     \item \textbf{Kanál pro konfiguraci uzlu} \\
@@ -88,11 +88,11 @@ kanálů MQTT (funkce budou popsány z~pohledu centrálního uzlu):
     či ladících informacích.
 \end{itemize}
 
-Celkové schéma systému, jak bude z pohledu architektury a komunikace realizováno, se ocitá na
-obrázku~\ref{fig:system-schema} -- v kapitole~\ref{ch:rozsireni} budou popsány základní principy pro rozšíření
+Celkové schéma systému, jak bude z~pohledu architektury a komunikace realizováno, se ocitá na
+obrázku~\ref{fig:system-schema} -- v~kapitole~\ref{ch:rozsireni} budou popsány základní principy pro rozšíření
 nástroje Node-RED, kapitola~\ref{ch:firmware} poté bude patřit realizaci programového vybavení pro uzly.
-Příklady zpráv, pomocí kterých budou tyto dvě strany komunikovat, jsou uvedeny v
-tabulce~\ref{table:protocol-examples} -- konkrétní situace, ke kterým může v rámci spojení dojít, jsou vyobrazeny na
+Příklady zpráv, pomocí kterých budou tyto dvě strany komunikovat, jsou uvedeny
+v~tabulce~\ref{table:protocol-examples} -- konkrétní situace, ke kterým může v~rámci spojení dojít, jsou vyobrazeny na
 obrázku~\ref{fig:protocol-messages}.
 
 \begin{table}
@@ -132,14 +132,14 @@ obrázku~\ref{fig:protocol-messages}.
 \begin{figure}
     \centering
     \includegraphics[width=\textwidth]{figures/system-schema.pdf}
-    \caption{Schématický diagram navrženého systému -- v levé části se nachází nástroj Node-RED, který obsahuje
-    jednotlivé funkční bloky umístěné do sítě, v rámci které dochází ke směrování zpráv.
-    Další bloky v této síti zajištují např. uživatelské rozhraní, směrování zpráv či konkrétní funkci sítě.
-    V prostřední části obrázku se nachází konkrétní kanály v brokeru MQTT -- pomocí nich jsou bloky propojeny s
-    odpovídajícími aplikacemi na uzlech -- každý uzel je takto připojen na specifickou sadu kanálů danou jeho
+    \caption{Schématický diagram navrženého systému -- v~levé části se nachází nástroj Node-RED, který obsahuje
+    jednotlivé funkční bloky umístěné do sítě, v~rámci které dochází ke směrování zpráv.
+    Další bloky v~této síti zajištují např. uživatelské rozhraní, směrování zpráv či konkrétní funkci sítě.
+    V~prostřední části obrázku se nachází konkrétní kanály v~brokeru MQTT -- pomocí nich jsou bloky propojeny
+s~odpovídajícími aplikacemi na uzlech -- každý uzel je takto připojen na specifickou sadu kanálů danou jeho
     unikátní identifikací.
-    Napravo jsou poté zobrazeny jednotlivé uzly se zavedenými aplikacemi -- šipky značí možný směr komunikace v rámci
-    systému, konkrétní případy jsou uvedeny v diagramu~\ref{fig:protocol-messages}.
+    Napravo jsou poté zobrazeny jednotlivé uzly se zavedenými aplikacemi -- šipky značí možný směr komunikace v~rámci
+    systému, konkrétní případy jsou uvedeny v~diagramu~\ref{fig:protocol-messages}.
     }
     \label{fig:system-schema}
 \end{figure}
@@ -159,11 +159,11 @@ obrázku~\ref{fig:protocol-messages}.
     \begin{minipage}{\textwidth}
         \vspace{1.5em}
         \centering
-        \subfloat[Situace s více aplikacemi na jednom uzlu -- komunikace samotná není blokující, pro asynchronní
-        jádro uzlu tedy není problém příjímat příkazy z brokeru a zároveň produkovat data zpět.]{
+        \subfloat[Situace s~více aplikacemi na jednom uzlu -- komunikace samotná není blokující, pro asynchronní
+        jádro uzlu tedy není problém příjímat příkazy z~brokeru a zároveň produkovat data zpět.]{
         \includegraphics[valign=t,width=.4\textwidth]{figures/messages-in-time-combined.pdf}
         }\hfill%
-        \subfloat[Situace, při které dojde k vypršení časového limitu pro spojení \uv{Keep Alive}, uzel je brokerem
+        \subfloat[Situace, při které dojde k~vypršení časového limitu pro spojení \uv{Keep Alive}, uzel je brokerem
         prohlášen za odpojený a do určeného kanálu odešle zprávu poslední vůle (\uv{Last Will}).]{
         \includegraphics[valign=t,width=.4\textwidth]{figures/messages-in-time-timeout.pdf}
         }

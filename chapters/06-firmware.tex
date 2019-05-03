@@ -84,64 +84,64 @@ class Core:
 \end{code}
 % @formatter:on
 
-Z hlediska kompozice je do běhu firmwaru zapojena i třída \ic{MQTTConnection}. Ta, jakožto potomek třídy \ic{MQTTClient}
-z balíčku \texttt{micropython-mqtt}\footnotetext{Balíček \texttt{kevinkk525/micropython-mqtt} obsahuje třídu pro
-asynchronní práci s připojením MQTT -- je dostupný skrz službu Github v repozitáři autora Kevina Köcka pod licencí MIT
--- \url{https://github.com/kevinkk525/micropython-mqtt}}, je zodpovědná za správu připojení k internetu a brokeru MQTT.
-Vlastní implementace v rámci této práce přidává do základních funkcionality třídy dvě vlastnosti.
+Z~hlediska kompozice je do běhu firmwaru zapojena i třída \ic{MQTTConnection}. Ta, jakožto potomek třídy \ic{MQTTClient}
+z~balíčku \texttt{micropython-mqtt}\footnotetext{Balíček \texttt{kevinkk525/micropython-mqtt} obsahuje třídu pro
+asynchronní práci s~připojením MQTT -- je dostupný skrz službu Github v~repozitáři autora Kevina Köcka pod licencí MIT
+-- \url{https://github.com/kevinkk525/micropython-mqtt}}, je zodpovědná za správu připojení k~internetu a brokeru MQTT.
+Vlastní implementace v~rámci této práce přidává do základních funkcionality třídy dvě vlastnosti.
 Tou první je využití ovládání stavové LED diody pro signalizaci barevného kódu a tou druhou je podpora více dvojic
-přihlašovacích údajů k sítím WiFi. Díky tomu lze do uzlu nakonfigurovat více známých bezdrátových sítí a uzel v
-případě nedostupnosti sítě či chyby ověření okamžitě zkouší připojení na další v pořadí -- uzel tak v případě
-statických sítí není geograficky závislý. Ve chvíli úspěšeného navázání komunikace a potvrzení, že připojení k
-brokeru MQTT je v pořádku, uzel uloží síť na první místo seznamu -- při příštím startu je tak
-zvýšena pravděpodobnost, že dojde k rychlejšímu připojení do sítě.
+přihlašovacích údajů k~sítím WiFi. Díky tomu lze do uzlu nakonfigurovat více známých bezdrátových sítí a uzel
+v~případě nedostupnosti sítě či chyby ověření okamžitě zkouší připojení na další v~pořadí -- uzel tak v~případě
+statických sítí není geograficky závislý. Ve chvíli úspěšeného navázání komunikace a potvrzení, že připojení
+k~brokeru MQTT je v~pořádku, uzel uloží síť na první místo seznamu -- při příštím startu je tak
+zvýšena pravděpodobnost, že dojde k~rychlejšímu připojení do sítě.
 
 Lokální správu konfiguace řeší jádro pomocí souboru \texttt{config.json}, který je uložen na
 systému souborů na uzlu -- je tedy persistentní mezi jednotlivými běhy uzlu.
-Při startu je tento soubor načten a převeden z formátu JSON do slovníku, který je
+Při startu je tento soubor načten a převeden z~formátu JSON do slovníku, který je
 zpřístupněn pro použití jádru a aplikacím. Konfigurační soubor uchovává seznam přihlašovacích údajů
-k bezdrátovým sítím, přihlašovací údaje a adresu k brokeru MQTT.
+k~bezdrátovým sítím, přihlašovací údaje a adresu k~brokeru MQTT.
 
-Firmware z hlediska správy aplikací rozlišuje pohledy na ně -- v prvním případě se jedná o aplikace dostupné k
-použití, reference na konkrétní třídy aplikací má uložené ve slovníku \ic{APPS} dostupném z modulu \texttt{fis.apps}.
+Firmware z~hlediska správy aplikací rozlišuje pohledy na ně -- v~prvním případě se jedná o~aplikace dostupné
+k~použití, reference na konkrétní třídy aplikací má uložené ve slovníku \ic{APPS} dostupném z~modulu \texttt{fis.apps}.
 Tento slovník používá pro klíče jednotlivé unikátní identifikátory typů aplikací, pomocí kterých lze skrz konfigurační
 aplikaci zavádět do uzlu -- tedy např. \ic{\'dht-sensor\'} či \ic{\'neopixel-display\'}.
-Druhým pohledem na aplikace z hlediska jádra jsou instance aplikací -- již zavedené aplikace. Tyto instance jsou
-uloženy pod klíčem svojí unikátní identifikace ve slovníku v atributu \ic{Core.apps} -- do tohoto slovníku je při
-startu přímo zavedena konfigurační aplikace zodpovědná za správnu ostatních aplikací -- její detaily budou popsány v
-kapitole \ref{sec:konfiguracni-aplikace}.
+Druhým pohledem na aplikace z~hlediska jádra jsou instance aplikací -- již zavedené aplikace. Tyto instance jsou
+uloženy pod klíčem svojí unikátní identifikace ve slovníku v~atributu \ic{Core.apps} -- do tohoto slovníku je při
+startu přímo zavedena konfigurační aplikace zodpovědná za správu ostatních aplikací pod statickým klíčem \ic{\'config\'}
+-- její detaily budou popsány v~kapitole \ref{sec:konfiguracni-aplikace}.
 
 \todo{uspávání smyčky}
 
 % \section{Aplikace a jejich programová struktura}\label{sec:aplikace-a-jejich-programova-struktura}
 
 \section{Implementace vstupní aplikace}\label{sec:implementace-vstupni-aplikace}
-Vstupní aplikací je z hlediska IoT sítě aplikace, která s pomocí ovladače některé z periférií získá data a dále je
+Vstupní aplikací je z~hlediska IoT sítě aplikace, která s~pomocí ovladače některé z~periférií získá data a dále je
 distribuuje do sítě pomocí protokolu MQTT.
-V ukázce~\ref{code:dht-sensor-app} se nachází kód vstupní aplikace pro export dat ze senzoru DHT, který měří okolní
+V~ukázce~\ref{code:dht-sensor-app} se nachází kód vstupní aplikace pro export dat ze senzoru DHT, který měří okolní
 teplotu a vlhkost a jehož ovladač je obsažen ve standardní distribuci jazyka MicroPython.
-Jedním z jeho specifik je neblokující chování při požadavku na změření, je tedy nutné po požadavku počkat
-více jak 2 sekundy, než vůbec může dojít k exportu hodnot \cite{dht22}.
-V případě selhání komunikace se senzorem dojde ze strany ovladače k signalizaci výjimky \ic{OSError}, na kterou aplikace
+Jedním z~jeho specifik je neblokující chování při požadavku na změření, je tedy nutné po požadavku počkat
+více jak 2 sekundy, než vůbec může dojít k~exportu hodnot \cite{dht22}.
+V~případě selhání komunikace se senzorem dojde ze strany ovladače k~signalizaci výjimky \ic{OSError}, na kterou aplikace
 reaguje zalogováním chybového stavu a počkáním na další interval měření.
-Díky použití asynchronní smyčky události není nutné v korutině \ic{_run_measurement} při čekání na další měření
+Díky použití asynchronní smyčky události není nutné v~korutině \ic{_run_measurement} při čekání na další měření
 používat aktivní čekání, které by blokovalo kontext procesoru pro další aplikace.
 Základní struktura vstupních aplikací založena na dvou metodách:
 \begin{itemize}
     \item Korutina \ic{init} má na starost načtení konfigurace pro aplikaci, inicializaci ovladačů a zavedení
     měřící korutiny do asynchronní smyčky. Měla by být schopna na základě jiné konfigurace (jiného obsahu atributu
     \ic{_config}) přijmout novou konfiguraci a reinicializovat ovladače a celkové nastavení.
-    \item Metoda \ic{_plan_app_task} slouží k registraci aplikační smyčky do asynchronní smyčky jádra -- v případě
-    rekonfigurace je v její kompetenci resetovat již běžící aplikační korutinu a odstranit její další naplánování ve
-    smyčce, aby mohlo dojít k opětovnému naplánování při reinicializaci aplikace.
+    \item Metoda \ic{_plan_app_task} slouží k~registraci aplikační smyčky do asynchronní smyčky jádra -- v~případě
+    rekonfigurace je v~její kompetenci resetovat již běžící aplikační korutinu a odstranit její další naplánování ve
+    smyčce, aby mohlo dojít k~opětovnému naplánování při reinicializaci aplikace.
 \end{itemize}
 
 % @formatter:off
 \begin{code}[
     language=Python,
     caption={Implementace vstupní aplikace pro měření teploty a vlhkosti pomocí senzoru DHT -- inicializační metoda
-    \ic{init} načítá parametry z přijaté konfigurace a inicializuje řadič pro DHT senzor.
-    Asynchronní měřící smyčka následně požádá ovladač o změření, počká a vyexportuje data.
+    \ic{init} načítá parametry z~přijaté konfigurace a inicializuje řadič pro DHT senzor.
+    Asynchronní měřící smyčka následně požádá ovladač o~změření, počká a vyexportuje data.
     \textit{Kód aplikace je pro zachování jednoduchosti zkrácen a upraven.}},
     label=code:dht-sensor-app
 ]
@@ -179,19 +179,19 @@ class App(BaseApp):
 Výstupní aplikace je aplikací, které reaguje na příchozí zprávy ve svém kanálu MQTT a reaguje na ně pomocí ovladačů
 periférií uzlu. Příkladem uvedeným v~ukázce~\ref{code:np-display-app} je výstupní aplikace řídící displej složený z~LED
 diod technologie NeoPixel \cite{Esp32KolbansBook}.
-Z hlediska porovnání se vstupní aplikací se jedná o jednodušší implementaci, vzhledem k tomu, že aplikace není povinna
+Z~hlediska porovnání se vstupní aplikací se jedná o~jednodušší implementaci, vzhledem k~tomu, že aplikace není povinna
 aktivně sledovat kanál MQTT, ale činí to za ni jádro. Kromě již zmíněné korutiny \ic{init}, ve které inicializuje
-ovladač k displeji se zde nachází korutina \ic{process} zodpovědná za zpracování zprávy.
+ovladač k~displeji se zde nachází korutina \ic{process} zodpovědná za zpracování zprávy.
 Kromě parametru \ic{payload} se samotným osahem zprávy uloženém ve slovníku příjmá korutina i parametr obsahující
 seznam podkanálů, ve kterých zpráva nachází -- tyto subkanály jsou relativní vůči adresaci aplikace\footnote{Subkanály
-předané do korutiny \ic{process} pro příchozí kanál \ic{fis/to/NODE_ID/app/APP_ID/sub1/sub2} jsou uloženy v seznamu
-jako \ic{[\'sub1\', \'sub2\']} -- aplikace může použít tuto informaci k bližší specifikaci zprávy.}.
+předané do korutiny \ic{process} pro příchozí kanál \ic{fis/to/NODE_ID/app/APP_ID/sub1/sub2} jsou uloženy v~seznamu
+jako \ic{[\'sub1\', \'sub2\']} -- aplikace může použít tuto informaci k~bližší specifikaci zprávy.}.
 
 % @formatter:off
 \begin{code}[
     language=Python,
-    caption={Ukázka z implementace výstupní aplikace -- v korutině \ic{init} aplikace připraví ovladač na základě
-    parametrů doručených z editoru. Korutina \ic{process} zodpovědná za zpracování příchozí zprávy následně tento
+    caption={Ukázka z~implementace výstupní aplikace -- v~korutině \ic{init} aplikace připraví ovladač na základě
+    parametrů doručených z~editoru. Korutina \ic{process} zodpovědná za zpracování příchozí zprávy následně tento
     ovladač řídí -- dle nastavené barvy a textu odešle požadavek na displej.},
     label=code:np-display-app
 ]
@@ -233,29 +233,29 @@ class App(BaseApp):
 \section{Konfigurační aplikace}\label{sec:konfiguracni-aplikace}
 
 Tato aplikace je speciální režijní aplikací sloužící pro obsluhu další aplikací a
-konfiguraci celého uzlu. V registru aplikací používá statický identifikátor \ic{\'config\'},
+konfiguraci celého uzlu. V~registru aplikací používá statický identifikátor \ic{\'config\'},
 díky čemuž nemusí znát konfigurační blok \ic{FisNode} na druhé straně komunikace konkrétní
 identifikaci aplikace (konkrétní \ic{APP\_ID} dle potokolu). Tato aplikace je tedy svázaná
-s metodou \ic{FisNode.config}, která již byla zmíněna v rámci kapitoly
+s~metodou \ic{FisNode.config}, která již byla zmíněna v~rámci kapitoly
 \ref{sec:implementace-bloku-pro-vstupni-aplikaci}. Mezi její funkce patří následující:
 
 \begin{enumerate}
     \item \textbf{(Re)inicializace dalších aplikací} \\
-    Při přijetí zprávy ze strany brokeru s obsahem \icb{\{action: \"init\", config: ...\}}
-    aplikace provede detekci, zda se jedná o zcela novou aplikaci zaváděnou do registru či
-    o rekonfiguraci již existující aplikace. V obou případech provede nastavení konfiguračního
-    slovníku do aplikace a asynchronně zažádá aplikaci o inicializaci pomocí korutiny \ic{init}.
-    Do registru aplikací je zavedena pod svým unikátním identifikátorem, který se nachází v použitém
+    Při přijetí zprávy ze strany brokeru s~obsahem \icb{\{action: \"init\", config: ...\}}
+    aplikace provede detekci, zda se jedná o~zcela novou aplikaci zaváděnou do registru či
+    o~rekonfiguraci již existující aplikace. V~obou případech provede nastavení konfiguračního
+    slovníku do aplikace a asynchronně zažádá aplikaci o~inicializaci pomocí korutiny \ic{init}.
+    Do registru aplikací je zavedena pod svým unikátním identifikátorem, který se nachází v~použitém
     subkanálu konfigurační zprávy\footnote{Zprávy pro konfigurační aplikaci používají subkanál vytvořený
-    z unikátní identifikace dotčené aplikace -- tedy např. pro \ic{fis/to/NODE\_ID/app/config/42abdef87}
+    z~unikátní identifikace dotčené aplikace -- tedy např. pro \ic{fis/to/NODE\_ID/app/config/42abdef87}
     je \ic{\'config\'} identifikace konfigurační aplikace a \ic{\'42abdef87\'} identifikace aplikace,
-    o které je zaslána zpráva.}.
+    o~které je zaslána zpráva.}.
     \item \textbf{Odebírání aplikací} \\
-    Konfigurační aplikace umožňuje mazání běžících aplikací z uzlu -- vyzvána je k tomu pomocí zprávy
-    \ic{\{action: "remove"\}} ve svém kanálu -- díky použití subkanálu s identifiátorem aplikace
-    není nutné v rámci obsahu zprávy přenášet aplikaci znovu. Konfigurační aplikace v tomto případě
+    Konfigurační aplikace umožňuje mazání běžících aplikací z~uzlu -- vyzvána je k~tomu pomocí zprávy
+    \ic{\{action: "remove"\}} ve svém kanálu -- díky použití subkanálu s~identifiátorem aplikace
+    není nutné v~rámci obsahu zprávy přenášet aplikaci znovu. Konfigurační aplikace v~tomto případě
     nabídne možnost aplikaci uzavřít ovladače pomocí korutiny \ic{deinit}, odebrere její případnou
-    naplánovanou korutinu z asynchronní smyčky událostí na uzlu a následně ji z registru (a paměti uzlu)
+    naplánovanou korutinu z~asynchronní smyčky událostí na uzlu a následně ji z~registru (a paměti uzlu)
     odstraní pomocí operátoru \ic{del}.
 \end{enumerate}
 

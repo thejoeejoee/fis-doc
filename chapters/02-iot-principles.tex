@@ -1,11 +1,11 @@
-\chapter{Aktuální situace v Internetu věcí}
+\chapter{Aktuální situace v~Internetu věcí}
 \label{ch:principy-iot}
 Internet věcí lze z~odborného hlediska klasifikovat jako síť fyzických zařízení komunikujících mezi sebou.
 Primárním obsahem zpráv jsou hodnoty získané v~koncových zařízeních a příkazy pro jejich interakci se světem.
 Data pro síť získává zařízení z~okolního prostředí pomocí senzorů (nejčastěji neelektrických) veličin, přímé
 uživatelské vstupy pomocí mechanických ovládacích prvků (tlačítka, přepínače, spínače), výstupy systému mohou být
-realizovány pomocí zobrazovacích jednotek, signalizačních světel či reproduktorů, stejně tak jako pomocí motorů,
-elektrických relé či krokových motorů.
+realizovány pomocí zobrazovacích jednotek, signalizačních světel či reproduktorů, stejně tak jako pomocí akčních
+členů, jako jsou motory, elektrická relé či krokové motory.
 
 Existuje několik hlavních motivací pro zavedení Internetu věcí.
 Tou první je možnost globální automatizace procesů okolo nás -- chytré domácnosti či chytré podniky.
@@ -50,7 +50,7 @@ Porovnání základních vlastností těchto dvou konceptů lze nalézt v~tabulc
     \hfill
     \subfloat[Síť decentralizovaného systému IoT je obecným grafem -- výpadek komunikačního spoje nemusí mít za
     následek nesouvislý graf.
-    Případně grafové kružnice v tomto případě zvyšují odolnost vůči výpadkům.]%
+    Případně grafové kružnice v~tomto případě zvyšují odolnost vůči výpadkům.]%
     {{\includegraphics[valign=t,width=.45\textwidth]{figures/iot-system-decentralized.pdf}}}%
 
     \caption{%
@@ -61,28 +61,30 @@ Porovnání základních vlastností těchto dvou konceptů lze nalézt v~tabulc
 
 % \subsection*{Bezpečnost systémů}
 Bezpečnost systémů Internetu věcí lze rozdělit do několika úrovní~\cite{IoTSecurity}:
-\todo{bezpečenost na urovni uzlu, na urovni komunikace, na urovni centralniho uzlu, na urovni řízení}
 \begin{itemize}
     \item \textbf{Fyzický uzel} \\
-    Bezpečenost z hlediska fyzického uzlu se týká možnosti přímého přístupu potenciálního útočníka k uzlu -- z
-    principu funkce věci má uzel přístup k síti Internetu věcí.
-    V případě kompromitovaného uzlu má tedy útočník plný přístup k datům, které síť na uzel zasílá, či má možnost do
+    Bezpečenost z~hlediska fyzického uzlu se týká možnosti přímého přístupu potenciálního útočníka k~uzlu --
+z~principu funkce věci má uzel přístup k~síti Internetu věcí.
+    V~případě kompromitovaného uzlu má tedy útočník plný přístup k~datům, které síť na uzel zasílá, či má možnost do
     sítě produkovat napadená data.
     Možnou obranou je zapouzdření komunikačního kanálu uzlu do samotnatného prostoru, ze kterého nemá uzel ani nepřímý
-    přístup k ostatním uzlům.
+    přístup k~ostatním uzlům.
 
     \item \textbf{Komunikace} \\
-    Od použité technologie použité ke komunikaci uzlů se odvíjí i její bezpečnost -- v případě standardních
-    bezdrátových technologií jako je WiFi, Z-Wave či ZigBee je meritum zabezpečení v použité šifrované verzi
+    Od použité technologie použité ke komunikaci uzlů se odvíjí i její bezpečnost -- v~případě standardních
+    bezdrátových technologií jako je WiFi, Z-Wave či ZigBee je meritum zabezpečení v~použité šifrované verzi
     konkrétní technologie, pokud existuje.
 
     \item \textbf{Centrální uzel} \\
-    U centralizovaných systémů Internetu věcí je důležitým aspektem bezpečenosti zabezpečení centrálního uzlu.
-    V kontextu této práce se jedná o zabezpečení nástroje Node-RED, \todo{čárka před a?} a to především jeho editoru
-    sítí ve formě webové stránky -- komunikaci s ním lze zabezpečit pomocí šifrovaného protokolu HTTPS, kromě toho
+    U~centralizovaných systémů Internetu věcí je důležitým aspektem bezpečenosti zabezpečení centrálního uzlu.
+    V~kontextu této práce se jedná o~zabezpečení nástroje Node-RED, \todo{čárka před a?} a to především jeho editoru
+    sítí ve formě webové stránky -- komunikaci s~ním lze zabezpečit pomocí šifrovaného protokolu HTTPS, kromě toho
     nabízí i základní autentizaci uživatelů na základně dvojice jméno-heslo.
 
     \item \textbf{Úložiště dat} \\
+    V~případě, že dochází ukládání dat na centrální úložiště dat, které je připojeno do internetu, je otázka
+    bezpečnosti srovnatelná se zabezpečením centrálního uzlu při centralizovaných systémech -- jedná se o~aplikační
+    službu typu databáze, s~čímž jsou spojeny požadavky (šifrovaná komunikace, autentizace, atd.).
 \end{itemize}
 
 
@@ -128,14 +130,14 @@ obrázku~\ref{fig:iot-loxone-config}.
     \label{fig:iot-loxone-config}
     %
 \end{figure}
-\footnotetext{Převzato z \url{https://www.loxone.com/cscz/loxone-config-8}.}
+\footnotetext{Převzato z~\url{https://www.loxone.com/cscz/loxone-config-8}.}
 
 \subsection{Domoticz}\label{subsec:domoticz}
 Nástroj Domoticz je založen na otevřeném zdrojovém kódu kombinující řešení jak pro fyzické uzly, tak centrální řídící
 prvek.
-Jednotlivé uzly mezi s sebou a centrálním prvkem komunikují na frekvenci pomocí několika podporovaných technologií,
-ať už se jedná o signál na otevřené frekvenci 433 MHz, nebo standardizovaný protokol Z-Wave.
-Z hlediska automatizace domácnosti je pro tento systém zajímavá podpora internetového směrovače (serveru)
+Jednotlivé uzly mezi s~sebou a centrálním prvkem komunikují na frekvenci pomocí několika podporovaných technologií,
+ať už se jedná o~signál na otevřené frekvenci 433 MHz, nebo standardizovaný protokol Z-Wave.
+Z~hlediska automatizace domácnosti je pro tento systém zajímavá podpora internetového směrovače (serveru)
 Turris\footnote{\url{https://doc.turris.cz/gadgets/domoticz}} a automatická definice pravidel na základě připojených zařízení.
 
 \section{ESP32}\label{sec:esp32}
@@ -143,7 +145,7 @@ ESP32 je řada nízkonákladových SoC\footnote{\textit{System on Chip} je integ
 periferie (digitální, analogové a často i rádiová rozhraní) zabudované přímo v~čipu.
 Tento princip se používá ve vestavěných systémech díky jeho nízké spotřebě.} mikrokontrolérů představená čínskou
 firmou Espressif Systems.
-Na obrázku~\ref{fig:esp32} je zobrazen samotný čip ESP32 a varianta jeho vývojového kitu, který bude použit v této
+Na obrázku~\ref{fig:esp32} je zobrazen samotný čip ESP32 a varianta jeho vývojového kitu, který bude použit v~této
 práci.
 Jakožto nástupce řady ESP8266 nabízí na jediném čipu ve standardní distribuci následující~\cite{ESP32Datasheet}:
 
@@ -182,7 +184,7 @@ chyb byla vyřešena vydáním dalších revizí čipu ESP32.
 
 Komunikace na WiFi protokolech využívá standardní model ISO/OSI, kdy na druhé, linkové vrstvě, modul používá MAC
 adresu, která je zabudována přímo v~čipu při jeho výrobě\footnote{MAC adresa složená ze 48 bitů je na čipu
-zaznamenána pomocí technologie eFuse -- při výrobě dojde k nezvratnému nastavení části paměti na unikátní hodnotu.}.
+zaznamenána pomocí technologie eFuse -- při výrobě dojde k~nezvratnému nastavení části paměti na unikátní hodnotu.}.
 Tato adresa je pro všechny vyrobené čipy ESP32 jedinečná a díky tomu, že je přístupná i pro uživatelskou programovou
 výbavu, je možné ji používat jako unikátní identifikátor jednotlivých čipů -- této vlastnosti bude využito při návrhu
 protokolu dále v~práci.
@@ -192,7 +194,7 @@ protokolu dále v~práci.
     \subfloat[čip ESP32 integrovaný na vývojovém kitu ESP32 Devkit C\protect\footnotemark]
     {{\includegraphics[valign=t,width=.35\textwidth]{figures/esp-devkitc.jpg}}}%
     \quad%
-    \subfloat[samotný čip ESP32, v plechovém pouzdru je vestavěn samotný čip i taktovací krystal, vně poté anténa pro
+    \subfloat[samotný čip ESP32, v~plechovém pouzdru je vestavěn samotný čip i taktovací krystal, vně poté anténa pro
     bezdrátové sítě\protect\footnotemark]
     {{\includegraphics[valign=t,width=.6\textwidth]{figures/esp-chip.jpg}}}%
 
@@ -203,14 +205,9 @@ protokolu dále v~práci.
 \end{figure}
 
 \addtocounter{footnote}{-1}
-\footnotetext{Převzato z SOS electronic s.r.o. -- \url{https://www.soselectronic.cz/products/espressif/esp32-devkitc-236729}.}
+\footnotetext{Převzato z~SOS electronic s.r.o. -- \url{https://www.soselectronic.cz/products/espressif/esp32-devkitc-236729}.}
 \stepcounter{footnote}
-\footnotetext{Převzato z Digi-Key Electronics -- \url{https://www.digikey.com/product-detail/en/espressif-systems/ESP32-WROOM-32U/1904-1026-1-ND/9381735}.}
-
-
-\subsection{Měření neelektrických veličin}
-\todo{Co vsechno se meri - kratky uvod do HW principu mereni?}
-\blind{1}
+\footnotetext{Převzato z~Digi-Key Electronics -- \url{https://www.digikey.com/product-detail/en/espressif-systems/ESP32-WROOM-32U/1904-1026-1-ND/9381735}.}
 
 \section{MicroPython}\label{sec:micropython}
 MicroPython je derivát vysokoúrovňového skriptovacího programovacího jazyka Python určený pro běh na vestavěných
@@ -264,29 +261,29 @@ Message Queuing Telemetry Transport (MQTT) je protokol definovaný ISO standarde
 kanálovou komunikaci zařízení mezi sebou.
 Jedná se o~typ komunikace klient-server nad protokolem TCP/IP, server je dle svých vlastností nazýván
 specificky jako \uv{broker}.
-Klient v momentu jeho připojení vytváří sezení (\textit{session}) na brokeru, v rámci kterého má možnost si zaregistrovat
+Klient v~momentu jeho připojení vytváří sezení (\textit{session}) na brokeru, v~rámci kterého má možnost si zaregistrovat
 odběry jednotlivých kanálů -- jejich identifikace má tvar alfanumerických řetězců oddělených pomocí znaku \ic{/}.
 Benefitem přístupu s~jasně definovaným oddělovačem je možnost použití zástupných znaků pro
 zaregistrování odběru více kanálů zároveň -- této vlastnosti bude využito v~pozdější části práce pro komunikaci s~uzly.
 Znak \ic{+} je použit pro zastoupení jedné úrovně kanálu, znak \ic{#} pro víceúrovňové zahrnutí -- demonstrace tohoto
 principu je shrnuta v~tabulce~\ref{table:mqtt-subscribes}.
 
-Z hlediska bezpečnosti nabízí protokol možnosti na několika úrovních -- tou základní a téměř nutnou je základní
+Z~hlediska bezpečnosti nabízí protokol možnosti na několika úrovních -- tou základní a téměř nutnou je základní
 autentizace klienta na serveru pomocí dvojice uživatelského jména a hesla.
-Druhou možností je provoz protokolu MQTT nad technologií TLS/SSL, což s sebou kromě bezpečenosti přináší několik nevýhod.
-Tou první jsou zvýšené nároky na výkon koncových zařízení (z hlediska této práce možný problém při použití na
+Druhou možností je provoz protokolu MQTT nad technologií TLS/SSL, což s~sebou kromě bezpečenosti přináší několik nevýhod.
+Tou první jsou zvýšené nároky na výkon koncových zařízení (z~hlediska této práce možný problém při použití na
 uzlech ESP32) a kapacitu datové linky (šifrování tímto způsobem přináší datovou režii přenášených zpráv) -- další
 nevýhodou je nutnost distribuce certifikátů na obě strany komunikace.
-Alternativa k TLS/SSL existuje ve formě protokolu SMQTT~\cite{SMQTT}, který
-ovšem existuje pouze ve formě návrhu a experimentální implementace, bez verze vhodné k produkčnímu nasazení.
+Alternativa k~TLS/SSL existuje ve formě protokolu SMQTT~\cite{SMQTT}, který
+ovšem existuje pouze ve formě návrhu a experimentální implementace, bez verze vhodné k~produkčnímu nasazení.
 
 V~následujících podkapitolách budou popsány specifické vlastnosti protokolu MQTT důležité pro další postup v~této
 práci.
 
 \subsection{Příznak zprávy \uv{retain}}\label{subsec:priznak-zpravy-retain}
-Pomocí příznaku \uv{retain} může klient u brokeru zažídat o persistenci zprávy -- pro zprávu tento parametr nastaví a
+Pomocí příznaku \uv{retain} může klient u~brokeru zažídat o~persistenci zprávy -- pro zprávu tento parametr nastaví a
 broker zajistí její uložení ke konkrétnímu kanálu.
-Dojde-li následně k zaregistrování odběru (jiným) klientem na tento kanál (včetně kanálů dle zástupných symbolů),
+Dojde-li následně k~zaregistrování odběru (jiným) klientem na tento kanál (včetně kanálů dle zástupných symbolů),
 uložená zpráva je mu automaticky ihned zaslána.
 
 Tohoto chování lze velmi dobře využít pro kanály obsahující stav kterékoliv části ze systému --
@@ -357,7 +354,7 @@ MQTT tímto nabízí možnost klientům informovat o~svém stavu odpojení auton
     \centering
     \caption{Možnosti odběru zpráv v~protokolu MQTT -- protokol nabízí dva typy zástupných znaků pro zaregistrování
     odběru více kanálů naráz. Pomocí znaku \ic{+} lze docílit zahrnutí celé jedné úrovně kanálů, znak \ic{\#}
-    je poté určen k neomezenému zanoření.}
+    je poté určen k~neomezenému zanoření.}
     \begin{tabularx}{\textwidth}{@{}sp{5cm}r@{}}
         \toprule
         \textbf{kanál odběru} & \textbf{kanál zprávy} & \textbf{bude zpráva zahrnuta?} \\
