@@ -39,8 +39,8 @@ Postup spuštění toto systému byl následující:
 \begin{enumerate}
     \item \textbf{Instalace firmwaru na uzel} \\
     Pro realizované programové vybavení pro uzly ESP32 existuje také instalátor v~podobě předpisu pro standardní
-    utilitu \texttt{make} -- instalace je složena ze tří hlavních kroků (více k~tomuto postupu je uvedeno v~příloze
-    \ref{ch:instalator}).
+    utilitu \texttt{make} -- instalace je složena ze tří hlavních kroků (více k~tomuto postupu je uvedeno
+    v~příloze~\ref{ch:instalator}).
     Prvním krokem je zavedení samotného interpretu jazyka MicroPython, následuje instalace externích knihoven jakožto
     závislostí realizovaného firmwaru a následně samotný kód firmwaru.
     Po ověření funkce firmwaru je posledním krokem zapnutí automatického zavedení firmwaru při startu -- uzel je v~tu
@@ -66,16 +66,36 @@ Postup spuštění toto systému byl následující:
     reinicializaci sítě a jejích bloků.
 \end{enumerate}
 
-\todo{vysledky mereni}
-\missingfigure{Fotka z~nasazeneho systemu?}
+\section{Scénáře užití}\label{sec:scenare-uziti}
+
+Pro ověření funkce systému byly použity dva případy užití, které budou představeny v následujících kapitolách.
+
+\subsection{Měření prostředí v místnosti s výstupem do uživatelského rozhraní}\label{subsec:scenar-1}
+
+Síť prvního scénáře obsahuje vstupní blok reprezentující senzor typu DHT22 měřící teplotu a vlhkost okolního prostředí.
+Zprávy z tohoto senzoru odečítá nasazená aplikace na uzlu s intervalem 30 sekund a skrz firmware a broker MQTT je
+distribuuje do sítě nástroje Node-RED, kde jsou dále zpracovávány -- dojde
+k vyextrahování hodnoty teploty a vlhkosti ze zprávy, zobrazení aktuální hodnoty v textovém výstupu uživatelského
+rozhraní a promítnutí časového aritmetického průměru hodnoty za 15 minut do grafu.
+
+Implementace sítě pro tento scénář je zobrazena v obrázku~\ref{fig:node-red-production-1}.
 
 \begin{figure}
     \centering
     \includegraphics[width=\textwidth]{figures/fis-flow-1.png}
-    \caption{Síť z~produkčního nasazení nástroje Node-RED s~realizovaných rozšířením -- vlevo se nachází vstupní blok
-    reprezentující uzel s~připojeným senzorem typu DHT22. }
+    \caption{Implementace sítě pro scénář  \textit{Měření prostředí v místnosti s výstupem do uživatelského
+    rozhraní} -- vlevo se nachází vstupní blok reprezentující uzel s~připojeným senzorem typu DHT22.
+    Výstup tohoto bloku dále směřuje do bloků exportující konkrétní hodnoty ze zprávy (vstupem je datový typ
+    \ic{Object}, výstupem \ic{float}), ze kterých již dochází k zobrazení a vyhodnocení časového aritmetického
+    průměru pro graf -- pro snažší ladění je zde přidán blok typu \texttt{debug}, který exportuje aktuální teplotu
+    do ladícího panelu nástroje.}
     \label{fig:node-red-production-1}
 \end{figure}
 
-\section{Produkční sítě}\label{sec:site-nástroje-node-red}
+\subsection{Zobrazení aktuálního času a teploty na displeji}\label{subsec:scenar-2}
+
+Druhý testovací scénář obsahuje displej sestavený z LED diod technologie Neopixel, na který se zobrazuje
+
+
+
 \missingfigure{screenshot z~nasazene site}

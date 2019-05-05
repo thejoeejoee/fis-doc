@@ -5,7 +5,8 @@ V~této kapitole bude popsán návrh a implementace řídícího softwaru, tzv. 
 jádra zodpovědného za zavedení aplikací či připojení k~brokeru MQTT až k~aplikacím a jejich asynchronnímu principu.
 
 \section{Základní požadavky pro jádro firmwaru}\label{sec:základní-požadavky-pro-jádro}
-Na základě navrženého protokolu a vlastního úsudku jsem navrhl následující požadavky na implementaci jádra firmwaru:
+Na základě navrženého protokolu, poznatků z práce P. Drahovského~\cite{DrahovskyPeter2017RIun} a vlastního úsudku jsem
+navrhl následující požadavky na implementaci jádra firmwaru:
 
 \begin{itemize}
     \item Jádro je koncový bod pro komunikační linku s~nástrojem Node-RED -- příjmá zprávy a deleguje jejich
