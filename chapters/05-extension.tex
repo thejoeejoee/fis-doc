@@ -228,9 +228,11 @@ appSubscribe(appId, callback, subtopic = null, qos = 1, ref = 0) {
 \section{Implementace bloku pro vstupní aplikaci}\label{sec:implementace-bloku-pro-vstupni-aplikaci}
 Blok pro vstupní aplikaci je z~pohledu nástroje Node-RED blokem, který do sítě produkuje zprávy (přijaté z~třetí
 strany).
-Implementace bloku pro konkrétní aplikaci vychází ze základního konfiguračního bloku -- s~využitím pomocné funkce
-nástroje Node-RED \mbox{\ic{RED.nodes.getNode}} lze získat instanci bloku, která reprezentuje IoT uzel připojený přes
-MQTT kanály. \todo{zbytečně brzo zmínka o~getNode, trochu přeformulovat}
+Funkce bloku reprezentující aplikaci na uzlu vychází ze základního konfiguračního bloku, který poskytuje podporu pro
+komunikaci s aplikací na uzlu, její konfiguraci, správu statusu bloku a další.
+Konkrétní konfigurační blok (reprezentující fyzický uzel) nastaví uživatel v editoru při konfiguraci bloku a nástroj
+Node-RED poté instanci tohoto bloku (třídy \ic{FisNode}) zpřístupňuje pomocí utilitní funkce
+\mbox{\ic{RED.nodes.getNode}} -- takto získaná instance tedy zeprezentuje fyzický uzel skrz spojení MQTT.
 V~ukázce~\ref{code:fis-dht-app} lze ve spodní části těla konstruktoru vidět dvě volání -- nad konfiguračním blokem se
 prvně volá metoda \ic{config}.
 Tato metoda zajišťuje napojení na servisní aplikaci určenou pro správu uzlu jako takového a dalších aplikací --

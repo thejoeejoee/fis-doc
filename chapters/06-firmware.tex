@@ -111,10 +111,6 @@ uloženy pod klíčem svojí unikátní identifikace ve slovníku v~atributu \ic
 startu přímo zavedena konfigurační aplikace zodpovědná za správu ostatních aplikací pod statickým klíčem \ic{\'config\'}
 -- její detaily budou popsány v~kapitole \ref{sec:konfiguracni-aplikace}.
 
-\todo{uspávání smyčky}
-
-% \section{Aplikace a jejich programová struktura}\label{sec:aplikace-a-jejich-programova-struktura}
-
 \section{Implementace vstupní aplikace}\label{sec:implementace-vstupni-aplikace}
 Vstupní aplikací je z~hlediska IoT sítě aplikace, která s~pomocí ovladače některé z~periférií získá data a dále je
 distribuuje do sítě pomocí protokolu MQTT.
@@ -255,11 +251,20 @@ s~metodou \ic{FisNode.config}, která již byla zmíněna v~rámci kapitoly
     \ic{\{action: "remove"\}} ve svém kanálu -- díky použití subkanálu s~identifiátorem aplikace
     není nutné v~rámci obsahu zprávy přenášet aplikaci znovu. Konfigurační aplikace v~tomto případě
     nabídne možnost aplikaci uzavřít ovladače pomocí korutiny \ic{deinit}, odebrere její případnou
-    naplánovanou korutinu z~asynchronní smyčky událostí na uzlu a následně ji z~registru (a paměti uzlu)
+    naplánovanou korutinu z~asynchronní smyčky událostí na uzlu a následně ji z~registru (a operační paměti uzlu)
     odstraní pomocí operátoru \ic{del}.
+    \item \textbf{Změny v konfiguraci uzlu} \\
+    Konfigurační aplikace je schopna na základě přijaté zprávy změnit aktuálně načtenou konfiguraci a příslušný
+    soubor \texttt{config.json} -- děje se tak na základě akce typu \ic{\'config\'}, v těle zprávy se nachází
+    konkrétní objekt s konfiguračními parametry. Lze tak vzdáleně do uzlu přidat podporu pro více bezdrátových sítí či
+    změnit adresu brokeru MQTT. Při neodborné manipulaci lze ovšem takto vyřadit uzel z provozu -- nakonfigurováním
+    neznámých bezdrátových sítí apod. Tato funkce není přímo dostupná z nástroje Node-RED, pracuje s ní instalátor,
+    jenž je popsaný v příloze \ref{ch:instalator}.
+
+    \item \textbf{Tvrdý reset uzlu} \\
+    Pomocí zprávy se specifickou akcí typu \ic{\'reset\'} lze uzel vzdáleně resetovat -- dojde tak ke
+    znovunačtení konfiguračního souboru, vyčištění registru aplikací a jejich následné reinicializaci.
+    Lze tak bez přímého přístupu k uzlu vyřešit například problém nastandardního stavu v uzlu -- je nutné ovšem brát
+    v potaz, že v případě nezapnutého automatického startu firmwaru dojde po resetu k situaci, kdy je nutné firmware
+    spustit manuálně. Tato funkce taktéž není přístupná z nástroje Node-RED, využita je instalátorem.
 \end{enumerate}
-
-\todo{úprava configu pomocí konfigurační aplikace}
-
-
-

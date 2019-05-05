@@ -67,11 +67,11 @@ Node-RED bez dalších rozšíření nabízí širokou základní sadu uzlů, me
     \item\emph{debug} -- Blok poskytující logovací službu, dle jeho konfigurace jsou přijaté zprávy logovány do systémové konzole či do
     bočního panelu v~editoru -- vhodné pro testování a monitorování stavu sítě.
     \item\emph{switch} -- Blok starající se o~směrování zpráv v~síti -- na základně definovaných pravidel
-    (shoda či porovnání hodnot, regulární výrazy) rozhodne, který z~výstupů bude použit pro další směřování zprávy.
+    (shoda či porovnání hodnot, regulární výrazy) rozhodne, který z~výstupů bude použit pro další směrování zprávy.
     \item\emph{delay} -- Blok umožňující časové operace nad tokem zpráv zkrz tento blok - dle konfigurace zprávy buď
     pouze zpožďuje o~konstantní hodnotu, nebo omezuje průtok (šířku pásma) za časovou jednotku.
     \item\emph{link} -- Blok, který je schopen zprávy exportovat do jiné sítě v~rámci jedné instance nástroje
-    Node-RED -- vytváří jednosměrný tunel pro mezi-síťové směřování zpráv.
+    Node-RED -- vytváří jednosměrný tunel pro mezi-síťové směrování zpráv.
 \end{itemize}
 
 Pro bloky využívající externí služby nabízí Node-RED institut konfiguračních bloků.
@@ -149,12 +149,28 @@ RED.nodes.registerType("string-length", StringLengthNode);
 % @formatter:on
 
 \section{Node-RED Dashboard}\label{sec:node-red-dashboard}
+
+\begin{figure}[th]
+    \centering
+    \includegraphics[width=\textwidth]{figures/node-red-dashboard.png}
+    \caption{Ukázka uživatelského rozhraní postaveného pomocí balíčku \texttt{node-red-dashboard} -- možnosti sahají
+    od standardních prvků typu tlačítka, textového vstupu, formuláře či checkboxu, přes dynamické textové výstupy,
+    nastavení barvy a posuvníky až ke komponentnám typu výstupní grafické výstupní škály či výběru data z kalendáře.}
+    \label{fig:node-red-dashboard}
+\end{figure}
+
 Díky otevřenosti ekosystému nástroje Node-RED vznikl populární rozšiřující balíček s~názvem
-\texttt{node-red-dashboard}. Tento balíček nabízí tvůrcům sítí zařadit i uživatelské rozhraní zahrnující dynamické
+\texttt{node-red-dashboard}.
+Tento balíček nabízí tvůrcům sítí zařadit i uživatelské rozhraní zahrnující dynamické
 popisky, grafy, tlačítka a další akční a informační členy.
 Definice tohoto rozhraní je založena na použití standardních funkčních bloků sítě, vstupní zprávy reflektuje nástroj
 v~uživatelském rozhraní, naopak uživatelská interakce je reflektována výstupními zprávami z~bloků rozhraní.
 Kromě definice samotných bloků lze další vlastnosti rozhraní konfigurovat v~přídavném postranním panelu v~editoru --
 rozšíření definuje rozřazení do záložek, skupin, jejich vzájemné pozicování, pořadí a vzhled.
+Ukázka možností rozhraní postaveného pomocí tohoto balíčku je zobrazena na obrázku~\ref{fig:node-red-dashboard}.
 
-\missingfigure{Node-RED spojeni}
+Z pohledu sítě disponují bloky z tohoto balíčku standardními vlastnostmi -- vstupy z uživatelského rozhraní jsou
+reflektovány pomocí výstupních zprávů bloků s informacemi o akci či změně vstupu, výstupní procedura z hlediska sítě
+je obdobná, bloky tohoto rozhraní jsou výstupními bloky sítě a balíček zajistí přenos informace ze sítě směrem do
+uživatelského rozhraní.
+
