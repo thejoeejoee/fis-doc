@@ -80,7 +80,8 @@ distribuuje do sítě nástroje Node-RED, kde jsou dále zpracovávány -- dojde
 k vyextrahování hodnoty teploty a vlhkosti ze zprávy, zobrazení aktuální hodnoty v textovém výstupu uživatelského
 rozhraní a promítnutí časového aritmetického průměru hodnoty za 15 minut do grafu.
 
-Implementace sítě pro tento scénář je zobrazena v obrázku~\ref{fig:node-red-production-1}.
+Implementace sítě pro tento scénář je zobrazena v obrázku~\ref{fig:node-red-production-1}, odpovídající část
+uživatelského rozhraní je poté vyobrazena na obrázku~\ref{fig:node-red-production-1-ui}.
 
 \begin{figure}
     \centering
@@ -107,12 +108,35 @@ Implementace sítě pro tento scénář je zobrazena v obrázku~\ref{fig:node-re
 \subsection{Zobrazení aktuálního času a teploty na displeji}\label{subsec:scenar-2}
 
 Druhý testovací scénář obsahuje displej sestavený z LED diod technologie Neopixel, na který se zobrazuje aktuální čas
-a aktuální teplotě v měřené místnosti z prvního scénáře -- čas je vždy zobrazen po dobu $X$ a následně je po dobu $Y$
+a aktuální teplota v měřené místnosti z prvního scénáře -- čas je vždy zobrazen po dobu $X$ a následně je po dobu $Y$
 zobrazena teplota.
-Tyto hodnoty jsou uživatelem stanoveny z uživatelského rozhraní, kde je také vstup pro možné nastavení statického
-textu na displej a zobrazované barvy.
+Tyto hodnoty jsou uživatelem stanoveny z uživatelského rozhraní -- v implementaci sítě tedy běží čítač, který na
+základě předaných vstupů definuje výstup do displeje.
+Speciálním případem je zadání statického textu do rozhraní, tento text je poté zobrazen bez vlivů čítače -- ve všech
+případech lze použít vstup pro výběr požadované barvy displeje.
 
+Ukázka z implementace této sítě se nechází na obrázku~\ref{fig:node-red-production-2}, sestavené uživatelské rozhraní
+poté na obrázku~\ref{fig:node-red-production-2-ui}.
 
+\begin{figure}
+    \centering
+    \includegraphics[width=.7\textwidth]{figures/fis-flow-2.png}
+    \caption{Implementace sítě pro scénář \textit{Zobrazení aktuálního času a teploty na displeji} -- funkce je
+    založena na dvou částech.
+    Spodní část je určena k ukládání aktuální stavu nastavení, tedy testického textu, intervalů zobrazení a pomocí
+    tunelového spojení i aktuální teploty -- využito je k tomu vlastnosti nástroje umožňující uložení informace v
+    rámci jedné sítě.
+    Horní část poté obsahuje časovač, který invokuej vlastní implementaci rozhodovací logiky, jejíž výstupem je
+    zpráva směrovaná do blok displeje (a pro snažší ladění i do postranního panelu).}
+    \label{fig:node-red-production-2}
+\end{figure}
+\begin{figure}
+    \centering
+    \includegraphics[width=.5\textwidth]{figures/fis-flow-2-ui.png}
+    \caption{Ukázka z uživatelského rozhraní pro scénář \textit{Měření prostředí v místnosti s výstupem do
+    uživatelského rozhraní} -- kromě naposled změřených hodnot se zde nachází grafy průběhů měřených hodnot a čas
+    poslední aktualizace.}
+    \label{fig:node-red-production-2-ui}
+\end{figure}
 
-
-\missingfigure{screenshot z~nasazene site}
+\section{Vyhodnocení scénářů}\label{sec:vyhodnocení}
