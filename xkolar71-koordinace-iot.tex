@@ -148,7 +148,15 @@ keywords.cs={IoT, Node-RED, ESP32, automatizace, Internet věcí},
 keywords.en={IoT, Node-RED, ESP32, automation, Internet of Things},
 %keywords.en={Here, individual keywords separated by commas will be written in English.},
 % Abstrakt / Abstract
-abstract.cs={Do tohoto odstavce bude zapsán výtah (abstrakt) práce v českém (slovenském) jazyce.}, % abstrakt v českém či slovenském jazyce / abstract in czech or slovak language
+abstract.cs={Cílem této práce je vytvoření prostředků pro použití nástroje Node-RED ke koordinaci fyzických
+uzlů v podobě čipů ESP32 ve světě Internetu věcí.
+To je zajištěno pomocí vlastního rozšíření tohoto nástroje umožňující nasazování různorodých aplikací na uzly
+simultánně vedle sebe, navrženého protokolu ve formě kanálů MQTT a vlastního firmwaru pro tyto uzly.
+Navržený a realizovaný firmware v jazyce MicroPython je schopen asynchronní obsluhy jednotlivých aplikací, pro
+které poskytuje rozhraní pro komunikaci s nástrojem Node-RED.
+Funkce tohoto systému je úspěšně ověřena na základě dvou praktických scénářů užití, které prokazují možnost přímého
+nasazení
+systému do praxe v oblasti automatizace -- a to i díky přiloženému instalátoru firmwaru.},
 abstract.en={Do tohoto odstavce bude zapsán výtah (abstrakt) práce v anglickém jazyce.}, % abstrakt v anglickém jazyce / abstract in english
 %abstract.en={An abstract of the work in English will be written in this paragraph.},
 % Prohlášení (u anglicky psané práce anglicky, u slovensky psané práce slovensky) / Declaration (for thesis in english should be in english)
@@ -197,8 +205,6 @@ faculty.en={Faculty of Information Technology}, % Fakulta v angličtině - pro v
     \setlength{\parskip}{0pt}
 
     {\setcounter{tocdepth}{1}\hypersetup{hidelinks}\tableofcontents}
-
-    \listoftodos[Tohle všechno bys měl dodělat]
 
     % Seznam obrazku a tabulek (pokud prace obsahuje velke mnozstvi obrazku, tak se to hodi)
     % List of figures and list of tables (if the thesis contains a lot of pictures, it is good)

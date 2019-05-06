@@ -5,7 +5,7 @@ V~této kapitole bude popsán návrh a implementace řídícího softwaru, tzv. 
 jádra zodpovědného za zavedení aplikací či připojení k~brokeru MQTT až k~aplikacím a jejich asynchronnímu principu.
 
 \section{Základní požadavky pro jádro firmwaru}\label{sec:základní-požadavky-pro-jádro}
-Na základě navrženého protokolu, poznatků z práce P. Drahovského~\cite{DrahovskyPeter2017RIun} a vlastního úsudku jsem
+Na základě navrženého protokolu, poznatků z~práce P. Drahovského~\cite{DrahovskyPeter2017RIun} a vlastního úsudku jsem
 navrhl následující požadavky na implementaci jádra firmwaru:
 
 \begin{itemize}
@@ -254,18 +254,18 @@ s~metodou \ic{FisNode.config}, která již byla zmíněna v~rámci kapitoly
     nabídne možnost aplikaci uzavřít ovladače pomocí korutiny \ic{deinit}, odebrere její případnou
     naplánovanou korutinu z~asynchronní smyčky událostí na uzlu a následně ji z~registru (a operační paměti uzlu)
     odstraní pomocí operátoru \ic{del}.
-    \item \textbf{Změny v konfiguraci uzlu} \\
+    \item \textbf{Změny v~konfiguraci uzlu} \\
     Konfigurační aplikace je schopna na základě přijaté zprávy změnit aktuálně načtenou konfiguraci a příslušný
-    soubor \texttt{config.json} -- děje se tak na základě akce typu \ic{\'config\'}, v těle zprávy se nachází
-    konkrétní objekt s konfiguračními parametry. Lze tak vzdáleně do uzlu přidat podporu pro více bezdrátových sítí či
-    změnit adresu brokeru MQTT. Při neodborné manipulaci lze ovšem takto vyřadit uzel z provozu -- nakonfigurováním
-    neznámých bezdrátových sítí apod. Tato funkce není přímo dostupná z nástroje Node-RED, pracuje s ní instalátor,
-    jenž je popsaný v příloze \ref{ch:instalator}.
+    soubor \texttt{config.json} -- děje se tak na základě akce typu \ic{\'config\'}, v~těle zprávy se nachází
+    konkrétní objekt s~konfiguračními parametry. Lze tak vzdáleně do uzlu přidat podporu pro více bezdrátových sítí či
+    změnit adresu brokeru MQTT. Při neodborné manipulaci lze ovšem takto vyřadit uzel z~provozu -- nakonfigurováním
+    neznámých bezdrátových sítí apod. Tato funkce není přímo dostupná z~nástroje Node-RED, pracuje s~ní instalátor,
+    jenž je popsaný v~příloze \ref{ch:instalator}.
 
     \item \textbf{Tvrdý reset uzlu} \\
     Pomocí zprávy se specifickou akcí typu \ic{\'reset\'} lze uzel vzdáleně resetovat -- dojde tak ke
     znovunačtení konfiguračního souboru, vyčištění registru aplikací a jejich následné reinicializaci.
-    Lze tak bez přímého přístupu k uzlu vyřešit například problém nastandardního stavu v uzlu -- je nutné ovšem brát
-    v potaz, že v případě nezapnutého automatického startu firmwaru dojde po resetu k situaci, kdy je nutné firmware
-    spustit manuálně. Tato funkce taktéž není přístupná z nástroje Node-RED, využita je instalátorem.
+    Lze tak bez přímého přístupu k~uzlu vyřešit například problém nastandardního stavu v~uzlu -- je nutné ovšem brát
+    v~potaz, že v~případě nezapnutého automatického startu firmwaru dojde po resetu k~situaci, kdy je nutné firmware
+    spustit manuálně. Tato funkce taktéž není přístupná z~nástroje Node-RED, využita je instalátorem.
 \end{enumerate}

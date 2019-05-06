@@ -29,8 +29,6 @@ Pro běh systému s~realizovaným rozšířením bylo nutné zajistit následuj�
     UART-USB a lištu pinů umožňující zapojení do nepájivého pole -- jedná se o~moduly s~produktovým názvem
     \uv{ESP32-DevKitC}\footnote{\url{https://www.espressif.com/en/products/hardware/esp32-devkitc/overview}}
     přímo od firmy Espressif Systems.
-
-    \item \textbf{}
 \end{itemize}
 
 Všechny výše uvedené prostředky jsem použil pro sestavení vlastního lokálního Internetu věcí, nad kterým jsem následně
@@ -68,28 +66,28 @@ Postup spuštění toto systému byl následující:
 
 \section{Scénáře užití}\label{sec:scenare-uziti}
 
-Pro ověření funkce systému byly použity dva případy užití, které budou představeny v následujících kapitolách -- vždy
-textový popis případu užití, zobrazení implementace sítě v nástroji Node-RED a ukázka ze sestaveného uživatelského
+Pro ověření funkce systému byly použity dva případy užití, které budou představeny v~následujících kapitolách -- vždy
+textový popis případu užití, zobrazení implementace sítě v~nástroji Node-RED a ukázka ze sestaveného uživatelského
 rozhraní.
 
-\subsection{Měření prostředí v místnosti s výstupem do uživatelského rozhraní}\label{subsec:scenar-1}
+\subsection{Měření prostředí v~místnosti s~výstupem do uživatelského rozhraní}\label{subsec:scenar-1}
 
 Síť prvního scénáře obsahuje vstupní blok reprezentující senzor typu DHT22 měřící teplotu a vlhkost okolního prostředí.
-Zprávy z tohoto senzoru odečítá nasazená aplikace na uzlu s intervalem 30 sekund a skrz firmware a broker MQTT je
+Zprávy z~tohoto senzoru odečítá nasazená aplikace na uzlu s~intervalem 30 sekund a skrz firmware a broker MQTT je
 distribuuje do sítě nástroje Node-RED, kde jsou dále zpracovávány -- dojde
-k vyextrahování hodnoty teploty a vlhkosti ze zprávy, zobrazení aktuální hodnoty v textovém výstupu uživatelského
+k~vyextrahování hodnoty teploty a vlhkosti ze zprávy, zobrazení aktuální hodnoty v~textovém výstupu uživatelského
 rozhraní a promítnutí časového aritmetického průměru hodnoty za 15 minut do grafu.
 
-Implementace sítě pro tento scénář je zobrazena v obrázku~\ref{fig:node-red-production-1}, odpovídající část
+Implementace sítě pro tento scénář je zobrazena v~obrázku~\ref{fig:node-red-production-1}, odpovídající část
 uživatelského rozhraní je poté vyobrazena na obrázku~\ref{fig:node-red-production-1-ui}.
 
 \begin{figure}
     \centering
     \includegraphics[width=\textwidth]{figures/fis-flow-1.png}
-    \caption{Implementace sítě pro scénář  \textit{Měření prostředí v místnosti s výstupem do uživatelského
+    \caption{Implementace sítě pro scénář  \textit{Měření prostředí v~místnosti s~výstupem do uživatelského
     rozhraní} -- vlevo se nachází vstupní blok reprezentující uzel s~připojeným senzorem typu DHT22.
     Výstup tohoto bloku dále směřuje do bloků exportující konkrétní hodnoty ze zprávy (vstupem je datový typ
-    \ic{Object}, výstupem \ic{float}), ze kterých již dochází k zobrazení a vyhodnocení časového aritmetického
+    \ic{Object}, výstupem \ic{float}), ze kterých již dochází k~zobrazení a vyhodnocení časového aritmetického
     průměru pro graf -- pro snažší ladění je zde přidán blok typu \texttt{debug}, který exportuje aktuální teplotu
     do ladícího panelu nástroje.
     Pro signalizaci času poslední aktualizace slouží soustava bloků pro nastavení aktuálního času při přijetí zprávy
@@ -99,7 +97,7 @@ uživatelského rozhraní je poté vyobrazena na obrázku~\ref{fig:node-red-prod
 \begin{figure}
     \centering
     \includegraphics[width=\textwidth]{figures/fis-flow-1-ui.png}
-    \caption{Ukázka z uživatelského rozhraní pro scénář \textit{Měření prostředí v místnosti s výstupem do
+    \caption{Ukázka z~uživatelského rozhraní pro scénář \textit{Měření prostředí v~místnosti s~výstupem do
     uživatelského rozhraní} -- kromě naposled změřených hodnot se zde nachází grafy průběhů měřených hodnot a čas
     poslední aktualizace.}
     \label{fig:node-red-production-1-ui}
@@ -107,15 +105,15 @@ uživatelského rozhraní je poté vyobrazena na obrázku~\ref{fig:node-red-prod
 
 \subsection{Zobrazení aktuálního času a teploty na displeji}\label{subsec:scenar-2}
 
-Druhý testovací scénář obsahuje displej sestavený z LED diod technologie Neopixel, na který se zobrazuje aktuální čas
-a aktuální teplota v měřené místnosti z prvního scénáře -- čas je vždy zobrazen po dobu $X$ a následně je po dobu $Y$
+Druhý testovací scénář obsahuje displej sestavený z~LED diod technologie Neopixel, na který se zobrazuje aktuální čas
+a aktuální teplota v~měřené místnosti z~prvního scénáře -- čas je vždy zobrazen po dobu $X$ a následně je po dobu $Y$
 zobrazena teplota.
-Tyto hodnoty jsou uživatelem stanoveny z uživatelského rozhraní -- v implementaci sítě tedy běží čítač, který na
+Tyto hodnoty jsou uživatelem stanoveny z~uživatelského rozhraní -- v~implementaci sítě tedy běží čítač, který na
 základě předaných vstupů definuje výstup do displeje.
 Speciálním případem je zadání statického textu do rozhraní, tento text je poté zobrazen bez vlivů čítače -- ve všech
 případech lze použít vstup pro výběr požadované barvy displeje.
 
-Ukázka z implementace této sítě se nechází na obrázku~\ref{fig:node-red-production-2}, sestavené uživatelské rozhraní
+Ukázka z~implementace této sítě se nechází na obrázku~\ref{fig:node-red-production-2}, sestavené uživatelské rozhraní
 poté na obrázku~\ref{fig:node-red-production-2-ui}.
 
 \begin{figure}
@@ -123,9 +121,9 @@ poté na obrázku~\ref{fig:node-red-production-2-ui}.
     \includegraphics[width=.7\textwidth]{figures/fis-flow-2.png}
     \caption{Implementace sítě pro scénář \textit{Zobrazení aktuálního času a teploty na displeji} -- funkce je
     založena na dvou částech.
-    Spodní část je určena k ukládání aktuální stavu nastavení, tedy testického textu, intervalů zobrazení a pomocí
-    tunelového spojení i aktuální teploty -- využito je k tomu vlastnosti nástroje umožňující uložení informace v
-    rámci jedné sítě.
+    Spodní část je určena k~ukládání aktuální stavu nastavení, tedy testického textu, intervalů zobrazení a pomocí
+    tunelového spojení i aktuální teploty -- využito je k~tomu vlastnosti nástroje umožňující uložení informace
+v~rámci jedné sítě.
     Horní část poté obsahuje časovač, který invokuej vlastní implementaci rozhodovací logiky, jejíž výstupem je
     zpráva směrovaná do blok displeje (a pro snažší ladění i do postranního panelu).}
     \label{fig:node-red-production-2}
@@ -133,10 +131,27 @@ poté na obrázku~\ref{fig:node-red-production-2-ui}.
 \begin{figure}
     \centering
     \includegraphics[width=.5\textwidth]{figures/fis-flow-2-ui.png}
-    \caption{Ukázka z uživatelského rozhraní pro scénář \textit{Měření prostředí v místnosti s výstupem do
+    \caption{Ukázka z~uživatelského rozhraní pro scénář \textit{Měření prostředí v~místnosti s~výstupem do
     uživatelského rozhraní} -- kromě naposled změřených hodnot se zde nachází grafy průběhů měřených hodnot a čas
     poslední aktualizace.}
     \label{fig:node-red-production-2-ui}
 \end{figure}
 
-\section{Vyhodnocení scénářů}\label{sec:vyhodnocení}
+\section{Vyhodnocení provozu scénářů}\label{sec:vyhodnocení}
+
+Oba scénáře byly po dobu sedmi dnů provozovány paralelně na dvou samostatných uzlech.
+Během této doby se realizovanému \textbf{systému plně dařilo plnit zadanou funkci} -- firmware uzlu se vypořádal
+s~lokálně slabým a nestabilním signálem bezdrátové sítě pomocí procesu znovupřipojení k~internetu a brokeru.
+Výsledkem bylo obnovené spojení, díky kterému obdržel uzel od brokeru poslední konfigurační data a data pro
+aplikace.
+Z~těchto dat zreprodukoval vnitřní stav a výstupy či vstupy -- zobrazený text v~případě displeje či naplánované měření
+v~případě senzoru.
+Toto chování bylo autorem zjištěno pomocí manuálního připojení se na konzoli uzlů přímo v~místě.
+
+V~této době bylo také odpozorováno několik automatických restartů uzlů, příčin bylo postupně několik -- nedostatek
+paměti při zavedení většího množství aplikací na uzel během testování, zvýšený výkonnový odběr uzlu v~případě
+displeje bez externího zdroje a tím i zapříčiněný pád operačního systému pro nedostatek energie v~procesoru nebo
+stav, kdy dojde k~uzavření spojení MQTT ze strany brokeru, a tím i automatickému restartu uzlu.
+
+\textit{Oba scénáře používaly každý samostatně svůj vlastní fyzický uzel -- pro navržený systém by ovšem nebyl
+problém provozovat oba scénáře na jednom uzlu vedle sebe, jak bylo autorem ověřeno během experimentů.}
