@@ -30,7 +30,8 @@ Soubor \cli{Makefile} obsahuje celkově tyto cíle (řazeno abecedně):
     \item[\texttt{erase-flash}] Smaže kompletně pamět flash na připojeném uzlu.
     \item[\texttt{flash-micropython}] Nahraje stažený binární obraz interpretu jazyka Micropython na připojený uzel.
     \item[\texttt{help}] Vypíše nápovědu k~cílům.
-    \item[\texttt{install-fis}] Nahraje firmware společně se zaváděcím souborem \texttt{boot.py} na připojený uzel.
+    \item[\texttt{install-fis}] Nahraje firmware společně se zaváděcím souborem \texttt{boot.py} na připojený uzel --
+    kromě toho také vypne automatické zavádění firmwaru.
     \item[\texttt{install-libs}] Pomocí instalačního souboru provede vzdálené připojení uzlu k~internetu a následně
     nainstaluje potřebné závilosti na uzel.
     \item[\texttt{install}] Provede kompletní instalaci na uzel (smazání flash paměti, zavedení interpretu jazyka

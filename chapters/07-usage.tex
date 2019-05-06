@@ -68,7 +68,9 @@ Postup spuštění toto systému byl následující:
 
 \section{Scénáře užití}\label{sec:scenare-uziti}
 
-Pro ověření funkce systému byly použity dva případy užití, které budou představeny v následujících kapitolách.
+Pro ověření funkce systému byly použity dva případy užití, které budou představeny v následujících kapitolách -- vždy
+textový popis případu užití, zobrazení implementace sítě v nástroji Node-RED a ukázka ze sestaveného uživatelského
+rozhraní.
 
 \subsection{Měření prostředí v místnosti s výstupem do uživatelského rozhraní}\label{subsec:scenar-1}
 
@@ -88,13 +90,28 @@ Implementace sítě pro tento scénář je zobrazena v obrázku~\ref{fig:node-re
     Výstup tohoto bloku dále směřuje do bloků exportující konkrétní hodnoty ze zprávy (vstupem je datový typ
     \ic{Object}, výstupem \ic{float}), ze kterých již dochází k zobrazení a vyhodnocení časového aritmetického
     průměru pro graf -- pro snažší ladění je zde přidán blok typu \texttt{debug}, který exportuje aktuální teplotu
-    do ladícího panelu nástroje.}
+    do ladícího panelu nástroje.
+    Pro signalizaci času poslední aktualizace slouží soustava bloků pro nastavení aktuálního času při přijetí zprávy
+    a jeho konverze na podobu do uživatelského rozhraní.}
     \label{fig:node-red-production-1}
+\end{figure}
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{figures/fis-flow-1-ui.png}
+    \caption{Ukázka z uživatelského rozhraní pro scénář \textit{Měření prostředí v místnosti s výstupem do
+    uživatelského rozhraní} -- kromě naposled změřených hodnot se zde nachází grafy průběhů měřených hodnot a čas
+    poslední aktualizace.}
+    \label{fig:node-red-production-1-ui}
 \end{figure}
 
 \subsection{Zobrazení aktuálního času a teploty na displeji}\label{subsec:scenar-2}
 
-Druhý testovací scénář obsahuje displej sestavený z LED diod technologie Neopixel, na který se zobrazuje
+Druhý testovací scénář obsahuje displej sestavený z LED diod technologie Neopixel, na který se zobrazuje aktuální čas
+a aktuální teplotě v měřené místnosti z prvního scénáře -- čas je vždy zobrazen po dobu $X$ a následně je po dobu $Y$
+zobrazena teplota.
+Tyto hodnoty jsou uživatelem stanoveny z uživatelského rozhraní, kde je také vstup pro možné nastavení statického
+textu na displej a zobrazované barvy.
+
 
 
 

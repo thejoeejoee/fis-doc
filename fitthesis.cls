@@ -1016,7 +1016,7 @@ faculty.en=,faculty=FIT
 
 % custom joe
 \def\arraystretch{1.3}
-\hyphenation{Node-RED}
+\hyphenation{MicroPython}
 \usepackage{tablefootnote}
 \renewcommand\lstlistlistingname{Seznam zdrojových kódů}
 \renewcommand\lstlistingname{Zdrojový kód}
@@ -1041,9 +1041,9 @@ xleftmargin=\dimexpr\fboxsep+1pt\relax,
 xrightmargin=\fboxsep,
 % start delimiter: (*, end delimiter: *)
 escapeinside={(*}{*)},
-abovecaptionskip=.5\baselineskip,
+abovecaptionskip=.25\baselineskip,
 belowskip=0pt,
-aboveskip=\baselineskip,
+aboveskip=.75\baselineskip,
 float,
 floatplacement=h,
 columns=fullflexible,
