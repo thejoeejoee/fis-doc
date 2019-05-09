@@ -8,7 +8,7 @@ programování na datovém toku určený pro IoT. Uživateli-programátorovi nab
 dle kontextu),
 jejichž vstupy a výstupy lze vzájemně propojovat a vytvářet tak síť jakožto celek s~požadovanými funkcemi.
 V~roce 2013 jej představila společnost IBM v~rámci projektu JS Foundation pod licencí Apache 2.0. Nástroj vyžaduje
-běhové prostředí Node.js, tedy je naimplementován v~programovacím jazyke Javascript, od čehož se odvíjí možnosti
+běhové prostředí Node.js, tedy je implementován v~programovacím jazyce Javascript, od čehož se odvíjí možnosti
 jeho rozšiřování.
 
 \begin{figure}
@@ -30,7 +30,7 @@ význam funkčních bloků propojených pomocí propojů, které zajištují vz�
 \section{Základní principy nástroje Node-RED}\label{sec:zakladni-principy-node-red}
 
 Vnitřní architektura nástroje Node-RED je rozdělena na dva samostatné funkční části.
-V~pohledu samotného běhu je důležitější částí jádro provádějící veškeré datové operace nad samotným nadefinovaným
+Z~pohledu samotného běhu je důležitější částí jádro provádějící veškeré datové operace nad samotným nadefinovaným
 modelem, zodpovědné za spouštění jednotlivých uživatelských uzly, jejich synchronizaci a vzájemnou distribuci dat.
 Druhou částí je samotný vizuální editor, který je ve výchozím nastavení dostupný pomocí protokolu HTTP. Pomocí něj je
 možné uživatelsky nastavovat jednotlivé uzly a vytvářet mezi nimi datové spoje.
@@ -153,7 +153,7 @@ RED.nodes.registerType("string-length", StringLengthNode);
     \includegraphics[width=\textwidth]{figures/node-red-dashboard.png}
     \caption{Ukázka uživatelského rozhraní postaveného pomocí balíčku \texttt{node-red-dashboard} -- možnosti sahají
     od standardních prvků typu tlačítka, textového vstupu, formuláře či checkboxu, přes dynamické textové výstupy,
-    nastavení barvy a posuvníky až ke komponentnám typu výstupní grafické výstupní škály či výběru data z~kalendáře.}
+    nastavení barvy a posuvníky až ke komponentám typu výstupní grafické výstupní škály či výběru data z~kalendáře.}
     \label{fig:node-red-dashboard}
 \end{figure}
 

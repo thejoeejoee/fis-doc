@@ -179,7 +179,7 @@ diod technologie NeoPixel \cite{Esp32KolbansBook}.
 Z~hlediska porovnání se vstupní aplikací se jedná o~jednodušší implementaci, vzhledem k~tomu, že aplikace není povinna
 aktivně sledovat kanál MQTT, ale činí to za ni jádro. Kromě již zmíněné korutiny \ic{init}, ve které inicializuje
 ovladač k~displeji se zde nachází korutina \ic{process} zodpovědná za zpracování zprávy.
-Kromě parametru \ic{payload} se samotným osahem zprávy uloženém ve slovníku příjmá korutina i parametr obsahující
+Kromě parametru \ic{payload} se samotným obsahem zprávy uloženém ve slovníku příjmá korutina i parametr obsahující
 seznam podkanálů, ve kterých zpráva nachází -- tyto subkanály jsou relativní vůči adresaci aplikace\footnote{Subkanály
 předané do korutiny \ic{process} pro příchozí kanál \ic{fis/to/NODE_ID/app/APP_ID/sub1/sub2} jsou uloženy v~seznamu
 jako \ic{[\'sub1\', \'sub2\']} -- aplikace může použít tuto informaci k~bližší specifikaci zprávy.}.
@@ -265,7 +265,7 @@ s~metodou \ic{FisNode.config}, která již byla zmíněna v~rámci kapitoly
     \item \textbf{Tvrdý reset uzlu} \\
     Pomocí zprávy se specifickou akcí typu \ic{\'reset\'} lze uzel vzdáleně resetovat -- dojde tak ke
     znovunačtení konfiguračního souboru, vyčištění registru aplikací a jejich následné reinicializaci.
-    Lze tak bez přímého přístupu k~uzlu vyřešit například problém nastandardního stavu v~uzlu -- je nutné ovšem brát
+    Lze tak bez přímého přístupu k~uzlu vyřešit například problém nestandardního stavu v~uzlu -- je nutné ovšem brát
     v~potaz, že v~případě nezapnutého automatického startu firmwaru dojde po resetu k~situaci, kdy je nutné firmware
     spustit manuálně. Tato funkce taktéž není přístupná z~nástroje Node-RED, využita je instalátorem.
 \end{enumerate}

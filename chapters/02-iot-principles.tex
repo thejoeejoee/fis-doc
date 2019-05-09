@@ -67,7 +67,7 @@ Bezpečnost systémů Internetu věcí lze rozdělit do několika úrovní~\cite
 z~principu funkce věci má uzel přístup k~síti Internetu věcí.
     V~případě kompromitovaného uzlu má tedy útočník plný přístup k~datům, které síť na uzel zasílá, či má možnost do
     sítě produkovat napadená data.
-    Možnou obranou je zapouzdření komunikačního kanálu uzlu do samotnatného prostoru, ze kterého nemá uzel ani nepřímý
+    Možnou obranou je zapouzdření komunikačního kanálu uzlu do samostatného prostoru, ze kterého nemá uzel ani nepřímý
     přístup k~ostatním uzlům.
 
     \item \textbf{Komunikace} \\
@@ -226,7 +226,7 @@ nedělitelnou součástí.
 Framework ESP-IDF je konkrétně postaven nad operačním systémem FreeRTOS, který je de facto standardem a největším hráčem
 na poli RTOS s~otevřeným zdrojovým kódem~\cite{RTOSSelection}.
 Jedním z~benefitů tohoto typu systému je možnost použití programového řízení komunikačních rozhraní
-(jako je SPI, I\textsuperscript{2}C nebo UART) -- tato rozhraní lze poté naimplementovat, není nutný konkrétní
+(jako je SPI, I\textsuperscript{2}C nebo UART) -- tato rozhraní lze poté implementovat, není nutný konkrétní
 hardwarový prvek.
 
 I~přes omezenou vestavěnou knihovnu a vysokoúrovňovost tohoto jazyka jej lze použít ve světě internetu věcí --
@@ -281,7 +281,7 @@ V~následujících podkapitolách budou popsány specifické vlastnosti protokol
 práci.
 
 \subsection{Příznak zprávy \uv{retain}}\label{subsec:priznak-zpravy-retain}
-Pomocí příznaku \uv{retain} může klient u~brokeru zažídat o~persistenci zprávy -- pro zprávu tento parametr nastaví a
+Pomocí příznaku \uv{retain} může klient u~brokeru zažádat o~persistenci zprávy -- pro zprávu tento parametr nastaví a
 broker zajistí její uložení ke konkrétnímu kanálu.
 Dojde-li následně k~zaregistrování odběru (jiným) klientem na tento kanál (včetně kanálů dle zástupných symbolů),
 uložená zpráva je mu automaticky ihned zaslána.
