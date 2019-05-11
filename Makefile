@@ -53,3 +53,5 @@ vlna:
 normostrany:
 	echo "scale=2; `detex -n $(CO)-[01]*.tex chapters/*.tex | wc -c`/1800;" | bc
 
+install-pkgs:
+	apt install -y texlive-base texlive-latex-base texlive-lang-czechslovak texlive-fonts-recommended texlive-latex-extra texlive-latex-recommended texlive-fonts-extra
