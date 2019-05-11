@@ -17,7 +17,7 @@
 %==============================================================================
 % \documentclass[]{fitthesis} % bez zadání - pro začátek práce, aby nebyl problém s překladem
 % \documentclass[english]{fitthesis} % without assignment - for the work start to avoid compilation problem
-\documentclass[zadani, odsaz]{fitthesis} % odevzdani do wisu a/nebo tisk s barevnými odkazy - odkazy jsou barevné
+\documentclass[zadani, odsaz, cprint]{fitthesis} % odevzdani do wisu a/nebo tisk s barevnými odkazy - odkazy jsou
 %\documentclass[english,zadani]{fitthesis} % for submission to the IS FIT and/or print with color links - links are color
 %\documentclass[zadani,print]{fitthesis} % pro černobílý tisk - odkazy jsou černé
 %\documentclass[english,zadani,print]{fitthesis} % for the black and white print - links are black
@@ -157,7 +157,17 @@ které poskytuje rozhraní pro komunikaci s nástrojem Node-RED.
 Funkce tohoto systému je úspěšně ověřena na základě dvou praktických scénářů užití, které prokazují možnost přímého
 nasazení
 systému do praxe v oblasti automatizace -- a to i díky přiloženému instalátoru firmwaru.},
-abstract.en={Do tohoto odstavce bude zapsán výtah (abstrakt) práce v anglickém jazyce.}, % abstrakt v anglickém jazyce / abstract in english
+abstract.en={
+The target of this thesis is to create means for using the Node-RED tool to coordinate physical
+nodes in the form of ESP32 chips in the Internet of Things.
+This is fulfilled by created Node-RED extension, the proposed MQTT channel protocol and custom firmware for these nodes.
+All of this suport deploy of diverse applications to nodes simultaneously side by side.
+The designed and implemented MicroPython firmware is capable of asynchronous operation of individual applications
+which provides an interface to communicate with the Node-RED.
+The functionality of this system has been successfully validated on the basis of two practical usage scenarios
+that demonstrate the possibility of direct use deployment
+system into practice in automation - even with the included firmware installer.
+}, % abstrakt v anglickém jazyce / abstract in english
 %abstract.en={An abstract of the work in English will be written in this paragraph.},
 % Prohlášení (u anglicky psané práce anglicky, u slovensky psané práce slovensky) / Declaration (for thesis in english should be in english)
 declaration={Prohlašuji, že jsem tuto bakalářskou práci vypracoval samostatně pod vedením doc. Ing. Vladimíra Janouška, Ph.D.
@@ -173,7 +183,7 @@ konzultace při realizaci této práce.},
 %(external submitter, consultant, etc.).},
 % Rozšířený abstrakt (cca 3 normostrany) - lze definovat zde nebo níže / Extended abstract (approximately 3 standard pages) - can be defined here or below
 %extendedabstract={Do tohoto odstavce bude zapsán rozšířený výtah (abstrakt) práce v českém (slovenském) jazyce.},
-%faculty={FIT}, % FIT/FEKT/FSI/FA/FCH/FP/FAST/FAVU/USI/DEF
+%faculty={FIT}, % FIT/FEKT/FSI/FA/FCH/FP/FAST/FAVU/USI/D
 faculty.cs={Fakulta informačních technologií}, % Fakulta v češtině - pro využití této položky výše zvolte fakultu DEF / Faculty in Czech - for use of this entry select DEF above
 faculty.en={Faculty of Information Technology}, % Fakulta v angličtině - pro využití této položky výše zvolte fakultu DEF / Faculty in English - for use of this entry select DEF above
 % department.cs={Ústav matematiky}, % Ústav v češtině - pro využití této položky výše zvolte ústav DEF nebo jej zakomentujte / Department in Czech - for use of this entry select DEF above or comment it out

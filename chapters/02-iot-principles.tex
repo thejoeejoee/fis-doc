@@ -106,7 +106,7 @@ Toto řešení nabízí možnost kompletní konfigurace serveru pro řízení Io
 připojeny jak po síti Internet, tak lokálně např. pomocí rozhraní USB -- k~rozšíření je dostupná obsáhlá
 knihovna přídavných modulů.
 Nástroj OpenHAB je primárně založen na sestavení uživatelského rozhraní pro ovládání systému, ve kterém uživatel ovládá
-připojená zařízení na základě pravidel, které mohou být nakonfigurována staticky či dynamicky pomocí dostupného
+připojená zařízení na základě pravidel, která mohou být konfigurována staticky či dynamicky pomocí dostupného
 skriptování.
 
 \subsection{Loxone -- Loxone Smart Home}\label{subsec:loxone}
@@ -272,7 +272,7 @@ Z~hlediska bezpečnosti nabízí protokol možnosti na několika úrovních -- t
 autentizace klienta na serveru pomocí dvojice uživatelského jména a hesla.
 Druhou možností je provoz protokolu MQTT nad technologií TLS/SSL, což s~sebou kromě bezpečenosti přináší několik nevýhod.
 Tou první jsou zvýšené nároky na výkon koncových zařízení (z~hlediska této práce možný problém při použití na
-uzlech ESP32) a kapacitu datové linky (šifrování tímto způsobem přináší datovou režii přenášených zpráv) -- další
+uzlech ESP32) a kapacitu datové linky (šifrování tímto způsobem přináší datovou režii přenášených zpráv), další
 nevýhodou je nutnost distribuce certifikátů na obě strany komunikace.
 Alternativa k~TLS/SSL existuje ve formě protokolu SMQTT~\cite{SMQTT}, který
 ovšem existuje pouze ve formě návrhu a experimentální implementace, bez verze vhodné k~produkčnímu nasazení.
@@ -290,6 +290,15 @@ Tohoto chování lze velmi dobře využít pro kanály obsahující stav kterék
 nově připojený klient pak ihned dostane zprávu o~stavu a nedochází k~časovému intervalu, kdy je sice klient
 zaregistrovaný, ale teprve čeká na novou aktualizaci stavu.
 
+\begin{figure}
+    \centering
+    \includegraphics[width=.6\textwidth]{figures/qos.pdf}
+    \caption{Tři typy QoS (Quality of Service) pro MQTT - $0$ pro zprávy bez potvrzování (doručení nejvýše jednou),
+    $1$ pro jednosměrné potvrzení (doručení alespoň jednou) a
+    $2$ pro obousměrné potvrzení (doručení právě jednou).}
+    \label{fig:mqtt-qos}
+\end{figure}
+
 \subsection{Quality of Service}\label{subsec:quality-of-service}
 Quality of Service (QoS) je pro MQTT vlastnost stanovující, k~jak důslednému potvrzování zpráv by mělo mezi
 brokerem a klientem docházet.
@@ -304,15 +313,6 @@ hodnoty dostupné pro QoS:
     \item[\textbf{2}] Kromě zpětného potvrzení je potvrzeno i samotné první zpětné potvrzení, příjemce tedy
     odesílateli potvrdí příjetí a smazání ze svého úložiště -- zpráva poté není distribuována vícenásobně.
 \end{enumerate}
-
-\begin{figure}
-    \centering
-    \includegraphics[width=.6\textwidth]{figures/qos.pdf}
-    \caption{Tři typy QoS (Quality of Service) pro MQTT - $0$ pro zprávy bez potvrzování (doručení nejvýše jednou),
-    $1$ pro jednosměrné potvrzení (doručení alespoň jednou) a
-    $2$ pro obousměrné potvrzení (doručení právě jednou).}
-    \label{fig:mqtt-qos}
-\end{figure}
 
 \subsection{Identifikace klienta \uv{Client ID}}\label{subsec:identifikace-klienta-client-id}
 Možností klienta je zapsat si při připojení k~brokeru své \uv{Client ID}.

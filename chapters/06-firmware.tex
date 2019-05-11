@@ -22,9 +22,9 @@ navrhl následující požadavky na implementaci jádra firmwaru:
 V~této kapitole budou představeny a popsány některé důležité implementační detaily jádra firmwaru.
 Středobodem z~hlediska funkce je asynchronní smyčka událostí, jejíž implementace pochází z~veřejně dostupného balíčku
 \texttt{micropython-async}\footnote{\url{https://github.com/peterhinch/micropython-async}}.
-Princip této smyčky vychází ze standardního balíku modulu \ic{asyncio} programovacího jazyka Python a nabízí
-jejím uživatelům přístup k~konkurentně asynchronnímu kódu -- na nejvyšší úrovni programátor definuje pouze jednotlivé
-korutiny\footnote{Korutina (coroutine) je z~pohledu asynchronního přístupu k~programování podpogram,
+Princip této smyčky vychází ze standardního balíku modulu \texttt{asyncio} programovacího jazyka Python a
+nabízí jejím uživatelům přístup k~konkurentně asynchronnímu kódu -- na nejvyšší úrovni programátor definuje pouze
+jednotlivé korutiny\footnote{Korutina (coroutine) je z~pohledu asynchronního přístupu k~programování podpogram,
 jehož kód lze provádět asynchronně a zároveň má možnost jiný kód tohoto typu invokovat.} (coroutines) a smyčka samotná
 se stará o~rozdělování procesorového času a kontextu.
 
