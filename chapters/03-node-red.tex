@@ -29,7 +29,7 @@ význam funkčních bloků propojených pomocí propojů, které zajištují vz�
 
 \section{Základní principy nástroje Node-RED}\label{sec:zakladni-principy-node-red}
 
-Vnitřní architektura nástroje Node-RED je rozdělena na dva samostatné funkční části.
+Vnitřní architektura nástroje Node-RED je rozdělena na dvě samostatné funkční části.
 Z~pohledu samotného běhu je důležitější částí jádro provádějící veškeré datové operace nad samotným nadefinovaným
 modelem, zodpovědné za spouštění jednotlivých uživatelských uzlů, jejich synchronizaci a vzájemnou distribuci dat.
 Druhou částí je samotný vizuální editor, který je ve výchozím nastavení dostupný pomocí protokolu HTTP. Pomocí něj je
@@ -67,14 +67,14 @@ Node-RED bez dalších rozšíření nabízí širokou základní sadu uzlů, me
     \item\emph{switch} -- Blok starající se o~směrování zpráv v~síti -- na základně definovaných pravidel
     (shoda či porovnání hodnot, regulární výrazy) rozhodne, který z~výstupů bude použit pro další směrování zprávy.
     \item\emph{delay} -- Blok umožňující časové operace nad tokem zpráv skrz tento blok - dle konfigurace zprávy buď
-    pouze zpožďuje o~konstantní hodnotu, nebo omezuje průtok (šířku pásma) za časovou jednotku.
+    pouze zpožďuje o~konstantní hodnotu nebo omezuje průtok (šířku pásma) za časovou jednotku.
     \item\emph{link} -- Blok, který je schopen zprávy exportovat do jiné sítě v~rámci jedné instance nástroje
-    Node-RED -- vytváří jednosměrný tunel pro mezi-síťové směrování zpráv.
+    Node-RED -- vytváří jednosměrný tunel pro mezisíťové směrování zpráv.
 \end{itemize}
 
 Pro bloky využívající externí služby nabízí Node-RED institut konfiguračních bloků.
 Tyto bloky jsou pouze virtuální, v~síti se viditelně nevyskytují, ale je
-s~jejich pomocí možné sdílet a znovupoužívat statickou konfiguraci v~dalších blocích.
+s~jejich pomocí možné sdílet a znovu používat statickou konfiguraci v~dalších blocích.
 Jedním takovým konfiguračním blokem je blok pro připojení k~brokeru MQTT, jehož konfigurační formulář je vyobrazen na
 obrázku~\ref{fig:node-red-mqtt-out-conf:mqtt-broker})
 
@@ -158,16 +158,16 @@ RED.nodes.registerType("string-length", StringLengthNode);
 
 Díky otevřenosti ekosystému nástroje Node-RED vznikl populární rozšiřující balíček s~názvem
 \texttt{node-red-dashboard}.
-Tento balíček nabízí tvůrcům sítí zařadit i uživatelské rozhraní zahrnující dynamické
+Tento balíček nabízí tvůrcům sítí zařadit i uživatelské rozhraní, zahrnující dynamické
 popisky, grafy, tlačítka a další akční a informační členy.
 Definice tohoto rozhraní je založena na použití standardních funkčních bloků sítě, vstupní zprávy reflektuje nástroj
 v~uživatelském rozhraní, naopak uživatelská interakce je reflektována výstupními zprávami z~bloků rozhraní.
 Kromě definice samotných bloků lze další vlastnosti rozhraní konfigurovat v~přídavném postranním panelu v~editoru --
 rozšíření definuje rozřazení do záložek, skupin, jejich vzájemné pozicování, pořadí a vzhled.
-Ukázka možností rozhraní postaveného pomocí tohoto balíčku je zobrazena na obrázku~\ref{fig:node-red-dashboard}.
+Ukázka možností rozhraní, postaveného pomocí tohoto balíčku, je zobrazena na obrázku~\ref{fig:node-red-dashboard}.
 
 Z~pohledu sítě disponují bloky z~tohoto balíčku standardními vlastnostmi -- vstupy z~uživatelského rozhraní jsou
-reflektovány pomocí výstupních zprávů bloků s~informacemi o~akci či změně vstupu, výstupní procedura z~hlediska sítě
+reflektovány pomocí výstupních zpráv bloků s~informacemi o~akci či změně vstupu, výstupní procedura z~hlediska sítě
 je obdobná, bloky tohoto rozhraní jsou výstupními bloky sítě a balíček zajistí přenos informace ze sítě směrem do
 uživatelského rozhraní.
 

@@ -73,9 +73,9 @@ z~jeho zdrojového kódu\footnote{\url{https://github
     label=code:fis-node-constructor,
     caption={Část konstruktoru třídy \ic{FisNode} obsluhující připojení brokeru MQTT a přípravu kanálů pro komunikaci.
     Důležitá je příprava části kanálů, které jsou následně použity pro publikování a odběr zpráv -- v~atributu
-    \ic{_publish_topic} je uložen kanál s~identifikací uzlu, identifikace aplikace, dle kapitoly~\ref{sec:mqtt-kanaly}, připojí
-    třída až při publikování pro konkrétní aplikaci. Druhým předpřipraveným kanálem je kanál pro odběr zprávy z~uzlu
-    -- ten je uložen v~atributu \ic{_subscribe_topic}.}
+    \ic{_publish_topic} je uložen kanál s~identifikací uzlu, identifikaci aplikace, dle kapitoly~\ref{sec:mqtt-kanaly},
+    připojí metoda až při publikování pro konkrétní aplikaci.
+    Druhým předpřipraveným kanálem je kanál pro odběr zprávy z~uzlu -- ten je uložen v~atributu \ic{_subscribe_topic}.}
 ]
 class FisNode {
     constructor(config) {
@@ -92,7 +92,7 @@ class FisNode {
 \end{code}
 % @formatter:on
 
-Implementace třídy \ic{FisNode} se vyznažuje několika dalšími vlastnostmi:
+Implementace třídy \ic{FisNode} se vyznačuje několika dalšími vlastnostmi:
 \begin{itemize}
     \item Signalizace stavu do editoru -- tato třída signalizuje skrz blok do editoru stav uzlu a konkrétní
     aplikace -- jak lze vidět na obrázku~\ref{fig:fis-node-status}, stav může nabývat tří hodnot:
@@ -119,9 +119,9 @@ k~odstranění bloku ze sítě.
     \centering
     \includegraphics[width=.5\textwidth]{figures/fis-node-status.png}
     \caption{Výčet stavů bloku konkrétní aplikace -- třída \ic{FisNode} vyhodnocuje na základě dostupných informací
-    (kanál pro logy, data a status uzlu) stav odpovídajícího uzlu a aplikace a tento stav signalizuje do editoru
+    (kanál pro logy, data a status uzlu) stav odpovídajícího uzlu a aplikace, a tento stav signalizuje do editoru
     nástroje Node-RED. Konkrétně se jedná o~stav, kdy je vše v~pořádku, aplikace zasílá data (na obrázku první),
-    stav, kdy je uzel připojen, avšak aplikace nezasílá či nepříjmá data (druhý případ) a poslední stav,
+    stav, kdy je uzel připojen, avšak aplikace nezasílá či nepřijímá data (druhý případ) a poslední stav,
     kdy je uzel odpojen (třetí případ).}
     \label{fig:fis-node-status}
 \end{figure}
@@ -140,9 +140,9 @@ neinterpretovat.}.
     language=HTML,
     label=code:fis-node-template,
     caption={Ukázka z~implementace druhé povinné části deklarace bloku -- šablona formuláře v~jazyce HTML obsahuje
-    jednotlivé vstupní pro pole pro korespondující parametry definovené v~registraci bloku do editoru
+    jednotlivá vstupní pole pro korespondující parametry, definovené v~registraci bloku do editoru
     v~ukázce~\ref{code:fis-node-constructor}.
-    Atribut \ic{id="node-config-input-broker"} (a odpovídající) jsou důležité vzhledem k~chování editoru, nutná je shoda
+    Atribut \ic{id="node-config-input-broker"} a odpovídající jsou důležité vzhledem k~chování editoru, nutná je shoda
     s~názvem parametru při registraci bloku -- stejně jako správné spárování šablony pomocí atributu
     \ic{data-template-name="fis-node"}.},
 ]
@@ -165,8 +165,8 @@ s~MQTT komunikací -- z~těch důležitějších se jedná o~\ic{appPublish} a \
 Prvně jmenovaná metoda, zobrazená v~ukázce~\ref{code:fis-node-app-publish}, slouží k~publikování zprávy pro
 konkrétní aplikaci (vlastnost požadovaná v~kapitole~\ref{sec:pozadavky-na-protokol}) -- tedy do konkrétního kanálu.
 Ten je v~tomto místě složen z~jednoznačné identifikace aplikace \ic{appId} (z~návrhu odpovídá symbolu \ic{APP_ID}) a
-volitelně podkanálu -- použitá privátní metoda \ic{_publish} poté ke kanálu před odesláním zprávy připojí identifikaci
-uzlu a dojde tak k~zacílení na konkrétní aplikaci na konkrétním uzlu.
+volitelně i podkanálu -- použitá privátní metoda \ic{_publish} poté ke kanálu před odesláním zprávy připojí identifikaci
+uzlu, a dojde tak k~zacílení na konkrétní aplikaci na konkrétním uzlu.
 
 % @formatter:off
 \begin{code}[
@@ -231,11 +231,11 @@ strany).
 Funkce bloku reprezentující aplikaci na uzlu vychází ze základního konfiguračního bloku, který poskytuje podporu pro
 komunikaci s~aplikací na uzlu, její konfiguraci, správu statusu bloku a další.
 Konkrétní konfigurační blok (reprezentující fyzický uzel) nastaví uživatel v~editoru při konfiguraci bloku a nástroj
-Node-RED poté instanci tohoto bloku (třídy \ic{FisNode}) zpřístupňuje pomocí utilitní funkce
+Node-RED poté instanci tohoto bloku (třídy \ic{FisNode}) zpřístupní pomocí utilitní funkce
 \mbox{\ic{RED.nodes.getNode}} -- takto získaná instance tedy reprezentuje fyzický uzel skrz spojení MQTT.
 V~ukázce~\ref{code:fis-dht-app} lze ve spodní části těla konstruktoru vidět dvě volání -- nad konfiguračním blokem se
 prvně volá metoda \ic{config}.
-Tato metoda zajišťuje napojení na servisní aplikaci určenou pro správu uzlu jako takového a dalších aplikací --
+Tato metoda zajišťuje napojení na servisní aplikaci určenou pro správu uzlu jako takového, a dalších aplikací --
 detaily její funkce budou popsány v~kapitole~\ref{sec:konfiguracni-aplikace}.
 Volání konkrétně odešle do uzlu uživatelské nastavení společně s~identifikátorem aplikace \ic{\'dht-sensor\'} -- zahrnut
 je typ senzoru a pin, na kterém je na uzlu připojen.

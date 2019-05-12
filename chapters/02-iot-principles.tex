@@ -4,13 +4,13 @@ Internet věcí lze z~odborného hlediska klasifikovat jako síť fyzických za�
 Primárním obsahem zpráv jsou hodnoty získané v~koncových zařízeních a příkazy pro jejich interakci se světem.
 Data pro síť získává zařízení z~okolního prostředí pomocí senzorů (nejčastěji neelektrických) veličin, přímé
 uživatelské vstupy pomocí mechanických ovládacích prvků (tlačítka, přepínače, spínače), výstupy systému mohou být
-realizovány pomocí zobrazovacích jednotek, signalizačních světel či reproduktorů, stejně tak jako pomocí akčních
+realizovány pomocí zobrazovacích jednotek, signalizačních světel či reproduktorů, stejně tak pomocí akčních
 členů, jako jsou motory, elektrická relé či krokové motory.
 
 Existuje několik hlavních motivací pro zavedení Internetu věcí.
 Tou první je možnost globální automatizace procesů okolo nás -- chytré domácnosti či chytré podniky.
-Díky snadno získatelným datům pro metriky je možné je vyhodnocovat v~reálném čase a rozhodovat na základě nich bez
-přítomnosti interakce člověka.
+Díky snadno získatelným datům pro metriky je možné je vyhodnocovat v~reálném čase a rozhodovat jejich na základě
+bez přítomnosti interakce člověka.
 
 % \subsubsection{Základní rozdělení Internetu věcí}
 Systémy pro Internet věcí lze v~zásadě rozdělit dle vnitřní struktury na centralizované a decentralizované --
@@ -82,7 +82,7 @@ z~principu funkce věci má uzel přístup k~síti Internetu věcí.
     nabízí i základní autentizaci uživatelů na základě dvojice jméno-heslo.
 
     \item \textbf{Úložiště dat} \\
-    V~případě, že dochází ukládání dat na centrální úložiště dat, které je připojeno do internetu, je otázka
+    V~případě, že dochází k ukládání dat na centrální úložiště dat, které je připojeno do internetu, je otázka
     bezpečnosti srovnatelná se zabezpečením centrálního uzlu při centralizovaných systémech -- jedná se o~aplikační
     službu typu databáze, s~čímž jsou spojeny požadavky (šifrovaná komunikace, autentizace, atd.).
 \end{itemize}
@@ -91,7 +91,7 @@ z~principu funkce věci má uzel přístup k~síti Internetu věcí.
 \section{Existující řešení pro IoT}\label{sec:existujici-reseni}
 
 Na realizaci systémů IoT se v~dnešní době zaměřuje mnoho firem, stejně tak existuje několik variant s~otevřeným kódem.
-Často se jedná o~kombinaci obou potřebných stránek pro provoz -- tedy, k~hardwarovému řešení je poskytnuto i řešení
+Často se jedná o~kombinaci obou potřebných stránek pro provoz -- tedy k~hardwarovému řešení je poskytnuto i řešení
 softwarové, ale existují i pouze jednostranné nástroje.
 Dále budou představeni největší hráči na poli jak z~komerční sféry, tak sféry otevřeného zdrojového kódu.
 % \todo{citace https://chytrydumsvepomoci.cz/blog/vyber-systemu-pro-inteligentni-dum}
@@ -112,11 +112,11 @@ skriptování.
 \subsection{Loxone -- Loxone Smart Home}\label{subsec:loxone}
 Platforma Loxone je otevřený, avšak komerční systém, nabízející jak hardwarové řešení, tak odpovídající softwarové
 řešení --
-jádrem systému je miniserver s~proprietárním programovou výbavou, která zajišťuje obsluhu pro karty \uv{Loxone
+jádrem systému je miniserver s~proprietární programovou výbavou, která zajišťuje obsluhu pro karty \uv{Loxone
 extension}, jež jsou poté rozhraním pro komunikaci s~okolním světem.
 
 Toto řešení také nabízí experimentální funkci automatického naučení pravidel pro funkci celého systému, kdy
-systém detekuje své vstupy a výstupy a na základě již existujících řešení vygeneruje pravidla.
+systém detekuje své vstupy a výstupy, a na základě již existujících řešení vygeneruje pravidla.
 Samotná manuální konfigurace je poté možná skrz nástroj Loxone Config, který zajišťuje zaslání požadované
 konfigurace do miniserveru a nabízí i její lokální simulaci -- dvě takováto pravidla lze vidět na
 obrázku~\ref{fig:iot-loxone-config}.
@@ -137,7 +137,7 @@ Nástroj Domoticz je založen na otevřeném zdrojovém kódu kombinující ře�
 prvek.
 Jednotlivé uzly mezi s~sebou a centrálním prvkem komunikují na frekvenci pomocí několika podporovaných technologií,
 ať už se jedná o~signál na otevřené frekvenci 433 MHz nebo standardizovaný protokol Z-Wave.
-Z~hlediska automatizace domácnosti je pro tento systém zajímavá podpora internetového směrovače (serveru)
+Z~hlediska automatizace domácností je pro tento systém zajímavá podpora internetového směrovače (serveru)
 Turris\footnote{\url{https://doc.turris.cz/gadgets/domoticz}} a automatická definice pravidel na základě připojených zařízení.
 
 \section{ESP32}\label{sec:esp32}
@@ -166,7 +166,7 @@ hl
     \centering
     \includegraphics[width=\textwidth]{figures/esp-function-diagram.pdf}
 
-    \caption{Diagram jednotlivých dostupných modulů na SoC ESP32 -- od jádra s~procesorem a pamětmi obsahuje čip
+    \caption{Diagram jednotlivých dostupných modulů na SoC ESP32 -- od jádra s~procesorem a paměťmi obsahuje čip
     moduly pro bezdrátovou komunikaci, hardwarovou podporu kryptografie, podporu pro nízkoodběrový běh i periferie
     pro externí sběrnice\protect\footnotemark.}
 
@@ -236,7 +236,7 @@ MicroPython v~základu nabízí knihovnu \ic{machine} s~třídami \ic{Pin}, \ic{
 každá z~těchto tříd reprezentuje způsob, jak komunikovat s~okolním světem pomocí vestavěných periférií
 -- tato část vestavěné knihovny je ovšem závislá na konkrétní distribuci interpretu jazyka MicroPython.
 
-Ústřední knihovnou pro komunikaci s~okolím na vyšších vrstách poskytuje balíček \ic{network}, který zpřístupňuje
+Ústřední knihovnu pro komunikaci s~okolím na vyšších vrstách poskytuje balíček \ic{network}, který zpřístupňuje
 třídu \ic{WLAN} -- ta je zodpovědná za práci s~modulem pro WiFi připojení a to jak v~klientském módu, tak v~módu
 přístupového bodu.
 
@@ -300,9 +300,9 @@ zaregistrovaný, ale teprve čeká na novou aktualizaci stavu.
 \end{figure}
 
 \subsection{Quality of Service}\label{subsec:quality-of-service}
-Quality of Service (QoS) je pro MQTT vlastnost stanovující, k~jak důslednému potvrzování zpráv by mělo mezi
+Quality of Service (QoS) je pro MQTT vlastnost stanovující k~jak důslednému potvrzování zpráv by mělo mezi
 brokerem a klientem docházet.
-Ve své podstatě stanovuje, ke kolika potvrzení odeslané zprávy musí dojít, aby byla
+Ve své podstatě stanovuje, ke kolika potvrzením odeslané zprávy musí dojít, aby byla
 zpráva prohlášena za úspěšně odeslanou.
 Na obrázku~\ref{fig:mqtt-qos} jsou znázorněny směry zpráv protokolu mezi odesílatelem a příjemcem pro jednotlivé
 hodnoty dostupné pro QoS:
@@ -318,7 +318,7 @@ hodnoty dostupné pro QoS:
 Možností klienta je zapsat si při připojení k~brokeru své \uv{Client ID}.
 Jedná se o~řetězec jednoznačně identifikující konkrétního klienta -- hlavním benefitem (v~případě podpory
 persistentních sezení) je možnost zachování zaregistrovaných kanálů k~odběru v~případě odpojení a
-opětovného připojení klienta a také uschování prozatím nedoručených zpráv s~QoS nastaveným na úroveň $1$ či $2$.
+opětovného připojení klienta, a také uschování prozatím nedoručených zpráv s~QoS nastaveným na úroveň $1$ či $2$.
 
 Klient tedy zahájí komunikaci zprávou \ic{CONNECT}, která kromě dalšího obsahuje parametry \uv{Client ID} a \uv{Clean
 session} -- druhý zmíněný vynucuje vyčištění sezení (smazání odběru a čekajících zpráv).
@@ -329,7 +329,7 @@ bylo vyčištěno či se podařilo připojit do existujícího).
 Parametr \uv{Keep Alive} určuje časový interval, během kterého musí klient odpovědět na zprávu \ic{PINGREQ} zprávou
 \ic{PINGRESP} -- jestliže se tak nestane, spojení je ukončeno.
 Toto chování je nutné kvůli nežádoucí vlastnosti protokolu TCP --
-v~tomto protokolu, nad kterým je MQTT založen, může dojít k~situaci tzv. polootevřeného spojení.
+v~tomto protokolu, na kterém je MQTT založen, může dojít k~situaci tzv. polootevřeného spojení.
 
 Je to standardně nežádoucí stav, při kterém je jedna ze stran spojení informována o~ukončení spojení (jakoukoliv
 vinou), druhá však ne.

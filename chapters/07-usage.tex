@@ -31,13 +31,13 @@ Pro běh systému s~realizovaným rozšířením bylo nutné zajistit následuj�
     přímo od firmy Espressif Systems.
 \end{itemize}
 
-Všechny výše uvedené prostředky jsem použil pro sestavení vlastního lokálního Internetu věcí, nad kterým jsem následně
+Všechny výše uvedené prostředky jsem použil pro sestavení vlastního lokálního Internetu věcí, na kterém jsem následně
 prováděl experimenty a ověřoval funkci realizovaných prostředků.
-Postup spuštění toto systému byl následující:
+Postup spuštění tohoto systému byl následující:
 \begin{enumerate}
     \item \textbf{Instalace firmwaru na uzel} \\
-    Pro realizované programové vybavení pro uzly ESP32 existuje také instalátor v~podobě předpisu pro standardní
-    utilitu \texttt{make} -- instalace je složena ze tří hlavních kroků (více k~tomuto postupu je uvedeno
+    Pro realizované programové vybavení pro uzly ESP32 existuje také instalátor v~podobě předpisu pro nástroj
+    \texttt{make} -- instalace je složena ze tří hlavních kroků (více k~tomuto postupu je uvedeno
     v~příloze~\ref{ch:instalator}).
     Prvním krokem je zavedení samotného interpretu jazyka MicroPython, následuje instalace externích knihoven jakožto
     závislostí realizovaného firmwaru a následně samotný kód firmwaru.
@@ -54,7 +54,7 @@ Postup spuštění toto systému byl následující:
     uživateli.
 
     \item \textbf{Příprava sítě} \\
-    Dalším krokem je příprava samotné sítě v~nástroji Node-RED, jedná se o~postupně o~výběr bloků pro síť (senzory,
+    Dalším krokem je příprava samotné sítě v~nástroji Node-RED, jedná se postupně o~výběr bloků pro síť (senzory,
     rozhodovací prvky, výstupní prvky), jejich nastavení (použité piny na uzlu, podmínky, rozmístění prvků v~GUI)
     včetně konfiguračních bloků (broker MQTT, identifikace uzlů získané při instalaci) a na závěr jejich propojení do
     sítě pomocí datových spojů.
@@ -86,7 +86,7 @@ uživatelského rozhraní je poté vyobrazena na obrázku~\ref{fig:node-red-prod
     \includegraphics[width=\textwidth]{figures/fis-flow-1.png}
     \caption{Implementace sítě pro scénář  \textit{Měření prostředí v~místnosti s~výstupem do uživatelského
     rozhraní} -- vlevo se nachází vstupní blok reprezentující uzel s~připojeným senzorem typu DHT22.
-    Výstup tohoto bloku dále směřuje do bloků exportující konkrétní hodnoty ze zprávy (vstupem je datový typ
+    Výstup tohoto bloku dále směřuje do bloků exportujících konkrétní hodnoty ze zprávy (vstupem je datový typ
     \ic{Object}, výstupem \ic{float}), ze kterých již dochází k~zobrazení a vyhodnocení časového aritmetického
     průměru pro graf -- pro snažší ladění je zde přidán blok typu \texttt{debug}, který exportuje aktuální teplotu
     do ladícího panelu nástroje.
@@ -98,7 +98,7 @@ uživatelského rozhraní je poté vyobrazena na obrázku~\ref{fig:node-red-prod
     \centering
     \includegraphics[width=\textwidth]{figures/fis-flow-1-ui.png}
     \caption{Ukázka z~uživatelského rozhraní pro scénář \textit{Měření prostředí v~místnosti s~výstupem do
-    uživatelského rozhraní} -- kromě naposled změřených hodnot se zde nachází grafy průběhů měřených hodnot a čas
+    uživatelského rozhraní} -- kromě naposledy změřených hodnot se zde nachází grafy průběhů měřených hodnot a čas
     poslední aktualizace.}
     \label{fig:node-red-production-1-ui}
 \end{figure}
@@ -123,7 +123,7 @@ poté na obrázku~\ref{fig:node-red-production-2-ui}.
     založena na dvou částech.
     Spodní část je určena k~ukládání aktuální stavu nastavení, tedy testického textu, intervalů zobrazení a pomocí
     tunelového spojení i aktuální teploty -- využito je k~tomu vlastnosti nástroje umožňující uložení informace
-v~rámci jedné sítě.
+    v~rámci jedné sítě.
     Horní část poté obsahuje časovač, který invokuje vlastní implementaci rozhodovací logiky, jejíž výstupem je
     zpráva směrovaná do blok displeje (a pro snažší ladění i do postranního panelu).}
     \label{fig:node-red-production-2}
@@ -149,7 +149,7 @@ v~případě senzoru.
 Toto chování bylo autorem zjištěno pomocí manuálního připojení se na konzoli uzlů přímo v~místě.
 
 V~této době bylo také odpozorováno několik automatických restartů uzlů, příčin bylo postupně několik -- nedostatek
-paměti při zavedení většího množství aplikací na uzel během testování, zvýšený výkonnový odběr uzlu v~případě
+paměti při zavedení většího množství aplikací na uzel během testování, zvýšený výkonový odběr uzlu v~případě
 displeje bez externího zdroje a tím i zapříčiněný pád operačního systému pro nedostatek energie v~procesoru nebo
 stav, kdy dojde k~uzavření spojení MQTT ze strany brokeru, a tím i automatickému restartu uzlu.
 
