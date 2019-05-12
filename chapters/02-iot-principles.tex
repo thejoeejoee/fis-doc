@@ -10,7 +10,7 @@ realizovány pomocí zobrazovacích jednotek, signalizačních světel či repro
 Existuje několik hlavních motivací pro zavedení Internetu věcí.
 Tou první je možnost globální automatizace procesů okolo nás -- chytré domácnosti či chytré podniky.
 Díky snadno získatelným datům pro metriky je možné je vyhodnocovat v~reálném čase a rozhodovat na základě nich bez
-přítomnosti interakce od člověka.
+přítomnosti interakce člověka.
 
 % \subsubsection{Základní rozdělení Internetu věcí}
 Systémy pro Internet věcí lze v~zásadě rozdělit dle vnitřní struktury na centralizované a decentralizované --
@@ -72,14 +72,14 @@ z~principu funkce věci má uzel přístup k~síti Internetu věcí.
 
     \item \textbf{Komunikace} \\
     Od použité technologie použité ke komunikaci uzlů se odvíjí i její bezpečnost -- v~případě standardních
-    bezdrátových technologií jako je WiFi, Z-Wave či ZigBee je meritum zabezpečení v~použité šifrované verzi
+    bezdrátových technologií jako je WiFi, Z-Wave či ZigBee je meritum zabezpečení v~konkrétní šifrované verzi
     konkrétní technologie, pokud existuje.
 
     \item \textbf{Centrální uzel} \\
     U~centralizovaných systémů Internetu věcí je důležitým aspektem bezpečenosti zabezpečení centrálního uzlu.
     V~kontextu této práce se jedná o~zabezpečení nástroje Node-RED, a to především jeho editoru
     sítí ve formě webové stránky -- komunikaci s~ním lze zabezpečit pomocí šifrovaného protokolu HTTPS, kromě toho
-    nabízí i základní autentizaci uživatelů na základně dvojice jméno-heslo.
+    nabízí i základní autentizaci uživatelů na základě dvojice jméno-heslo.
 
     \item \textbf{Úložiště dat} \\
     V~případě, že dochází ukládání dat na centrální úložiště dat, které je připojeno do internetu, je otázka
@@ -93,7 +93,7 @@ z~principu funkce věci má uzel přístup k~síti Internetu věcí.
 Na realizaci systémů IoT se v~dnešní době zaměřuje mnoho firem, stejně tak existuje několik variant s~otevřeným kódem.
 Často se jedná o~kombinaci obou potřebných stránek pro provoz -- tedy, k~hardwarovému řešení je poskytnuto i řešení
 softwarové, ale existují i pouze jednostranné nástroje.
-Dále budou představeni největší hráči na poli jak komerční sféry, tak sféry otevřeného zdrojového kódu.
+Dále budou představeni největší hráči na poli jak z komerční sféry, tak sféry otevřeného zdrojového kódu.
 % \todo{citace https://chytrydumsvepomoci.cz/blog/vyber-systemu-pro-inteligentni-dum}
 
 \subsection{OpenHAB -- open Home Automation Bus}\label{subsec:openhab}
@@ -136,7 +136,7 @@ obrázku~\ref{fig:iot-loxone-config}.
 Nástroj Domoticz je založen na otevřeném zdrojovém kódu kombinující řešení jak pro fyzické uzly, tak centrální řídící
 prvek.
 Jednotlivé uzly mezi s~sebou a centrálním prvkem komunikují na frekvenci pomocí několika podporovaných technologií,
-ať už se jedná o~signál na otevřené frekvenci 433 MHz, nebo standardizovaný protokol Z-Wave.
+ať už se jedná o~signál na otevřené frekvenci 433 MHz nebo standardizovaný protokol Z-Wave.
 Z~hlediska automatizace domácnosti je pro tento systém zajímavá podpora internetového směrovače (serveru)
 Turris\footnote{\url{https://doc.turris.cz/gadgets/domoticz}} a automatická definice pravidel na základě připojených zařízení.
 
@@ -148,9 +148,9 @@ firmou Espressif Systems.
 Na obrázku~\ref{fig:esp32} je zobrazen samotný čip ESP32 a varianta jeho vývojového kitu, který bude použit v~této
 práci.
 Jakožto nástupce řady ESP8266 nabízí na jediném čipu ve standardní distribuci následující~\cite{ESP32Datasheet}:
-
+hl
 \begin{itemize}
-    \item dvoujádrový 32 bitový mikroprocesor Xtensa LX6, taktovaný na 160 či 240 MHz
+    \item dvoujádrový 32bitový mikroprocesor Xtensa LX6, taktovaný na 160 či 240 MHz
     \item 520 KiB statické operační paměti
     \item WiFi ve standardu 802.11 b/g/n (včetně podpory \textit{Long range} WiFi~\cite{Esp32LongRangeWifi})
     \item Bluetooth v4.2 včetně nízkoodběrového režimu BLE
@@ -316,7 +316,7 @@ hodnoty dostupné pro QoS:
 
 \subsection{Identifikace klienta \uv{Client ID}}\label{subsec:identifikace-klienta-client-id}
 Možností klienta je zapsat si při připojení k~brokeru své \uv{Client ID}.
-Jedná se o~řetězec jednoznačně identifikující konkrétního klienta -- hlavním benefitem je (v~případě podpory
+Jedná se o~řetězec jednoznačně identifikující konkrétního klienta -- hlavním benefitem (v~případě podpory
 persistentních sezení) je možnost zachování zaregistrovaných kanálů k~odběru v~případě odpojení a
 opětovného připojení klienta a také uschování prozatím nedoručených zpráv s~QoS nastaveným na úroveň $1$ či $2$.
 

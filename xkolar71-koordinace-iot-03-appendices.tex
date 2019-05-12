@@ -25,15 +25,15 @@ Soubor \cli{Makefile} obsahuje celkově tyto cíle (řazeno abecedně):
     \item[\texttt{console}] Otevřen REPL\footnote{\uv{Read Execute Print Loop} (REPL) je postup použitý pro
     interaktivní vykonávání kódu interpretovaného jazyka v~konzoli.} konzoli interpretu jazyka na připojeném uzlu.
     \item[\texttt{console-with-reset}] Provede tvrdý reset připojeného uzlu a následně otevře konzoli.
-    \item[\texttt{disable-autoloader}] Vypne automatický start formwaru při zapnutí uzlu.
+    \item[\texttt{disable-autoloader}] Vypne automatický start firmwaru při zapnutí uzlu.
     \item[\texttt{enable-autoloader}] Zapne automatický start firmwaru při zapnutí uzlu.
     \item[\texttt{erase-flash}] Smaže kompletně pamět flash na připojeném uzlu.
-    \item[\texttt{flash-micropython}] Nahraje stažený binární obraz interpretu jazyka Micropython na připojený uzel.
+    \item[\texttt{flash-micropython}] Nahraje stažený binární obraz interpretu jazyka MicroPython na připojený uzel.
     \item[\texttt{help}] Vypíše nápovědu k~cílům.
     \item[\texttt{install-fis}] Nahraje firmware společně se zaváděcím souborem \texttt{boot.py} na připojený uzel --
     kromě toho také vypne automatické zavádění firmwaru.
     \item[\texttt{install-libs}] Pomocí instalačního souboru provede vzdálené připojení uzlu k~internetu a následně
-    nainstaluje potřebné závilosti na uzel.
+    nainstaluje potřebné závislosti na uzel.
     \item[\texttt{install}] Provede kompletní instalaci na uzel (smazání flash paměti, zavedení interpretu jazyka
     MicroPython, instalaci závislostí a samotného firmwaru).
     \item[\texttt{put-config}] Na připojený uzel nahraje konfigurační soubor \texttt{config.json} z~aktuálního adresáře.

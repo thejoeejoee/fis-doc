@@ -1,7 +1,7 @@
 \chapter{Nástroj Node-RED}
 \label{ch:nastroj-node-red}
 
-V~této kapitole budou popsány základní principy nástroje Node-RED vzhledem k~jeho funkci ve světě Internetu věcí a
+V~této kapitole budou popsány základní principy nástroje Node-RED, vzhledem k~jeho funkci ve světě Internetu věcí, a
 jeho důležité aspekty.
 Node-RED je nástroj tvůrci popsaný jako \uv{Flow-based programming for the Internet of Things}, tedy nástroj založený na
 programování na datovém toku určený pro IoT. Uživateli-programátorovi nabízí jednotlivé funkční bloky (či \emph{uzly}
@@ -31,7 +31,7 @@ význam funkčních bloků propojených pomocí propojů, které zajištují vz�
 
 Vnitřní architektura nástroje Node-RED je rozdělena na dva samostatné funkční části.
 Z~pohledu samotného běhu je důležitější částí jádro provádějící veškeré datové operace nad samotným nadefinovaným
-modelem, zodpovědné za spouštění jednotlivých uživatelských uzly, jejich synchronizaci a vzájemnou distribuci dat.
+modelem, zodpovědné za spouštění jednotlivých uživatelských uzlů, jejich synchronizaci a vzájemnou distribuci dat.
 Druhou částí je samotný vizuální editor, který je ve výchozím nastavení dostupný pomocí protokolu HTTP. Pomocí něj je
 možné uživatelsky nastavovat jednotlivé uzly a vytvářet mezi nimi datové spoje.
 
@@ -66,7 +66,7 @@ Node-RED bez dalších rozšíření nabízí širokou základní sadu uzlů, me
     bočního panelu v~editoru -- vhodné pro testování a monitorování stavu sítě.
     \item\emph{switch} -- Blok starající se o~směrování zpráv v~síti -- na základně definovaných pravidel
     (shoda či porovnání hodnot, regulární výrazy) rozhodne, který z~výstupů bude použit pro další směrování zprávy.
-    \item\emph{delay} -- Blok umožňující časové operace nad tokem zpráv zkrz tento blok - dle konfigurace zprávy buď
+    \item\emph{delay} -- Blok umožňující časové operace nad tokem zpráv skrz tento blok - dle konfigurace zprávy buď
     pouze zpožďuje o~konstantní hodnotu, nebo omezuje průtok (šířku pásma) za časovou jednotku.
     \item\emph{link} -- Blok, který je schopen zprávy exportovat do jiné sítě v~rámci jedné instance nástroje
     Node-RED -- vytváří jednosměrný tunel pro mezi-síťové směrování zpráv.
@@ -100,8 +100,7 @@ obrázku~\ref{fig:node-red-mqtt-out-conf:mqtt-broker})
 
 \section{Rozšíření pomocí vlastních modulů}\label{sec:node-red-rozsireni}
 
-Nástroj Node-RED mj. díky své otevřenosti nabízí rozšiřování pomocí vlastních bloků s~vlastním
-chování.
+Nástroj Node-RED mj. díky své otevřenosti nabízí rozšiřování pomocí vlastních bloků s~vlastním chováním.
 Při startu tento nástroj proskenuje jmenný prostor nainstalovaných knihoven a do užšího výběru vybere
 knihovny s~názvem začínajícím na {\ic{node-red-contrib-}} -- tento prefix značí, že knihovna může obsahovat
 rozšiřující bloky. % mbox hack to no break in the middle
@@ -123,7 +122,7 @@ Z~editoru jsou zde dostupné nakonfigurované parametry (v~parametru funkce), kt
 úpravu chování bloku.
 Ve zdrojovém kódu~\ref{code:node-red-custom-block} se nachází ukázka implementace jednoduchého rozšiřujícího bloku --
 v~bloku hlavní funkce je navázána funkce obsluhující událost typu \ic{\'input\'}.
-Na základě této události je zpracována příchozivší zpráva a výsledek je opět dál odeslán jako zpráva datového typu
+Na základě této události je zpracována příchozí zpráva a výsledek je opět dál odeslán jako zpráva datového typu
 \ic{Object}.
 
 % @formatter:off

@@ -3,7 +3,7 @@
 
 Na základně poznatků z~kapitoly~\ref{sec:node-red-rozsireni} a navrženého komunikačního protokolu zde navrhnu a
 zrealizuji vlastní rozšíření nástroje Node-RED -- předmětem budou detaily ze základní infrastruktury bloků a následně
-příklady konkrétních aplikací přímo přímo nasaditelných.
+příklady konkrétních aplikací přímo nasaditelných.
 % \marginpar{\small Poznámky na okraji}
 
 \section{Základní konfigurační blok}\label{sec:zakladni-konfiguracni-blok}
@@ -14,14 +14,14 @@ uzlů zadávat více než jednou.
 
 Jak uvádí dokumentace k~nástroji Node-RED~\cite{NodeRedDocs}, nedělitelnou součástí každého bloku v~Node-RED je jeho
 konfigurační formulář pro editor.
-Ten se skládá ze dvou povinných částí a jedné nepovinné -- z~povinných částí jedná se o~programovou definici pro editor
-sítě v~jazyce Javascript a o~samotnou definici konfiguračního formuláře popsanou v~jazyce HTML.
+Ten se skládá ze dvou povinných částí a jedné nepovinné -- z~povinných částí se jedná o~programovou definici pro
+editor sítě v~jazyce Javascript a o~samotnou definici konfiguračního formuláře popsanou v~jazyce HTML.
 Nepovinnou částí je poté uživatelská dokumentace dostupná přímo z~editoru.
-Zkracenou definici bloku pro editor lze vidět v~ukázce~\ref{code:fis-node-editor}, která kromě samotné registrace
+Zkrácenou definici bloku pro editor lze vidět v~ukázce~\ref{code:fis-node-editor}, která kromě samotné registrace
 obsahuje dva důležité aspekty.
 
-Prvním je registrace do kategorie \ic{\'config\'} což značí registraci konfigurační bloku pro reprezentaci jednoho IoT
-uzlu (uzel tedy nemá grafickou reprezentaci v~síti).
+Prvním je registrace do kategorie \ic{\'config\'}, což značí registraci konfiguračního bloku pro reprezentaci jednoho
+IoT uzlu (uzel tedy nemá grafickou reprezentaci v~síti).
 Druhým aspektem je výčet parametrů pro formulář, které následně bude možné použít pro samotné chování uzlu v~síti.
 První parametr typu \ic{\'mqtt-broker\'} je určen pro konkrétní broker MQTT, pomocí kterého bude blok s~uzlem spojen
 (jedná se o~konfigurační blok poskytnutý přímo nástrojem Node-RED).
@@ -122,12 +122,12 @@ k~odstranění bloku ze sítě.
     (kanál pro logy, data a status uzlu) stav odpovídajícího uzlu a aplikace a tento stav signalizuje do editoru
     nástroje Node-RED. Konkrétně se jedná o~stav, kdy je vše v~pořádku, aplikace zasílá data (na obrázku první),
     stav, kdy je uzel připojen, avšak aplikace nezasílá či nepříjmá data (druhý případ) a poslední stav,
-    kdy je uzel odpojen (spodní případ).}
+    kdy je uzel odpojen (třetí případ).}
     \label{fig:fis-node-status}
 \end{figure}
 
 Druhá povinná část, šablona konfiguračního formuláře do editoru, je úzce spjata s~registrací bloku -- jednotlivé
-parametry zde musí odpovídat formulářovým prvkům, resp. jejím názvům, jak je uvedeno
+parametry zde musí odpovídat formulářovým prvkům, resp. jejich názvům, jak je uvedeno
 v~ukázce~\ref{code:fis-node-template} -- kvůli funkci editoru, aby byl schopen učinit
 formulář interaktivním a zároveň i srozumitelným pro jádro editoru a získávání hodnot z~něj.
 V~ukázce lze také vidět speciální způsob definice HTML šablony -- šablona je obalena do elementu \ic{<script>} se
@@ -189,7 +189,7 @@ appPublish(appId, payload, subtopic = null) {
 \end{code}
 % @formatter:on
 
-Posledním zmínění-hodným detailem implementace třídy \ic{FisNode} je metoda pro odběr zpráv z~aplikací na uzlech
+Posledním zmíněníhodným detailem implementace třídy \ic{FisNode} je metoda pro odběr zpráv z~aplikací na uzlech
 \ic{appSubscribe}.
 Tu mohou implementace jednotlivých bloků využít k~zaregistrování odběru konkrétního kanálu, resp. konkrétní aplikace
 -- výsledný kanál je složen ze základního kanálu (pro směr do nástroje Node-RED sestaveného již v~konstruktoru),
@@ -232,7 +232,7 @@ Funkce bloku reprezentující aplikaci na uzlu vychází ze základního konfigu
 komunikaci s~aplikací na uzlu, její konfiguraci, správu statusu bloku a další.
 Konkrétní konfigurační blok (reprezentující fyzický uzel) nastaví uživatel v~editoru při konfiguraci bloku a nástroj
 Node-RED poté instanci tohoto bloku (třídy \ic{FisNode}) zpřístupňuje pomocí utilitní funkce
-\mbox{\ic{RED.nodes.getNode}} -- takto získaná instance tedy zeprezentuje fyzický uzel skrz spojení MQTT.
+\mbox{\ic{RED.nodes.getNode}} -- takto získaná instance tedy reprezentuje fyzický uzel skrz spojení MQTT.
 V~ukázce~\ref{code:fis-dht-app} lze ve spodní části těla konstruktoru vidět dvě volání -- nad konfiguračním blokem se
 prvně volá metoda \ic{config}.
 Tato metoda zajišťuje napojení na servisní aplikaci určenou pro správu uzlu jako takového a dalších aplikací --
@@ -258,7 +258,7 @@ do sítě nástroje Node-RED (skrz volání metody \ic{this.send}).
     caption={Detail implementace vstupní aplikace (z~hlediska centrálního uzlu) -- jedná se o~aplikaci pro
     senzory měřící teplotu a vlhkost okolí.
     Konstruktor této třídy je zodpovědný za konfiguraci aplikace na uzlu za pomoci metody \ic{config} a následnou
-    registrace odběru zprávy z~uzlu -- funkce volaná na příchozí zprávy z~nich přejímá data a zasílá je dále do sítě
+    registraci odběru zprávy z~uzlu -- funkce volaná na příchozí zprávy z~nich přejímá data a zasílá je dále do sítě
     nástroje Node-RED (volání \ic{this.send})}.
 ]
 class DhtSensor {
@@ -287,8 +287,8 @@ class DhtSensor {
 Blok pro výstupní aplikaci je z~pohledu nástroje Node-RED blokem, který ze sítě konzumuje zprávy a zpracovává je dále.
 V~ukázce~\ref{code:fis-node-neopixel-display} lze vidět implementaci bloku pro aplikaci ovládající bodový displej,
 jejíž detaily budou popsány v~kapitole~\ref{subsec:implementace-vystupni-aplikace}.
-Po standardním zavedením cílové aplikace na uzel si blok registruje odběr pomocí vlastní metody \ic{on} -- ta slouží
-k~odběru příchozí zpráv do bloku, v~tomto případě převezme příchozí zprávu a zformátuje zprávu pro aplikaci
+Po standardním zavedení cílové aplikace na uzel si blok registruje odběr pomocí vlastní metody \ic{on} -- ta slouží
+k~odběru příchozích zpráv do bloku, v~tomto případě převezme příchozí zprávu a zformátuje zprávu pro aplikaci
 (kromě samotného textu k~zobrazení podporuje volitelně i požadovanou barvu).
 Sestavená zpráva je odeslána pomocí \ic{appPublish} odpovídající aplikaci do subkanálu \ic{\'text\'}.
 

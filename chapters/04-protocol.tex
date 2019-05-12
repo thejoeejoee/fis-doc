@@ -3,7 +3,7 @@
 
 V~této kapitole bude popsán princip funkce koncových uzlů a způsob, kterým s~nimi bude komunikováno.
 S~využitím možností, které nabízí jazyk MicroPython, popsaných v~kapitole~\ref{sec:micropython}, jsem se rozhodl
-koncové uzly používat víceúčelově -- v~jeden moment na uzlu může více instancí aplikací.
+koncové uzly používat víceúčelově -- v~jeden moment může na uzlu běžet více instancí aplikací.
 \textbf{Aplikace} je v~kontextu této práce jednoúčelový program ovládající konkrétní periferii uzlu -- pro svou činnost
 využívá rozhraní poskytnutého operačním systémem běžícím na ESP32.
 O~přepínání kontextu se stará operační systém, stejně jako o~připojení k~Internetu, brokeru MQTT a o~správu uzlu jako
@@ -147,7 +147,7 @@ s~odpovídajícími aplikacemi na uzlech -- každý uzel je takto připojen na s
 \begin{figure}
     \begin{minipage}{\textwidth}
         \centering
-        \subfloat[Standardní situace, při které se uzel připojí, obdrží konfiguraci a zasílá bez problém %
+        \subfloat[Standardní situace, při které se uzel připojí, obdrží konfiguraci a zasílá bez problému %
         data.]{
         \includegraphics[valign=t,width=.4\textwidth]{figures/messages-in-time-publisher.pdf}
         }\hfill%

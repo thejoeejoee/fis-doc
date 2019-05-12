@@ -23,7 +23,7 @@ V~této kapitole budou představeny a popsány některé důležité implementa�
 Středobodem z~hlediska funkce je asynchronní smyčka událostí, jejíž implementace pochází z~veřejně dostupného balíčku
 \texttt{micropython-async}\footnote{\url{https://github.com/peterhinch/micropython-async}}.
 Princip této smyčky vychází ze standardního balíku modulu \texttt{asyncio} programovacího jazyka Python a
-nabízí jejím uživatelům přístup k~konkurentně asynchronnímu kódu -- na nejvyšší úrovni programátor definuje pouze
+nabízí jejím uživatelům přístup ke konkurentně asynchronnímu kódu -- na nejvyšší úrovni programátor definuje pouze
 jednotlivé korutiny\footnote{Korutina (coroutine) je z~pohledu asynchronního přístupu k~programování podpogram,
 jehož kód lze provádět asynchronně a zároveň má možnost jiný kód tohoto typu invokovat.} (coroutines) a smyčka samotná
 se stará o~rozdělování procesorového času a kontextu.
@@ -103,7 +103,7 @@ Při startu je tento soubor načten a převeden z~formátu JSON do slovníku, kt
 zpřístupněn pro použití jádru a aplikacím. Konfigurační soubor uchovává seznam přihlašovacích údajů
 k~bezdrátovým sítím, přihlašovací údaje a adresu k~brokeru MQTT.
 
-Firmware z~hlediska správy aplikací rozlišuje pohledy na ně -- v~prvním případě se jedná o~aplikace dostupné
+Firmware z~hlediska správy aplikací rozlišuje dva pohledy na ně -- v~prvním případě se jedná o~aplikace dostupné
 k~použití, reference na konkrétní třídy aplikací má uložené ve slovníku \ic{APPS} dostupném z~modulu \texttt{fis.apps}.
 Tento slovník používá pro klíče jednotlivé unikátní identifikátory typů aplikací, pomocí kterých lze skrz konfigurační
 aplikaci zavádět do uzlu -- tedy např. \ic{\'dht-sensor\'} či \ic{\'neopixel-display\'}.
@@ -120,7 +120,7 @@ teplotu a vlhkost a jehož ovladač je obsažen ve standardní distribuci jazyka
 Jedním z~jeho specifik je neblokující chování při požadavku na změření, je tedy nutné po požadavku počkat
 více jak 2 sekundy, než vůbec může dojít k~exportu hodnot \cite{dht22}.
 V~případě selhání komunikace se senzorem dojde ze strany ovladače k~signalizaci výjimky \ic{OSError}, na kterou aplikace
-reaguje zalogováním chybového stavu a počkáním na další interval měření.
+reaguje zalogováním chybového stavu a vyčkáním na další interval měření.
 Díky použití asynchronní smyčky události není nutné v~korutině \ic{_run_measurement} při čekání na další měření
 používat aktivní čekání, které by blokovalo kontext procesoru pro další aplikace.
 Základní struktura vstupních aplikací založena na dvou metodách:
@@ -229,7 +229,7 @@ class App(BaseApp):
 
 \section{Konfigurační aplikace}\label{sec:konfiguracni-aplikace}
 
-Tato aplikace je speciální režijní aplikací sloužící pro obsluhu další aplikací a
+Tato aplikace je speciální režijní aplikací sloužící pro obsluhu dalších aplikací a
 konfiguraci celého uzlu. V~registru aplikací používá statický identifikátor \ic{\'config\'},
 díky čemuž nemusí znát konfigurační blok \ic{FisNode} na druhé straně komunikace konkrétní
 identifikaci aplikace (konkrétní \ic{APP\_ID} dle potokolu). Tato aplikace je tedy svázaná
